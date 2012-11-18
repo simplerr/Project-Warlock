@@ -10,11 +10,7 @@ namespace GLib {
 	class Input;
 }
 
-struct Target
-{
-	XMFLOAT3 pos;
-	XMFLOAT3 dir;
-};
+class LivingObject;
 
 class Arena 
 {
@@ -26,7 +22,6 @@ public:
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 private:
-	GLib::Object3D* mSelectedObject;
 	GLib::World*	mWorld;
-	std::list<Target> mTargetQueue;
+	LivingObject*	mSelectedObject;
 };
