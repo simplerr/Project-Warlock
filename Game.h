@@ -16,6 +16,8 @@ namespace GLib {
 	class StaticObject;
 	class AnimatedObject;
 }
+
+class Arena;
 #pragma endregion
 
 class Game : public GLib::Runnable
@@ -31,10 +33,5 @@ public:
 
 	LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 private:
-	GLib::World*			mWorld;
-	GLib::StaticObject*		mTerrain;
-	GLib::AnimatedObject*	mAnimatedObject;
-	GLib::Texture2D*		mLoadingAssetsBkgd;
-	GLib::Texture2D*		mHelpScreen;
-	GLib::Texture2D*		mPressH;
+	Arena* mArena;
 };

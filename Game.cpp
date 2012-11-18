@@ -11,6 +11,7 @@
 #include "Effects.h"
 #include "CameraFPS.h"
 #include "CameraRTS.h"
+#include "Arena.h"
 
 using namespace GLib;
 
@@ -40,7 +41,7 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 	
 Game::~Game()
 {
-	delete mWorld;
+
 }
 
 void Game::Init()
@@ -48,22 +49,20 @@ void Game::Init()
 	// Important to run Systems Init() function.
 	Runnable::Init();
 
+	mArena = new Arena();
+	mArena->Init();
+
 	// Add a camera.
 	GLib::CameraRTS* camera = new GLib::CameraRTS();
 	GetGraphics()->SetCamera(camera);
 
-	// Create the world.
-	mWorld = new GLib::World();
-	mWorld->Init(GetGraphics());
-
-	// Connect the graphics light list and set the fog color.
-	GetGraphics()->SetLightList(mWorld->GetLights());
+	// Set the fog color.
 	GetGraphics()->SetFogColor(XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f));
 }
 
 void Game::Update(GLib::Input* pInput, float dt)
 {
-	mWorld->Update(dt);
+	mArena->Update(pInput, dt);
 }
 	
 void Game::Draw(GLib::Graphics* pGraphics)
@@ -71,8 +70,7 @@ void Game::Draw(GLib::Graphics* pGraphics)
 	// Clear the render target and depth/stencil.
 	pGraphics->ClearScene();
 
-	// Draw all objects.
-	mWorld->Draw(pGraphics);	
+	mArena->Draw(pGraphics);
 	pGraphics->DrawBillboards();
 
 	// Present the backbuffer.
