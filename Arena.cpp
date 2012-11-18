@@ -25,12 +25,12 @@ void Arena::Init()
 	mWorld->Init(GLib::GetGraphics());
 
 	LivingObject* object = new LivingObject(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x");
-	object->SetPosition(XMFLOAT3(0, 2, 0));
+	object->SetPosition(XMFLOAT3(0, 4, 0));
 	object->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	mWorld->AddObject(object);
 
 	object = new LivingObject(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x");
-	object->SetPosition(XMFLOAT3(0, 2, 20));
+	object->SetPosition(XMFLOAT3(0, 4, 20));
 	object->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	mWorld->AddObject(object);
 

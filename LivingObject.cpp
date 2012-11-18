@@ -5,7 +5,7 @@
 LivingObject::LivingObject(GLib::ModelImporter* pImporter, string filename)
 	: AnimatedObject(pImporter, filename)
 {
-	SetMovementSpeed(0.03f);
+	SetMovementSpeed(0.1f/2.0f);
 	SetSelected(false);
 }
 
@@ -26,16 +26,14 @@ void LivingObject::Update(float dt)
 	// Move the object.
 	if(mTargetQueue.size() != 0)
 	{
-		SetPosition(GetPosition() + mTargetQueue.front().dir * mMovementSpeed);
+		SetRotation(XMFLOAT3(0, atan2f(mTargetQueue.front().dir.x, mTargetQueue.front().dir.z), 0));
+		XMFLOAT3 newPos = GetPosition() + mTargetQueue.front().dir * mMovementSpeed;
+		SetPosition(XMFLOAT3(newPos.x, GetPosition().y, newPos.z));
 
 		// Reached the target?
 		XMFLOAT3 diff = mTargetQueue.front().pos - GetPosition();
-		if(sqrt(diff.x * diff.x + diff.z * diff.z) < 1.0f) {
+		if(sqrt(diff.x * diff.x + diff.z * diff.z) < 1.0f) 
 			mTargetQueue.pop_front();
-
-			if(mTargetQueue.size() == 0)
-				int a = 1;
-		}
 	}
 
 	// Walk or idle animation?
