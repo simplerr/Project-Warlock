@@ -11,6 +11,7 @@ namespace GLib {
 }
 
 class LivingObject;
+class Peer;
 
 class Arena 
 {
@@ -19,8 +20,9 @@ public:
 	~Arena();
 
 	void Init();
-	void Update(GLib::Input* pInput, float dt);
+	void Update(GLib::Input* pInput, Peer* pPeer, float dt);
 	void Draw(GLib::Graphics* pGraphics);
+	GLib::World* GetWorld();
 private:
 	GLib::World*	mWorld;
 	LivingObject*	mSelectedObject;

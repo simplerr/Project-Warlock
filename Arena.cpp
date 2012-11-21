@@ -7,6 +7,7 @@
 #include "Input.h"
 #include "Light.h"
 #include "LivingObject.h"
+#include "Peer.h"
 
 Arena::Arena()
 {
@@ -24,13 +25,8 @@ void Arena::Init()
 	mWorld = new GLib::World();
 	mWorld->Init(GLib::GetGraphics());
 
-	LivingObject* object = new LivingObject(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x");
+	LivingObject* object = new LivingObject(GLib::GetGraphics()->GetModelImporter(), "models/monster/monster.x");
 	object->SetPosition(XMFLOAT3(0, 4, 0));
-	object->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
-	mWorld->AddObject(object);
-
-	object = new LivingObject(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x");
-	object->SetPosition(XMFLOAT3(0, 4, 20));
 	object->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	mWorld->AddObject(object);
 
@@ -38,7 +34,7 @@ void Arena::Init()
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
 }
 
-void Arena::Update(GLib::Input* pInput, float dt)
+void Arena::Update(GLib::Input* pInput, Peer* pPeer, float dt)
 {
 	// Update the world.
 	mWorld->Update(dt);
@@ -65,15 +61,10 @@ void Arena::Update(GLib::Input* pInput, float dt)
 	{
 		XMFLOAT3 pos = mWorld->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
 
-		// Inside the terrain?
+		// Inform the server about what happened.
+		// The server then informs all the clients, including the callee.
 		if(pos.x != numeric_limits<float>::infinity())
-		{
-			// Add to the selected objects target queue.
-			if(!pInput->KeyDown(VK_SHIFT))
-				mSelectedObject->AddTarget(pos, true);
-			else
-				mSelectedObject->AddTarget(pos, false);
-		}
+			pPeer->SendAddTarget(mSelectedObject->GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
 	}
 }
 
@@ -81,4 +72,9 @@ void Arena::Draw(GLib::Graphics* pGraphics)
 {
 	// Draw the world.
 	mWorld->Draw(pGraphics);
+}
+
+GLib::World* Arena::GetWorld()
+{
+	return mWorld;
 }

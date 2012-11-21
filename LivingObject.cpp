@@ -5,7 +5,7 @@
 LivingObject::LivingObject(GLib::ModelImporter* pImporter, string filename)
 	: AnimatedObject(pImporter, filename)
 {
-	SetMovementSpeed(0.1f/2.0f);
+	SetMovementSpeed(0.1f);
 	SetSelected(false);
 }
 

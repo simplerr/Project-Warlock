@@ -18,6 +18,7 @@ namespace GLib {
 }
 
 class Arena;
+class Peer;
 #pragma endregion
 
 class Game : public GLib::Runnable
@@ -34,4 +35,5 @@ public:
 	LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 private:
 	Arena* mArena;
+	Peer* mPeer;
 };

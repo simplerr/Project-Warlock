@@ -12,6 +12,8 @@
 #include "CameraFPS.h"
 #include "CameraRTS.h"
 #include "Arena.h"
+#include "Peer.h"
+#include <fstream>
 
 using namespace GLib;
 
@@ -22,7 +24,7 @@ GLib::Runnable* GLib::GlobalApp = nullptr;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
 	// Create a Game instance.
-	Game game(hInstance, "Project Warlock", 1200, 800);
+	Game game(hInstance, "Project Warlock", 800, 600);
 	GLib::GlobalApp = &game;
 
 	// Init the app.
@@ -41,7 +43,7 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 	
 Game::~Game()
 {
-
+	delete mPeer;
 }
 
 void Game::Init()
@@ -49,8 +51,8 @@ void Game::Init()
 	// Important to run Systems Init() function.
 	Runnable::Init();
 
-	mArena = new Arena();
-	mArena->Init();
+	// Create the peer.
+	mPeer = new Peer();
 
 	// Add a camera.
 	GLib::CameraRTS* camera = new GLib::CameraRTS();
@@ -62,7 +64,7 @@ void Game::Init()
 
 void Game::Update(GLib::Input* pInput, float dt)
 {
-	mArena->Update(pInput, dt);
+	mPeer->Update(pInput, dt);
 }
 	
 void Game::Draw(GLib::Graphics* pGraphics)
@@ -70,7 +72,7 @@ void Game::Draw(GLib::Graphics* pGraphics)
 	// Clear the render target and depth/stencil.
 	pGraphics->ClearScene();
 
-	mArena->Draw(pGraphics);
+	mPeer->Draw(pGraphics);
 	pGraphics->DrawBillboards();
 
 	// Present the backbuffer.
