@@ -1,29 +1,37 @@
-#include "LivingObject.h"
+#include "Actor.h"
 #include "d3dUtil.h"
 #include "Graphics.h"
 
-LivingObject::LivingObject(GLib::ModelImporter* pImporter, string filename)
+Actor::Actor(GLib::ModelImporter* pImporter, string filename)
 	: AnimatedObject(pImporter, filename)
 {
 	SetMovementSpeed(0.1f);
 	SetSelected(false);
+	SetVelocity(XMFLOAT3(0, 0, 0));
+	SetFriction(0.99f);
 }
 
-LivingObject::~LivingObject()
+Actor::~Actor()
 {
 
 }
 
-void LivingObject::Init()
+void Actor::Init()
 {
 
 }
 
-void LivingObject::Update(float dt)
+void Actor::Update(float dt)
 {
 	AnimatedObject::Update(dt);
 
+	// Simple physics.
+	mVelocity = mVelocity * mFriction;
+	SetPosition(GetPosition() + mVelocity);
+
 	// Move the object.
+	// [NOTE] The position of the actor gets set in the Client as well,
+	// but it's overwritten with the UPDATE_WORLD MSG!
 	if(mTargetQueue.size() != 0)
 	{
 		SetRotation(XMFLOAT3(0, atan2f(mTargetQueue.front().dir.x, mTargetQueue.front().dir.z), 0));
@@ -43,7 +51,7 @@ void LivingObject::Update(float dt)
  		SetAnimation(0);
 }
 
-void LivingObject::Draw(GLib::Graphics* pGraphics)
+void Actor::Draw(GLib::Graphics* pGraphics)
 {
 	AnimatedObject::Draw(pGraphics);
 
@@ -60,7 +68,7 @@ void LivingObject::Draw(GLib::Graphics* pGraphics)
 	}
 }
 
-void LivingObject::AddTarget(XMFLOAT3 targetPos, bool clear)
+void Actor::AddTarget(XMFLOAT3 targetPos, bool clear)
 {
 	// Clear the queue?
 	if(clear)
@@ -81,12 +89,27 @@ void LivingObject::AddTarget(XMFLOAT3 targetPos, bool clear)
 	mTargetQueue.push_back(target);
 }
 
-void LivingObject::SetMovementSpeed(float movementSpeed)
+void Actor::SetMovementSpeed(float movementSpeed)
 {
 	mMovementSpeed = movementSpeed;
 }
 
-void LivingObject::SetSelected(bool selected)
+void Actor::SetSelected(bool selected)
 {
 	mSelected = selected;
+}
+
+bool Actor::IsSelected()
+{
+	return mSelected;
+}
+
+void Actor::SetVelocity(XMFLOAT3 velocity)
+{
+	mVelocity = velocity;
+}
+
+void Actor::SetFriction(float friction)
+{
+	mFriction = friction;
 }

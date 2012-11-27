@@ -6,8 +6,8 @@
 #include "StaticObject.h"
 #include "Input.h"
 #include "Light.h"
-#include "LivingObject.h"
-#include "Peer.h"
+#include "Actor.h"
+#include "Client.h"
 
 Arena::Arena()
 {
@@ -25,7 +25,7 @@ void Arena::Init()
 	mWorld = new GLib::World();
 	mWorld->Init(GLib::GetGraphics());
 
-	LivingObject* object = new LivingObject(GLib::GetGraphics()->GetModelImporter(), "models/monster/monster.x");
+	Actor* object = new Actor(GLib::GetGraphics()->GetModelImporter(), "models/monster/monster.x");
 	object->SetPosition(XMFLOAT3(0, 4, 0));
 	object->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	mWorld->AddObject(object);
@@ -34,7 +34,7 @@ void Arena::Init()
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
 }
 
-void Arena::Update(GLib::Input* pInput, Peer* pPeer, float dt)
+void Arena::Update(GLib::Input* pInput, Client* pPeer, float dt)
 {
 	// Update the world.
 	mWorld->Update(dt);
@@ -42,7 +42,7 @@ void Arena::Update(GLib::Input* pInput, Peer* pPeer, float dt)
 	// Get the selected object.
 	if(pInput->KeyPressed(VK_LBUTTON))
 	{
-		LivingObject* selected = (LivingObject*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay());
+		Actor* selected = (Actor*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay());
 		if(selected != nullptr) 
 		{
 			if(mSelectedObject != nullptr) {
@@ -53,6 +53,13 @@ void Arena::Update(GLib::Input* pInput, Peer* pPeer, float dt)
 			mSelectedObject = selected;
 			mSelectedObject->SetSelected(true);
 			mSelectedObject->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
+		}
+		else if(mSelectedObject != nullptr) // Fire projectile.
+		{
+			XMFLOAT3 pos = mWorld->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
+
+			if(pos.x != numeric_limits<float>::infinity())
+				pPeer->SendAddProjectile(mSelectedObject->GetId(), mSelectedObject->GetPosition(), pos);
 		}
 	}
 

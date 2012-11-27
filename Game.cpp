@@ -12,10 +12,12 @@
 #include "CameraFPS.h"
 #include "CameraRTS.h"
 #include "Arena.h"
-#include "Peer.h"
+#include "Client.h"
 #include <fstream>
 
 using namespace GLib;
+
+#define _HAS_ITERATOR_DEBUGGING 0
 
 // Set global to NULL.
 GLib::Runnable* GLib::GlobalApp = nullptr;
@@ -24,7 +26,7 @@ GLib::Runnable* GLib::GlobalApp = nullptr;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
 	// Create a Game instance.
-	Game game(hInstance, "Project Warlock", 800, 600);
+	Game game(hInstance, "Client", 800, 600);
 	GLib::GlobalApp = &game;
 
 	// Init the app.
@@ -43,7 +45,7 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 	
 Game::~Game()
 {
-	delete mPeer;
+	delete mClient;
 }
 
 void Game::Init()
@@ -52,7 +54,7 @@ void Game::Init()
 	Runnable::Init();
 
 	// Create the peer.
-	mPeer = new Peer();
+	mClient = new Client();
 
 	// Add a camera.
 	GLib::CameraRTS* camera = new GLib::CameraRTS();
@@ -64,7 +66,7 @@ void Game::Init()
 
 void Game::Update(GLib::Input* pInput, float dt)
 {
-	mPeer->Update(pInput, dt);
+	mClient->Update(pInput, dt);
 }
 	
 void Game::Draw(GLib::Graphics* pGraphics)
@@ -72,7 +74,7 @@ void Game::Draw(GLib::Graphics* pGraphics)
 	// Clear the render target and depth/stencil.
 	pGraphics->ClearScene();
 
-	mPeer->Draw(pGraphics);
+	mClient->Draw(pGraphics);
 	pGraphics->DrawBillboards();
 
 	// Present the backbuffer.

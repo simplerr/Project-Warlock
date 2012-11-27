@@ -10,8 +10,8 @@ namespace GLib {
 	class Input;
 }
 
-class LivingObject;
-class Peer;
+class Actor;
+class Client;
 
 class Arena 
 {
@@ -20,10 +20,10 @@ public:
 	~Arena();
 
 	void Init();
-	void Update(GLib::Input* pInput, Peer* pPeer, float dt);
+	void Update(GLib::Input* pInput, Client* pPeer, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 	GLib::World* GetWorld();
 private:
 	GLib::World*	mWorld;
-	LivingObject*	mSelectedObject;
+	Actor*	mSelectedObject;
 };

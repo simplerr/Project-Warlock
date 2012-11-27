@@ -15,11 +15,15 @@ struct Target
 	XMFLOAT3 dir;
 };
 
-class LivingObject : public GLib::AnimatedObject
+
+//
+//	Contains a target queue.
+//
+class Actor : public GLib::AnimatedObject
 {
 public:
-	LivingObject(GLib::ModelImporter* pImporter, string filename);
-	virtual ~LivingObject();
+	Actor(GLib::ModelImporter* pImporter, string filename);
+	virtual ~Actor();
 
 	virtual void Init();
 	virtual void Update(float dt);
@@ -28,8 +32,14 @@ public:
 	void AddTarget(XMFLOAT3 targetPos, bool clear);
 	void SetMovementSpeed(float movementSpeed);
 	void SetSelected(bool selected);
+	void SetVelocity(XMFLOAT3 velocity);
+	void SetFriction(float friction);
+	bool IsSelected();
 private:
 	std::list<Target> mTargetQueue;
 	float			  mMovementSpeed;
 	bool			  mSelected;
+
+	float mFriction;
+	XMFLOAT3 mVelocity;
 };
