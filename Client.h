@@ -1,5 +1,6 @@
 #pragma once
 #include "RakPeerInterface.h"
+#include "BitStream.h"
 #include "d3dUtil.h"
 #include <string>
 
@@ -33,11 +34,24 @@ public:
 	void SendServerMessage(RakNet::BitStream& bitstream);
 
 	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
-	void SendAddProjectile(int owner, XMFLOAT3 startPos, XMFLOAT3 endPos);
 
 	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World* GetWorld();
 	int GetPlayerId();
+
+	//
+	// Handle packet functions.
+	//
+	void HandleWorldUpdate(RakNet::BitStream& bitstream);
+	void HandleTargetAdded(RakNet::BitStream& bitstream);
+	void HandleObjectRemvoed(RakNet::BitStream& bitstream);
+	void HandleConnectionSuccess(RakNet::BitStream& bitstream);
+	void HandleAddPlayer(RakNet::BitStream& bitstream);
+	void HandlePlayerDisconnected(RakNet::BitStream& bitstream);
+	void HandleGetConnectedPlayers(RakNet::BitStream& bitstream);
+	void HandleSkillCasted(RakNet::BitStream& bitstream);
+	void HandleProjectilePlayerCollision(RakNet::BitStream& bitstream);
+
 private:
 	RakNet::RakPeerInterface*	mRaknetPeer;
 	GLib::World*				mWorld;

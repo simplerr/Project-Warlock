@@ -23,6 +23,7 @@ void Actor::Init()
 
 void Actor::Update(float dt)
 {
+	// Update the animaton.
 	AnimatedObject::Update(dt);
 
 	// Simple physics.
