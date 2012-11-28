@@ -19,14 +19,15 @@ public:
 	void Update(float dt);
 	void Draw(GLib::Graphics* pGraphics);
 	void PollAction(Client* pClient, GLib::Input* pInput);
+	
 	void SetSystemAdress(RakNet::SystemAddress adress);
+	void SetHealth(float health);
 
 	RakNet::SystemAddress GetSystemAdress();
-
+	float GetHealth();
 private:
 	SkillHandler* mSkillHandler;	// Should it really be here?
 	RakNet::SystemAddress mSystemAdress;
 	string name;
 	float mHealth;
-	float mBaseDamage;
 };

@@ -10,6 +10,7 @@ Player::Player()
 	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x")
 {
 	SetType(GLib::PLAYER);
+	SetHealth(100.0f);
 	mSkillHandler = new SkillHandler();
 }
 
@@ -61,4 +62,14 @@ void Player::SetSystemAdress(RakNet::SystemAddress adress)
 RakNet::SystemAddress Player::GetSystemAdress()
 {
 	return mSystemAdress;
+}
+
+void Player::SetHealth(float health)
+{
+	mHealth = health;
+}
+
+float Player::GetHealth()
+{
+	return mHealth;
 }

@@ -11,7 +11,6 @@
 #include "Effects.h"
 #include "CameraFPS.h"
 #include "CameraRTS.h"
-#include "Arena.h"
 #include "Client.h"
 #include <fstream>
 

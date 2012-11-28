@@ -149,12 +149,19 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 
 void Client::HandleWorldUpdate(RakNet::BitStream& bitstream)
 {
+	GLib::ObjectType type;
 	unsigned char id;
 	XMFLOAT3 pos;
+	float health;
+
+	bitstream.Read(type);
 	bitstream.Read(id);
 	bitstream.Read(pos.x);
 	bitstream.Read(pos.y);
 	bitstream.Read(pos.z);
+
+	if(type == GLib::PLAYER)
+		bitstream.Read(health);
 
 	GLib::ObjectList* objects = mWorld->GetObjects();
 	for(int i = 0; i < objects->size(); i++)
@@ -163,7 +170,12 @@ void Client::HandleWorldUpdate(RakNet::BitStream& bitstream)
 
 		// Do interpolation stuff here.
 		if(object->GetId() == id)
+		{
 			object->SetPosition(pos);
+
+			if(object->GetType() == GLib::PLAYER)
+				((Player*)object)->SetHealth(health);
+		}
 	}
 }
 
@@ -300,8 +312,10 @@ void Client::HandleProjectilePlayerCollision(RakNet::BitStream& bitstream)
 	bitstream.Read(projectileId);
 	bitstream.Read(playerId);
 
+	Player* player = (Player*)mWorld->GetObjectById(playerId);
+
 	char buffer[244];
-	sprintf(buffer, "projectile %i collided with player %i\n", projectileId, playerId);
+	sprintf(buffer, "projectile %i collided with player %i health: %.2f\n", projectileId, playerId, player->GetHealth());
 	OutputDebugString(buffer);
 }
 
@@ -330,7 +344,7 @@ void Client::PollSelection(GLib::Input* pInput)
 	// Get the selected object.
 	if(pInput->KeyPressed(VK_LBUTTON))
 	{
-		Player* selected = (Player*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay());
+		Player* selected = (Player*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay(), GLib::PLAYER);
 		if(selected != nullptr) 
 		{
 			if(mSelectedObject != nullptr) {
