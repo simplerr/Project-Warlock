@@ -16,6 +16,7 @@ public:
 	~SkillHandler();
 
 	void PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 position, XMFLOAT3 end);
+	bool IsCastingSkill();
 private:
 	std::map<int, Skill*> mSkillMap;
 	int mActiveSkill;

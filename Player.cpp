@@ -73,3 +73,8 @@ float Player::GetHealth()
 {
 	return mHealth;
 }
+
+bool Player::IsCastingSkill()
+{
+	return mSkillHandler->IsCastingSkill();
+}

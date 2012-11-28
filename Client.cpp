@@ -16,7 +16,7 @@ Client::Client()
 {
 	// Create the RakNet peer
 	mRaknetPeer		= RakNet::RakPeerInterface::GetInstance();
-	mSelectedObject = nullptr;
+	mSelectedPlayer = nullptr;
 	mPlayer			= nullptr;
 
 	// Create the world.
@@ -56,12 +56,12 @@ void Client::Update(GLib::Input* pInput, float dt)
 	// Update the world.
 	mWorld->Update(dt);
 
-	// If the selected object is the player then poll for action.
-	if(mSelectedObject != nullptr && mSelectedObject->GetId() == mPlayer->GetId()) 
-		mPlayer->PollAction(this, pInput);
-
 	// Poll for object selection.
 	PollSelection(pInput);
+
+	// If the selected object is the player then poll for action.
+	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId()) 
+		mPlayer->PollAction(this, pInput);
 
 	// Testing..
 	if(pInput->KeyPressed('C'))
@@ -75,6 +75,12 @@ void Client::Draw(GLib::Graphics* pGraphics)
 {
 	// Draw the world.
 	mWorld->Draw(pGraphics);
+
+	if(mSelectedPlayer != nullptr) {
+		char buffer[244];
+		sprintf(buffer, "Health: %.2f", mSelectedPlayer->GetHealth());
+		pGraphics->DrawText(buffer, 10, 10, 20, 0xff000000);
+	}
 }
 
 bool Client::ConnectToServer(string ip)
@@ -264,9 +270,9 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 		OutputDebugString(string("Successfully connected to the server! " + name + "\n").c_str());
 		mPlayer = player;
 
-		mSelectedObject = mPlayer;
-		mSelectedObject->SetSelected(true);
-		mSelectedObject->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
+		mSelectedPlayer = mPlayer;
+		mSelectedPlayer->SetSelected(true);
+		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
 	}
 	else
 		OutputDebugString(string(name + " has connected!\n").c_str());
@@ -338,23 +344,22 @@ void Client::SendAddTarget(int id, XMFLOAT3 pos, bool clear)
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
-
 void Client::PollSelection(GLib::Input* pInput)
 {
 	// Get the selected object.
-	if(pInput->KeyPressed(VK_LBUTTON))
+	if(pInput->KeyPressed(VK_LBUTTON) && !mPlayer->IsCastingSkill())
 	{
 		Player* selected = (Player*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay(), GLib::PLAYER);
 		if(selected != nullptr) 
 		{
-			if(mSelectedObject != nullptr) {
-				mSelectedObject->SetSelected(false);
-				mSelectedObject->SetMaterials(GLib::Material(GLib::Colors::White));
+			if(mSelectedPlayer != nullptr) {
+				mSelectedPlayer->SetSelected(false);
+				mSelectedPlayer->SetMaterials(GLib::Material(GLib::Colors::White));
 			}
 
-			mSelectedObject = selected;
-			mSelectedObject->SetSelected(true);
-			mSelectedObject->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
+			mSelectedPlayer = selected;
+			mSelectedPlayer->SetSelected(true);
+			mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
 		}
 	}
 }

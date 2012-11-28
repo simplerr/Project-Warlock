@@ -28,3 +28,8 @@ void SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 sta
 		mActiveSkill = -1;
 	}
 }
+
+bool SkillHandler::IsCastingSkill()
+{
+	return mActiveSkill == -1 ? false : true;
+}

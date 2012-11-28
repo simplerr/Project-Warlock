@@ -56,7 +56,7 @@ private:
 	RakNet::RakPeerInterface*	mRaknetPeer;
 	GLib::World*				mWorld;
 	ClientSkillInterpreter*		mSkillInterpreter;
-	Actor*		 mSelectedObject;
+	Player*		 mSelectedPlayer;
 	Player*		 mPlayer;
 	string		 mName;
 };

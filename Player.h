@@ -25,6 +25,7 @@ public:
 
 	RakNet::SystemAddress GetSystemAdress();
 	float GetHealth();
+	bool IsCastingSkill();
 private:
 	SkillHandler* mSkillHandler;	// Should it really be here?
 	RakNet::SystemAddress mSystemAdress;

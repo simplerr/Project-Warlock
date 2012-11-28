@@ -25,7 +25,7 @@ GLib::Runnable* GLib::GlobalApp = nullptr;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
 	// Create a Game instance.
-	Game game(hInstance, "Client", 800, 600);
+	Game game(hInstance, "Client", 1200, 900);
 	GLib::GlobalApp = &game;
 
 	// Init the app.
