@@ -109,7 +109,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 	RakNet::BitStream bitstream((unsigned char*)pPacket->data, pPacket->length, false);
 	unsigned char packetID;
 
-	// Read the id.
+	// Read the packet id.
 	bitstream.Read(packetID);
 
 	// Switch the packet id.
@@ -251,6 +251,10 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 	if(mName == name && mPlayer == nullptr) {
 		OutputDebugString(string("Successfully connected to the server! " + name + "\n").c_str());
 		mPlayer = player;
+
+		mSelectedObject = mPlayer;
+		mSelectedObject->SetSelected(true);
+		mSelectedObject->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
 	}
 	else
 		OutputDebugString(string(name + " has connected!\n").c_str());

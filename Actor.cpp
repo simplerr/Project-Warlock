@@ -28,7 +28,7 @@ void Actor::Update(float dt)
 
 	// Simple physics.
 	mVelocity = mVelocity * mFriction;
-	SetPosition(GetPosition() + mVelocity);
+	SetPosition(GetPosition() + mVelocity); 
 
 	// Move the object.
 	// [NOTE] The position of the actor gets set in the Client as well,
@@ -113,4 +113,9 @@ void Actor::SetVelocity(XMFLOAT3 velocity)
 void Actor::SetFriction(float friction)
 {
 	mFriction = friction;
+}
+
+float Actor::GetSpeed()
+{
+	return sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z);
 }
