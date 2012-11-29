@@ -7,6 +7,7 @@ ItemContainer::ItemContainer(int x, int y, int colums, float slotSize)
 	mPosition = XMFLOAT2(x, y);
 	mNumColums = colums;
 	mSlotSize = slotSize;
+	mHooveringSlotId = -1;
 
 	mEmptySlotTexture = GLib::GetGraphics()->LoadTexture("textures/icons/empty_slot.bmp");
 }
@@ -18,13 +19,18 @@ ItemContainer::~ItemContainer()
 
 void ItemContainer::Update(GLib::Input* pInput, float dt)
 {
+	mHooveringSlotId = -1;
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
-		if(InsideSlot(mItemSlots[i], pInput->MousePosition()))
+		if(mItemSlots[i].taken && InsideSlot(mItemSlots[i], pInput->MousePosition()))
 		{
 			OnHoover(mItemSlots[i]);
 			if(pInput->KeyPressed(VK_LBUTTON))
-				OnPress(mItemSlots[i]);
+				OnLeftPress(mItemSlots[i]);
+			else if(pInput->KeyPressed(VK_RBUTTON))
+				OnRightPress(mItemSlots[i]);
+
+			mHooveringSlotId = i;
 		}
 	}
 }
@@ -34,8 +40,13 @@ void ItemContainer::Draw(GLib::Graphics* pGraphics)
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
 		XMFLOAT2 pos = mItemSlots[i].position;
-		if(mItemSlots[i].taken) 
+		if(mItemSlots[i].taken) {
 			pGraphics->DrawScreenQuad(mItemSlots[i].texture, pos.x, pos.y, mSlotSize, mSlotSize);
+
+			if(mHooveringSlotId == i) {
+				pGraphics->DrawText(mItemSlots[i].item.description, mPosition.x - mSlotSize/2, mPosition.y - mSlotSize/2 - 25, 18);
+			}
+		}	
 		else
 			pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mSlotSize, mSlotSize);
 	}

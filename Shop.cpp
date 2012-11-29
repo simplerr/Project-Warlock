@@ -25,7 +25,12 @@ void Shop::OnHoover(const ItemSlot& itemSlot)
 
 }
 
-void Shop::OnPress(const ItemSlot& itemSlot)
+void Shop::OnLeftPress(const ItemSlot& itemSlot)
+{
+	
+}
+
+void Shop::OnRightPress(const ItemSlot& itemSlot)
 {
 	if(mInspectingInventory != nullptr && itemSlot.taken)
 		mInspectingInventory->AddItem(itemSlot.item);

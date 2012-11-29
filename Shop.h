@@ -11,7 +11,8 @@ public:
 
 	void Draw(GLib::Graphics* pGraphics);
 	void OnHoover(const ItemSlot& itemSlot);
-	void OnPress(const ItemSlot& itemSlot);
+	void OnLeftPress(const ItemSlot& itemSlot);
+	void OnRightPress(const ItemSlot& itemSlot);
 
 	void SetInspectingInventory(Inventory* pIventory);
 private:

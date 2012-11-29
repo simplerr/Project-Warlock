@@ -31,7 +31,8 @@ public:
 	void UpdateItems();
 
 	void OnHoover(const ItemSlot& itemSlot);
-	void OnPress(const ItemSlot& itemSlot);
+	void OnLeftPress(const ItemSlot& itemSlot);
+	void OnRightPress(const ItemSlot& itemSlot);
 
 	void SetPlayer(Player* pPlayer);
 	void SetClient(Client* pClient);

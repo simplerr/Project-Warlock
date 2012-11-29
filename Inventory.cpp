@@ -24,7 +24,7 @@ Inventory::~Inventory()
 
 void Inventory::Update(GLib::Input* pInput, float dt)
 {
-
+	ItemContainer::Update(pInput, dt);
 }
 
 void Inventory::Draw(GLib::Graphics* pGraphics)
@@ -89,9 +89,15 @@ void Inventory::OnHoover(const ItemSlot& itemSlot)
 
 }
 
-void Inventory::OnPress(const ItemSlot& itemSlot)
+void Inventory::OnLeftPress(const ItemSlot& itemSlot)
 {
 
+}
+
+void Inventory::OnRightPress(const ItemSlot& itemSlot)
+{
+	// Sell item.
+	RemoveItem(GetItemLoader()->StringToName(itemSlot.item.name), itemSlot.item.level);
 }
 
 void Inventory::SetPlayer(Player* pPlayer)

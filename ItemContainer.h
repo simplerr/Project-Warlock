@@ -34,7 +34,8 @@ public:
 	virtual void Update(GLib::Input* pInput, float dt);
 	virtual void Draw(GLib::Graphics* pGraphics);
 	virtual void OnHoover(const ItemSlot& itemSlot) = 0;
-	virtual void OnPress(const ItemSlot& itemSlot) = 0;
+	virtual void OnLeftPress(const ItemSlot& itemSlot) = 0;
+	virtual void OnRightPress(const ItemSlot& itemSlot) = 0;
 
 	void AddSlot();
 	void PlaceInFreeSlot(ItemKey itemKey);
@@ -51,5 +52,6 @@ private:
 	XMFLOAT2			mPosition;
 	float				mSlotSize;
 	int					mNumColums;
+	int					mHooveringSlotId;
 
 };
