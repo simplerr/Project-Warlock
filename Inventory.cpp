@@ -39,6 +39,9 @@ void Inventory::AddItem(ItemName name, int level)
 
 void Inventory::AddItem(Item item)
 {
+	if(!HasFreeSlots())
+		return;
+
 	ItemName name = GetItemLoader()->StringToName(item.name);
 	int level = item.level;
 

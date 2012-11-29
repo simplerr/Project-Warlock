@@ -41,6 +41,7 @@ public:
 	void FreeAllSlots();
 	void SetItemLoader(ItemLoaderXML* pLoader);
 	
+	bool HasFreeSlots();
 	bool InsideSlot(const ItemSlot& slot, XMFLOAT3 pos);
 	ItemLoaderXML* GetItemLoader();
 private:

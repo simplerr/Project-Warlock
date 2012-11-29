@@ -91,3 +91,14 @@ ItemLoaderXML* ItemContainer::GetItemLoader()
 {
 	return mItemLoaderXML;
 }
+
+bool ItemContainer::HasFreeSlots()
+{
+	for(int i = 0; i < mItemSlots.size(); i++)
+	{
+		if(!mItemSlots[i].taken)
+			return true;
+	}
+
+	return false;
+}

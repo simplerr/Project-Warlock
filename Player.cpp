@@ -88,17 +88,19 @@ void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
 {
 	auto iter = mItemList.find(itemKey);
 	if(iter != mItemList.end())
+	{
 		mItemList.erase(iter);
 
-	// Remove item attributes.
-	Item item = pItemLoader->GetItem(itemKey);
-	SetHealth(GetHealth() - item.health);
-	SetRegen(GetRegen() - item.regen);
-	SetKnockBackResistance(GetKnockBackResistance() - item.knockbakResistance);
-	SetLavaImmunity(GetLavaImmunity() - item.lavaImmunity);
-	SetDamage(GetDamage() - item.damage);
-	SetLifeSteal(GetLifeSteal() - item.lifesteal);
-	SetMovementSpeed(GetMovementSpeed() - item.movementSpeed);
+		// Remove item attributes.
+		Item item = pItemLoader->GetItem(itemKey);
+		SetHealth(GetHealth() - item.health);
+		SetRegen(GetRegen() - item.regen);
+		SetKnockBackResistance(GetKnockBackResistance() - item.knockbakResistance);
+		SetLavaImmunity(GetLavaImmunity() - item.lavaImmunity);
+		SetDamage(GetDamage() - item.damage);
+		SetLifeSteal(GetLifeSteal() - item.lifesteal);
+		SetMovementSpeed(GetMovementSpeed() - item.movementSpeed);
+	}
 }
 
 multiset<ItemKey> Player::GetItemList()
