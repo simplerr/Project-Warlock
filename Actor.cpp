@@ -115,7 +115,12 @@ void Actor::SetFriction(float friction)
 	mFriction = friction;
 }
 
-float Actor::GetSpeed()
+float Actor::GetMovementSpeed()
 {
-	return sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z);
+	return mMovementSpeed;
+}
+
+float Actor::IsKnockedBack()
+{
+	return sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z) > 0.09f;
 }

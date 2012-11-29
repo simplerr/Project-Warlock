@@ -36,7 +36,8 @@ public:
 	void SetFriction(float friction);
 	bool IsSelected();
 
-	float GetSpeed();
+	float GetMovementSpeed();
+	float IsKnockedBack();
 private:
 	std::list<Target> mTargetQueue;
 	float			  mMovementSpeed;

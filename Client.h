@@ -15,6 +15,8 @@ namespace GLib {
 class ClientSkillInterpreter;
 class Actor;
 class Player;
+class Inventory;
+class ItemLoaderXML;
 
 class Client
 {
@@ -51,11 +53,15 @@ public:
 	void HandleGetConnectedPlayers(RakNet::BitStream& bitstream);
 	void HandleSkillCasted(RakNet::BitStream& bitstream);
 	void HandleProjectilePlayerCollision(RakNet::BitStream& bitstream);
+	void HandleItemAdded(RakNet::BitStream& bitstream);
+	void HandleItemRemoved(RakNet::BitStream& bitstream);
 
 private:
 	RakNet::RakPeerInterface*	mRaknetPeer;
 	GLib::World*				mWorld;
 	ClientSkillInterpreter*		mSkillInterpreter;
+	ItemLoaderXML*				mItemLoader;
+	Inventory*					mInventory;
 	Player*		 mSelectedPlayer;
 	Player*		 mPlayer;
 	string		 mName;

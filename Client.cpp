@@ -10,6 +10,8 @@
 #include "Player.h"
 #include "NetworkMessages.h"
 #include "ClientSkillInterpreter.h"
+#include "ItemLoaderXML.h"
+#include "Inventory.h"
 #include <fstream>
 
 Client::Client()
@@ -24,6 +26,10 @@ Client::Client()
 	mWorld->Init(GLib::GetGraphics());
 
 	mSkillInterpreter = new ClientSkillInterpreter();
+	mItemLoader = new ItemLoaderXML("items.xml");
+
+	mInventory = new Inventory();
+	mInventory->SetItemLoader(mItemLoader);
 
 	// Connect the graphics light list.
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
@@ -41,6 +47,8 @@ Client::~Client()
 {
 	delete mWorld;
 	delete mSkillInterpreter;
+	delete mItemLoader;
+	delete mInventory;
 
 	// Tell the opponent that you left
 	/*RakNet::BitStream bitstream;
@@ -56,6 +64,8 @@ void Client::Update(GLib::Input* pInput, float dt)
 	// Update the world.
 	mWorld->Update(dt);
 
+	mInventory->Update(pInput, dt);
+
 	// Poll for object selection.
 	PollSelection(pInput);
 
@@ -67,6 +77,11 @@ void Client::Update(GLib::Input* pInput, float dt)
 	if(pInput->KeyPressed('C'))
 		RequestClientNames();
 
+	if(pInput->KeyPressed('V'))
+		mInventory->AddItem(this, IRON_ARMOR, 1);
+	if(pInput->KeyPressed('B'))
+		mInventory->RemoveItem(this, IRON_ARMOR, 1);
+
 	// Listen for incoming packets.
 	ListenForPackets();
 }
@@ -76,10 +91,13 @@ void Client::Draw(GLib::Graphics* pGraphics)
 	// Draw the world.
 	mWorld->Draw(pGraphics);
 
+	mInventory->Draw(pGraphics);
+
 	if(mSelectedPlayer != nullptr) {
 		char buffer[244];
-		sprintf(buffer, "Health: %.2f", mSelectedPlayer->GetHealth());
-		pGraphics->DrawText(buffer, 10, 10, 20, 0xff000000);
+		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
+			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal());
+		pGraphics->DrawText(buffer, 10, 10, 16, 0xff000000);
 	}
 }
 
@@ -147,6 +165,12 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			break;
 		case NMSG_PROJECTILE_PLAYER_COLLISION:
 			HandleProjectilePlayerCollision(bitstream);
+			break;
+		case NMSG_ITEM_ADDED:
+			HandleItemAdded(bitstream);
+			break;
+		case NMSG_ITEM_REMOVED:
+			HandleItemRemoved(bitstream);
 			break;
 	}
 
@@ -273,6 +297,12 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 		mSelectedPlayer = mPlayer;
 		mSelectedPlayer->SetSelected(true);
 		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
+
+		// [NOTEOTOEOTOE]
+		mInventory->SetPlayer(mPlayer);
+
+		mInventory->AddItem(this, IRON_ARMOR, 1);
+		mInventory->AddItem(this, REGEN_CAP, 1);
 	}
 	else
 		OutputDebugString(string(name + " has connected!\n").c_str());
@@ -325,6 +355,30 @@ void Client::HandleProjectilePlayerCollision(RakNet::BitStream& bitstream)
 	OutputDebugString(buffer);
 }
 
+void Client::HandleItemAdded(RakNet::BitStream& bitstream)
+{
+	ItemName name;
+	int playerId, level;
+	bitstream.Read(playerId);
+	bitstream.Read(name);
+	bitstream.Read(level);
+
+	Player* player = (Player*)mWorld->GetObjectById(playerId);
+	player->AddItem(mItemLoader, ItemKey(name, level));
+}
+
+void Client::HandleItemRemoved(RakNet::BitStream& bitstream)
+{
+	ItemName name;
+	int playerId, level;
+	bitstream.Read(playerId);
+	bitstream.Read(name);
+	bitstream.Read(level);
+
+	Player* player = (Player*)mWorld->GetObjectById(playerId);
+	player->RemoveItem(mItemLoader, ItemKey(name, level));
+}
+
 void Client::SendServerMessage(RakNet::BitStream& bitstream)
 {
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
@@ -360,6 +414,7 @@ void Client::PollSelection(GLib::Input* pInput)
 			mSelectedPlayer = selected;
 			mSelectedPlayer->SetSelected(true);
 			mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
+			mInventory->SetPlayer(mSelectedPlayer);
 		}
 	}
 }

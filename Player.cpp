@@ -64,17 +64,104 @@ RakNet::SystemAddress Player::GetSystemAdress()
 	return mSystemAdress;
 }
 
+bool Player::IsCastingSkill()
+{
+	return mSkillHandler->IsCastingSkill();
+}
+
+void Player::AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
+{
+	mItemList.insert(itemKey);
+
+	// Add item attributes.
+	Item item = pItemLoader->GetItem(itemKey);
+	SetHealth(GetHealth() + item.health);
+	SetRegen(GetRegen() + item.regen);
+	SetKnockBackResistance(GetKnockBackResistance() + item.knockbakResistance);
+	SetLavaImmunity(GetLavaImmunity() + item.lavaImmunity);
+	SetDamage(GetDamage() + item.damage);
+	SetLifeSteal(GetLifeSteal() + item.lifesteal);
+	SetMovementSpeed(GetMovementSpeed() + item.movementSpeed);
+}
+
+void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
+{
+	auto iter = mItemList.find(itemKey);
+	if(iter != mItemList.end())
+		mItemList.erase(iter);
+
+	// Remove item attributes.
+	Item item = pItemLoader->GetItem(itemKey);
+	SetHealth(GetHealth() - item.health);
+	SetRegen(GetRegen() - item.regen);
+	SetKnockBackResistance(GetKnockBackResistance() - item.knockbakResistance);
+	SetLavaImmunity(GetLavaImmunity() - item.lavaImmunity);
+	SetDamage(GetDamage() - item.damage);
+	SetLifeSteal(GetLifeSteal() - item.lifesteal);
+	SetMovementSpeed(GetMovementSpeed() - item.movementSpeed);
+}
+
+multiset<ItemKey> Player::GetItemList()
+{
+	return mItemList;
+}
+
 void Player::SetHealth(float health)
 {
-	mHealth = health;
+	mAttributes.health = health;
+}
+
+void Player::SetRegen(float regen)
+{
+	mAttributes.regen = regen;
+}
+
+void Player::SetKnockBackResistance(float resistance)
+{
+	mAttributes.knockbackResistance = resistance;
+}
+
+void Player::SetLavaImmunity(float immunity)
+{
+	mAttributes.lavaImmunity = immunity;
+}
+
+void Player::SetDamage(float damage)
+{
+	mAttributes.damage = damage;
+}
+
+void Player::SetLifeSteal(float lifesteal)
+{
+	mAttributes.lifesteal = lifesteal;
 }
 
 float Player::GetHealth()
 {
-	return mHealth;
+	return mAttributes.health;
 }
 
-bool Player::IsCastingSkill()
+float Player::GetRegen()
 {
-	return mSkillHandler->IsCastingSkill();
+	return mAttributes.regen;
+}
+
+float Player::GetKnockBackResistance()
+{
+	return mAttributes.knockbackResistance;
+}
+
+float Player::GetLavaImmunity()
+{
+	return mAttributes.lavaImmunity;
+}
+
+float Player::GetDamage()
+{
+	return mAttributes.damage;
+}
+
+float Player::GetLifeSteal()
+{
+	return mAttributes.lifesteal;
 }
