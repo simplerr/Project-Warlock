@@ -25,16 +25,17 @@ public:
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 
-	void AddItem(Client* pClient, ItemName name, int level);
-	void RemoveItem(Client* pClient, ItemName name, int level);
+	void AddItem(ItemName name, int level);
+	void AddItem(Item item);
+	void RemoveItem(ItemName name, int level);
 	void UpdateItems();
 
-	void OnHoover(const ItemSlot& item);
-	void OnPress(const ItemSlot& item);
+	void OnHoover(const ItemSlot& itemSlot);
+	void OnPress(const ItemSlot& itemSlot);
 
 	void SetPlayer(Player* pPlayer);
+	void SetClient(Client* pClient);
 private:
 	Player*			 mPlayer;
-	float mIconSize;
-	XMFLOAT2		mPosition;
+	Client*			 mClient;
 };

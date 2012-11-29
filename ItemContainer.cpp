@@ -43,15 +43,11 @@ void ItemContainer::Draw(GLib::Graphics* pGraphics)
 
 void ItemContainer::AddSlot()
 {
-	static int addedSlots = 0;
-
 	ItemSlot newSlot;
 	newSlot.position = mPosition;
-	newSlot.position.x += mSlotSize * 1.2 * (addedSlots % 3);
-	newSlot.position.y += mSlotSize * 1.2 * (addedSlots / 3);
+	newSlot.position.x += mSlotSize * 1.2 * (mItemSlots.size() % 3);
+	newSlot.position.y += mSlotSize * 1.2 * (mItemSlots.size() / 3);
 	mItemSlots.push_back(newSlot);
-
-	addedSlots++;
 }
 
 void ItemContainer::PlaceInFreeSlot(ItemKey itemKey)

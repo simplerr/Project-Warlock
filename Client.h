@@ -16,6 +16,7 @@ class ClientSkillInterpreter;
 class Actor;
 class Player;
 class Inventory;
+class Shop;
 class ItemLoaderXML;
 
 class Client
@@ -62,6 +63,7 @@ private:
 	ClientSkillInterpreter*		mSkillInterpreter;
 	ItemLoaderXML*				mItemLoader;
 	Inventory*					mInventory;
+	Shop*						mShop;
 	Player*		 mSelectedPlayer;
 	Player*		 mPlayer;
 	string		 mName;

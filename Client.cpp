@@ -12,6 +12,7 @@
 #include "ClientSkillInterpreter.h"
 #include "ItemLoaderXML.h"
 #include "Inventory.h"
+#include "Shop.h"
 #include <fstream>
 
 Client::Client()
@@ -30,6 +31,15 @@ Client::Client()
 
 	mInventory = new Inventory(900, 770, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
+	mInventory->SetClient(this);
+
+	mShop = new Shop(200, 770, 3, 60);
+	mShop->SetItemLoader(mItemLoader);
+	mShop->SetInspectingInventory(mInventory);
+
+	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
+	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
+	mShop->PlaceInFreeSlot(ItemKey(IRON_ARMOR, 1));
 
 	// Connect the graphics light list.
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
@@ -65,6 +75,7 @@ void Client::Update(GLib::Input* pInput, float dt)
 	mWorld->Update(dt);
 
 	mInventory->Update(pInput, dt);
+	mShop->Update(pInput, dt);
 
 	// Poll for object selection.
 	PollSelection(pInput);
@@ -78,9 +89,9 @@ void Client::Update(GLib::Input* pInput, float dt)
 		RequestClientNames();
 
 	if(pInput->KeyPressed('V'))
-		mInventory->AddItem(this, IRON_ARMOR, 1);
+		mInventory->AddItem(IRON_ARMOR, 1);
 	if(pInput->KeyPressed('B'))
-		mInventory->RemoveItem(this, IRON_ARMOR, 1);
+		mInventory->RemoveItem(IRON_ARMOR, 1);
 
 	// Listen for incoming packets.
 	ListenForPackets();
@@ -92,6 +103,7 @@ void Client::Draw(GLib::Graphics* pGraphics)
 	mWorld->Draw(pGraphics);
 
 	mInventory->Draw(pGraphics);
+	mShop->Draw(pGraphics);
 
 	if(mSelectedPlayer != nullptr) {
 		char buffer[244];
@@ -301,8 +313,8 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 		// [NOTEOTOEOTOE]
 		mInventory->SetPlayer(mPlayer);
 
-		mInventory->AddItem(this, IRON_ARMOR, 1);
-		mInventory->AddItem(this, REGEN_CAP, 1);
+		mInventory->AddItem(IRON_ARMOR, 1);
+		mInventory->AddItem(REGEN_CAP, 1);
 	}
 	else
 		OutputDebugString(string(name + " has connected!\n").c_str());

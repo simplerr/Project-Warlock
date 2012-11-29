@@ -76,3 +76,8 @@ Item ItemLoaderXML::GetItem(ItemKey key)
 {
 	return mItemMap[key];
 }
+
+ItemName ItemLoaderXML::StringToName(string name)
+{
+	return (ItemName)mStringKeyMap[name];
+}

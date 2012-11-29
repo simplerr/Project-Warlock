@@ -33,8 +33,8 @@ public:
 
 	virtual void Update(GLib::Input* pInput, float dt);
 	virtual void Draw(GLib::Graphics* pGraphics);
-	virtual void OnHoover(const ItemSlot& item) = 0;
-	virtual void OnPress(const ItemSlot& item) = 0;
+	virtual void OnHoover(const ItemSlot& itemSlot) = 0;
+	virtual void OnPress(const ItemSlot& itemSlot) = 0;
 
 	void AddSlot();
 	void PlaceInFreeSlot(ItemKey itemKey);
