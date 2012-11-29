@@ -11,7 +11,6 @@ Inventory::Inventory(int x, int y, int colums, float slotSize)
 	: ItemContainer(x, y, colums, slotSize)
 {
 	mPlayer = nullptr;
-	mClient = nullptr;
 
 	for(int i = 0; i < 6; i++)
 		AddSlot();
@@ -30,6 +29,9 @@ void Inventory::Update(GLib::Input* pInput, float dt)
 void Inventory::Draw(GLib::Graphics* pGraphics)
 {
 	ItemContainer::Draw(pGraphics);
+
+	if(GetClient()->IsLocalPlayerSelected())
+		pGraphics->DrawScreenQuad(nullptr, 760, 770, 20, 20);
 }
 
 void Inventory::AddItem(ItemName name, int level)
@@ -53,7 +55,7 @@ void Inventory::AddItem(Item item)
 	bitstream.Write(mPlayer->GetId());
 	bitstream.Write(name);
 	bitstream.Write(level);
-	mClient->SendServerMessage(bitstream);
+	GetClient()->SendServerMessage(bitstream);
 
 	UpdateItems();
 }
@@ -68,7 +70,7 @@ void Inventory::RemoveItem(ItemName name, int level)
 	bitstream.Write(mPlayer->GetId());
 	bitstream.Write(name);
 	bitstream.Write(level);
-	mClient->SendServerMessage(bitstream);
+	GetClient()->SendServerMessage(bitstream);
 
 	UpdateItems();
 }
@@ -104,9 +106,4 @@ void Inventory::SetPlayer(Player* pPlayer)
 {
 	mPlayer = pPlayer;
 	UpdateItems();
-}
-
-void Inventory::SetClient(Client* pClient)
-{
-	mClient = pClient;
 }

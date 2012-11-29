@@ -34,10 +34,10 @@ Client::Client()
 	mInventory->SetClient(this);
 
 	mShop = new Shop(200, 770, 3, 60);
+	mShop->SetClient(this);
 	mShop->SetItemLoader(mItemLoader);
 	mShop->SetInspectingInventory(mInventory);
 
-	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
 	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
 	mShop->PlaceInFreeSlot(ItemKey(IRON_ARMOR, 1));
 
@@ -312,9 +312,6 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 
 		// [NOTEOTOEOTOE]
 		mInventory->SetPlayer(mPlayer);
-
-		mInventory->AddItem(IRON_ARMOR, 1);
-		mInventory->AddItem(REGEN_CAP, 1);
 	}
 	else
 		OutputDebugString(string(name + " has connected!\n").c_str());
@@ -416,18 +413,23 @@ void Client::PollSelection(GLib::Input* pInput)
 	if(pInput->KeyPressed(VK_LBUTTON) && !mPlayer->IsCastingSkill())
 	{
 		Player* selected = (Player*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay(), GLib::PLAYER);
-		if(selected != nullptr) 
-		{
-			if(mSelectedPlayer != nullptr) {
-				mSelectedPlayer->SetSelected(false);
-				mSelectedPlayer->SetMaterials(GLib::Material(GLib::Colors::White));
-			}
+		SetSelectedPlayer(selected);
+	}
+}
 
-			mSelectedPlayer = selected;
-			mSelectedPlayer->SetSelected(true);
-			mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
-			mInventory->SetPlayer(mSelectedPlayer);
+void Client::SetSelectedPlayer(Player* pPlayer)
+{
+	if(pPlayer != nullptr) 
+	{
+		if(mSelectedPlayer != nullptr) {
+			mSelectedPlayer->SetSelected(false);
+			mSelectedPlayer->SetMaterials(GLib::Material(GLib::Colors::White));
 		}
+
+		mSelectedPlayer = pPlayer;
+		mSelectedPlayer->SetSelected(true);
+		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
+		mInventory->SetPlayer(mSelectedPlayer);
 	}
 }
 
@@ -452,4 +454,14 @@ int Client::GetPlayerId()
 GLib::World* Client::GetWorld()
 {
 	return mWorld;
+}
+
+bool Client::IsLocalPlayerSelected()
+{
+	return (mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId());
+}
+
+Player* Client::GetPlayer()
+{
+	return mPlayer;
 }

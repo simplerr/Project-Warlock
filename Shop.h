@@ -15,6 +15,8 @@ public:
 	void OnRightPress(const ItemSlot& itemSlot);
 
 	void SetInspectingInventory(Inventory* pIventory);
+	void SetClientsPlayerI(int id);
 private:
 	Inventory* mInspectingInventory;
+	int mClientPlayerId;
 };

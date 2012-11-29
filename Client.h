@@ -33,14 +33,16 @@ public:
 	bool HandlePacket(RakNet::Packet* pPacket);
 	
 	void RequestClientNames();
-
 	void SendServerMessage(RakNet::BitStream& bitstream);
-
 	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
+
+	void SetSelectedPlayer(Player* pPlayer);
 
 	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World* GetWorld();
+	Player* GetPlayer();
 	int GetPlayerId();
+	bool IsLocalPlayerSelected();
 
 	//
 	// Handle packet functions.

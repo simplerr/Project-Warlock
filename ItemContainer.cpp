@@ -1,4 +1,5 @@
 #include "ItemContainer.h"
+#include "Client.h"
 #include "Input.h"
 #include "Graphics.h"
 
@@ -112,4 +113,14 @@ bool ItemContainer::HasFreeSlots()
 	}
 
 	return false;
+}
+
+void ItemContainer::SetClient(Client* pClient)
+{
+	mClient = pClient;
+}
+
+Client*	ItemContainer::GetClient()
+{
+	return mClient;
 }

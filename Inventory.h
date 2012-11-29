@@ -35,8 +35,6 @@ public:
 	void OnRightPress(const ItemSlot& itemSlot);
 
 	void SetPlayer(Player* pPlayer);
-	void SetClient(Client* pClient);
 private:
 	Player*			 mPlayer;
-	Client*			 mClient;
 };

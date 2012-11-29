@@ -11,6 +11,7 @@ namespace GLib {
 }
 
 class ItemLoaderXML;
+class Client;
 
 struct ItemSlot
 {
@@ -41,14 +42,18 @@ public:
 	void PlaceInFreeSlot(ItemKey itemKey);
 	void FreeAllSlots();
 	void SetItemLoader(ItemLoaderXML* pLoader);
+	void SetClient(Client* pClient);
 	
 	bool HasFreeSlots();
 	bool InsideSlot(const ItemSlot& slot, XMFLOAT3 pos);
+	bool IsLocalPlayerSelected();
 	ItemLoaderXML* GetItemLoader();
+	Client*	GetClient();
 private:
 	vector<ItemSlot>	mItemSlots;
 	ItemLoaderXML*		mItemLoaderXML;
 	GLib::Texture2D*	mEmptySlotTexture;
+	Client*				mClient;
 	XMFLOAT2			mPosition;
 	float				mSlotSize;
 	int					mNumColums;
