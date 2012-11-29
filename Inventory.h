@@ -1,5 +1,6 @@
 #pragma once
 #include "Items.h"
+#include "ItemContainer.h"
 #include "ItemLoaderXML.h"
 #include "d3dUtil.h"
 #include <vector>
@@ -15,22 +16,10 @@ class ItemLoaderXML;
 class Player;
 class Client;
 
-struct InventorySlot
-{
-	InventorySlot() {
-		texture = nullptr;
-		taken = false;
-	}
-
-	GLib::Texture2D* texture;
-	Item item;
-	bool taken;
-};
-
-class Inventory
+class Inventory : public ItemContainer
 {
 public:
-	Inventory();
+	Inventory(int x, int y, int colums, float slotSize);
 	~Inventory();
 
 	void Update(GLib::Input* pInput, float dt);
@@ -39,14 +28,12 @@ public:
 	void AddItem(Client* pClient, ItemName name, int level);
 	void RemoveItem(Client* pClient, ItemName name, int level);
 	void UpdateItems();
-	void PlaceInFreeSlot(ItemKey itemKey);
 
-	void SetItemLoader(ItemLoaderXML* pLoader);
+	void OnHoover(const ItemSlot& item);
+	void OnPress(const ItemSlot& item);
+
 	void SetPlayer(Player* pPlayer);
 private:
-	vector<InventorySlot> mInventorySlots;
-	ItemLoaderXML*	mItemLoaderXML;
-	GLib::Texture2D* mEmptySlotTexture;
 	Player*			 mPlayer;
 	float mIconSize;
 	XMFLOAT2		mPosition;

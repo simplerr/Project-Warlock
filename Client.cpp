@@ -28,7 +28,7 @@ Client::Client()
 	mSkillInterpreter = new ClientSkillInterpreter();
 	mItemLoader = new ItemLoaderXML("items.xml");
 
-	mInventory = new Inventory();
+	mInventory = new Inventory(900, 770, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
 
 	// Connect the graphics light list.

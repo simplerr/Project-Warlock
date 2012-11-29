@@ -7,16 +7,13 @@
 #include "BitStream.h"
 #include "NetworkMessages.h"
 
-Inventory::Inventory()
+Inventory::Inventory(int x, int y, int colums, float slotSize)
+	: ItemContainer(x, y, colums, slotSize)
 {
-	mPosition = XMFLOAT2(970, 770);
-	mIconSize = 60.0f;
 	mPlayer = nullptr;
 
 	for(int i = 0; i < 6; i++)
-		mInventorySlots.push_back(InventorySlot());
-
-	mEmptySlotTexture = GLib::GetGraphics()->LoadTexture("textures/icons/empty_slot.bmp");
+		AddSlot();
 }
 
 Inventory::~Inventory()
@@ -31,23 +28,12 @@ void Inventory::Update(GLib::Input* pInput, float dt)
 
 void Inventory::Draw(GLib::Graphics* pGraphics)
 {
-	for(int i = 0; i < mInventorySlots.size(); i++)
-	{
-		XMFLOAT2 pos = mPosition;
-
-		pos.x += mIconSize * 1.2 * (i % 3);
-		pos.y += mIconSize * 1.2 * (i / 3);
-
-		if(mInventorySlots[i].taken) 
-			pGraphics->DrawScreenQuad(mInventorySlots[i].texture, pos.x, pos.y, mIconSize, mIconSize);
-		else
-			pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mIconSize, mIconSize);
-	}
+	ItemContainer::Draw(pGraphics);
 }
 
 void Inventory::AddItem(Client* pClient, ItemName name, int level)
 {
-	mPlayer->AddItem(mItemLoaderXML, ItemKey(name, level));
+	mPlayer->AddItem(GetItemLoader(), ItemKey(name, level));
 
 	// Send to server.
 	RakNet::BitStream bitstream;
@@ -62,7 +48,7 @@ void Inventory::AddItem(Client* pClient, ItemName name, int level)
 
 void Inventory::RemoveItem(Client* pClient, ItemName name, int level)
 {
-	mPlayer->RemoveItem(mItemLoaderXML, ItemKey(name, level));
+	mPlayer->RemoveItem(GetItemLoader(), ItemKey(name, level));
 
 	// Send to server.
 	RakNet::BitStream bitstream;
@@ -77,34 +63,23 @@ void Inventory::RemoveItem(Client* pClient, ItemName name, int level)
 
 void Inventory::UpdateItems()
 {
-	// Update the inventory.
+	// Get the players items.
 	multiset<ItemKey> playerItems = mPlayer->GetItemList();
 
-	for(int i = 0; i< mInventorySlots.size(); i++)
-		mInventorySlots[i].taken = false;
+	FreeAllSlots();
 
 	for(auto iter = playerItems.begin(); iter != playerItems.end(); iter++)
 		PlaceInFreeSlot((*iter));
 }
 
-void Inventory::PlaceInFreeSlot(ItemKey itemKey)
+void Inventory::OnHoover(const ItemSlot& item)
 {
-	Item item = mItemLoaderXML->GetItem(itemKey);
-	for(int i = 0; i < mInventorySlots.size(); i++)
-	{
-		if(!mInventorySlots[i].taken)
-		{
-			mInventorySlots[i].item = item;
-			mInventorySlots[i].texture = GLib::GetGraphics()->LoadTexture(item.icon);
-			mInventorySlots[i].taken = true;
-			break;
-		}
-	}
+
 }
 
-void Inventory::SetItemLoader(ItemLoaderXML* pLoader)
+void Inventory::OnPress(const ItemSlot& item)
 {
-	mItemLoaderXML = pLoader;
+
 }
 
 void Inventory::SetPlayer(Player* pPlayer)
