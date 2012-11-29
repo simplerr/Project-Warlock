@@ -53,6 +53,7 @@ public:
 	void SetLavaImmunity(float immunity);
 	void SetDamage(float damage);
 	void SetLifeSteal(float lifesteal);
+	void SetGold(int gold);
 
 	float GetHealth();
 	float GetRegen();
@@ -60,11 +61,13 @@ public:
 	float GetLavaImmunity();
 	float GetDamage();
 	float GetLifeSteal();
+	int	GetGold();
 
 	bool IsCastingSkill();
 private:
 	RakNet::SystemAddress mSystemAdress;
 	SkillHandler*		  mSkillHandler;	// Should it really be here?
-	multiset<ItemKey>		  mItemList;
+	multiset<ItemKey>	  mItemList;
 	PlayerAttributes	  mAttributes;
+	int mGold;
 };

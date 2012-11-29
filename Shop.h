@@ -13,6 +13,7 @@ public:
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(const ItemSlot& itemSlot);
+	string GetHooverText(const Item& item);
 
 	void SetInspectingInventory(Inventory* pIventory);
 	void SetClientsPlayerI(int id);

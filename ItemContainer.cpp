@@ -44,9 +44,8 @@ void ItemContainer::Draw(GLib::Graphics* pGraphics)
 		if(mItemSlots[i].taken) {
 			pGraphics->DrawScreenQuad(mItemSlots[i].texture, pos.x, pos.y, mSlotSize, mSlotSize);
 
-			if(mHooveringSlotId == i) {
-				pGraphics->DrawText(mItemSlots[i].item.description, mPosition.x - mSlotSize/2, mPosition.y - mSlotSize/2 - 25, 18);
-			}
+			if(mHooveringSlotId == i) 
+				pGraphics->DrawText(GetHooverText(mItemSlots[i].item), mPosition.x - mSlotSize/2, mPosition.y - mSlotSize/2 - 49, 18);
 		}	
 		else
 			pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mSlotSize, mSlotSize);

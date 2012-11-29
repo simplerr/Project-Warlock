@@ -57,6 +57,7 @@ ItemLoaderXML::ItemLoaderXML(string filename)
 			loadedItem.lavaImmunity = level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
 			loadedItem.damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
 			loadedItem.lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
+			loadedItem.price = level->Attribute("price") == NULL ? 10.0f : atoi(level->Attribute("price"));
 
 			ItemKey key;
 			key.name = (ItemName)mStringKeyMap[loadedItem.name];

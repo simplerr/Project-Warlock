@@ -102,6 +102,13 @@ void Inventory::OnRightPress(const ItemSlot& itemSlot)
 	RemoveItem(GetItemLoader()->StringToName(itemSlot.item.name), itemSlot.item.level);
 }
 
+string Inventory::GetHooverText(const Item& item)
+{
+	char buffer[244];
+	sprintf(buffer, "Sell value: %i gold\n", item.price-3);	// [NOTE][TODO] Maybe enough?
+	return string(buffer + item.description);
+}
+
 void Inventory::SetPlayer(Player* pPlayer)
 {
 	mPlayer = pPlayer;

@@ -14,6 +14,7 @@ struct Item
 {
 	Item() {
 		health =  regen = movementSpeed = knockbakResistance = damage = lifesteal = 0.0f;
+		price = 10;
 	}
 
 	string description;
@@ -27,6 +28,7 @@ struct Item
 	float damage;
 	float lifesteal;
 	int level;
+	int price;
 };
 
 // Inventory has a map of ItemSlots!

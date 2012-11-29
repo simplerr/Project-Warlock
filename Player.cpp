@@ -11,6 +11,7 @@ Player::Player()
 {
 	SetType(GLib::PLAYER);
 	SetHealth(100.0f);
+	SetGold(10);
 	mSkillHandler = new SkillHandler();
 }
 
@@ -138,6 +139,11 @@ void Player::SetLifeSteal(float lifesteal)
 	mAttributes.lifesteal = lifesteal;
 }
 
+void Player::SetGold(int gold)
+{
+	mGold = gold;
+}
+
 float Player::GetHealth()
 {
 	return mAttributes.health;
@@ -166,4 +172,9 @@ float Player::GetDamage()
 float Player::GetLifeSteal()
 {
 	return mAttributes.lifesteal;
+}
+
+int	Player::GetGold()
+{
+	return mGold;
 }

@@ -45,6 +45,13 @@ void Shop::OnRightPress(const ItemSlot& itemSlot)
 		mInspectingInventory->AddItem(itemSlot.item);
 }
 
+string Shop::GetHooverText(const Item& item)
+{
+	char buffer[244];
+	sprintf(buffer, "Cost: %i gold\n", item.price);
+	return string(buffer + item.description);
+}
+
 void Shop::SetInspectingInventory(Inventory* pIventory)
 {
 	mInspectingInventory = pIventory;
