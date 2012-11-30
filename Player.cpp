@@ -40,9 +40,6 @@ void Player::PollAction(Client* pClient, GLib::Input* pInput)
 	// [TODO] Add mSkillHandler->PollAction().
 	mSkillHandler->PollAction(pClient, pInput, GetPosition(), GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay()));
 
-	if(pInput->KeyPressed('W'))
-		SetVelocity(XMFLOAT3(0, 0, 0.1f));
-
 	// Add movement target for the selected object.
 	if(pInput->KeyPressed(VK_RBUTTON))
 	{

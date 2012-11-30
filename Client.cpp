@@ -14,6 +14,7 @@
 #include "Inventory.h"
 #include "Shop.h"
 #include <fstream>
+#include "UserInterface.h"
 
 Client::Client()
 {
@@ -27,19 +28,7 @@ Client::Client()
 	mWorld->Init(GLib::GetGraphics());
 
 	mSkillInterpreter = new ClientSkillInterpreter();
-	mItemLoader = new ItemLoaderXML("items.xml");
-
-	mInventory = new Inventory(900, 770, 3, 60);
-	mInventory->SetItemLoader(mItemLoader);
-	mInventory->SetClient(this);
-
-	mShop = new Shop(200, 770, 3, 60);
-	mShop->SetClient(this);
-	mShop->SetItemLoader(mItemLoader);
-	mShop->SetInspectingInventory(mInventory);
-
-	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
-	mShop->PlaceInFreeSlot(ItemKey(IRON_ARMOR, 1));
+	mUserInterface = new UserInterface(this);
 
 	// Connect the graphics light list.
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
@@ -57,8 +46,7 @@ Client::~Client()
 {
 	delete mWorld;
 	delete mSkillInterpreter;
-	delete mItemLoader;
-	delete mInventory;
+	delete mUserInterface;
 
 	// Tell the opponent that you left
 	/*RakNet::BitStream bitstream;
@@ -74,24 +62,18 @@ void Client::Update(GLib::Input* pInput, float dt)
 	// Update the world.
 	mWorld->Update(dt);
 
-	mInventory->Update(pInput, dt);
-	mShop->Update(pInput, dt);
+	mUserInterface->Update(pInput, dt);
 
 	// Poll for object selection.
 	PollSelection(pInput);
 
 	// If the selected object is the player then poll for action.
-	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId()) 
+	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId() && !mUserInterface->PointInsideUi(pInput->MousePosition())) 
 		mPlayer->PollAction(this, pInput);
 
 	// Testing..
 	if(pInput->KeyPressed('C'))
 		RequestClientNames();
-
-	if(pInput->KeyPressed('V'))
-		mInventory->AddItem(IRON_ARMOR, 1);
-	if(pInput->KeyPressed('B'))
-		mInventory->RemoveItem(IRON_ARMOR, 1);
 
 	// Listen for incoming packets.
 	ListenForPackets();
@@ -102,8 +84,7 @@ void Client::Draw(GLib::Graphics* pGraphics)
 	// Draw the world.
 	mWorld->Draw(pGraphics);
 
-	mInventory->Draw(pGraphics);
-	mShop->Draw(pGraphics);
+	mUserInterface->Draw(pGraphics);
 
 	if(mSelectedPlayer != nullptr) {
 		char buffer[244];
@@ -179,11 +160,19 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			HandleProjectilePlayerCollision(bitstream);
 			break;
 		case NMSG_ITEM_ADDED:
-			HandleItemAdded(bitstream);
-			break;
+			{
+				int playerId;
+				bitstream.Read(playerId);
+				mUserInterface->HandleItemAdded((Player*)mWorld->GetObjectById(playerId), bitstream);
+				break;
+			}
 		case NMSG_ITEM_REMOVED:
-			HandleItemRemoved(bitstream);
-			break;
+			{
+				int playerId;
+				bitstream.Read(playerId);
+				mUserInterface->HandleItemRemoved((Player*)mWorld->GetObjectById(playerId), bitstream);
+				break;
+			}
 	}
 
 	return true;
@@ -319,7 +308,7 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
 
 		// [NOTEOTOEOTOE]
-		mInventory->SetPlayer(mPlayer);
+		mUserInterface->SetSelectedPlayer(mPlayer);
 	}
 	else
 		OutputDebugString(string(name + " has connected!\n").c_str());
@@ -372,32 +361,6 @@ void Client::HandleProjectilePlayerCollision(RakNet::BitStream& bitstream)
 	OutputDebugString(buffer);
 }
 
-void Client::HandleItemAdded(RakNet::BitStream& bitstream)
-{
-	ItemName name;
-	int playerId, level;
-	bitstream.Read(playerId);
-	bitstream.Read(name);
-	bitstream.Read(level);
-
-	Player* player = (Player*)mWorld->GetObjectById(playerId);
-	player->AddItem(mItemLoader, ItemKey(name, level));
-	mInventory->UpdateItems();
-}
-
-void Client::HandleItemRemoved(RakNet::BitStream& bitstream)
-{
-	ItemName name;
-	int playerId, level;
-	bitstream.Read(playerId);
-	bitstream.Read(name);
-	bitstream.Read(level);
-
-	Player* player = (Player*)mWorld->GetObjectById(playerId);
-	player->RemoveItem(mItemLoader, ItemKey(name, level));
-	mInventory->UpdateItems();
-}
-
 void Client::SendServerMessage(RakNet::BitStream& bitstream)
 {
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
@@ -420,7 +383,7 @@ void Client::SendAddTarget(int id, XMFLOAT3 pos, bool clear)
 void Client::PollSelection(GLib::Input* pInput)
 {
 	// Get the selected object.
-	if(pInput->KeyPressed(VK_LBUTTON) && !mPlayer->IsCastingSkill())
+	if(pInput->KeyPressed(VK_LBUTTON) && !mPlayer->IsCastingSkill() && !mUserInterface->PointInsideUi(pInput->MousePosition()))
 	{
 		Player* selected = (Player*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay(), GLib::PLAYER);
 		SetSelectedPlayer(selected);
@@ -439,7 +402,7 @@ void Client::SetSelectedPlayer(Player* pPlayer)
 		mSelectedPlayer = pPlayer;
 		mSelectedPlayer->SetSelected(true);
 		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
-		mInventory->SetPlayer(mSelectedPlayer);
+		mUserInterface->SetSelectedPlayer(mPlayer);
 	}
 }
 
