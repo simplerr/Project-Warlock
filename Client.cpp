@@ -403,7 +403,7 @@ void Client::SetSelectedPlayer(Player* pPlayer)
 		mSelectedPlayer = pPlayer;
 		mSelectedPlayer->SetSelected(true);
 		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
-		mUserInterface->SetSelectedPlayer(mPlayer);
+		mUserInterface->SetSelectedPlayer(mSelectedPlayer);
 	}
 }
 
