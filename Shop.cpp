@@ -1,7 +1,10 @@
 #include "Shop.h"
+#include "NetworkMessages.h"
 #include "Inventory.h"
 #include "Client.h"
 #include "Graphics.h"
+#include "Player.h"
+#include "BitStream.h"
 
 Shop::Shop(int x, int y, int colums, float slotSize)
 	: ItemContainer(x, y, colums, slotSize)
@@ -37,18 +40,29 @@ void Shop::OnLeftPress(const ItemSlot& itemSlot)
 
 void Shop::OnRightPress(const ItemSlot& itemSlot)
 {
+	Player* player = GetClient()->GetPlayer();
+
 	// If the Clients Player isn't selected then select it before adding item to inventory.
 	if(!GetClient()->IsLocalPlayerSelected())
-		GetClient()->SetSelectedPlayer(GetClient()->GetPlayer());
+		GetClient()->SetSelectedPlayer(player);
 
-	if(mInspectingInventory != nullptr && itemSlot.taken)
+	if(player->GetGold() >= itemSlot.item.cost && mInspectingInventory != nullptr && itemSlot.taken) {
 		mInspectingInventory->AddItem(itemSlot.item);
+		player->SetGold(player->GetGold() - itemSlot.item.cost);
+
+		// Send event to server.
+		RakNet::BitStream bitstream;
+		bitstream.Write((unsigned char)NMSG_GOLD_CHANGE);
+		bitstream.Write(player->GetId());
+		bitstream.Write(player->GetGold());
+		GetClient()->SendServerMessage(bitstream);
+	}
 }
 
 string Shop::GetHooverText(const Item& item)
 {
 	char buffer[244];
-	sprintf(buffer, "Cost: %i gold\n", item.price);
+	sprintf(buffer, "Cost: %i gold\n", item.cost);
 	return string(buffer + item.description);
 }
 

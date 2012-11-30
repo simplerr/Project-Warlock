@@ -195,6 +195,7 @@ void Client::HandleWorldUpdate(RakNet::BitStream& bitstream)
 	unsigned char id;
 	XMFLOAT3 pos;
 	float health;
+	int gold;
 
 	bitstream.Read(type);
 	bitstream.Read(id);
@@ -203,7 +204,10 @@ void Client::HandleWorldUpdate(RakNet::BitStream& bitstream)
 	bitstream.Read(pos.z);
 
 	if(type == GLib::PLAYER)
+	{
 		bitstream.Read(health);
+		bitstream.Read(gold);
+	}
 
 	GLib::ObjectList* objects = mWorld->GetObjects();
 	for(int i = 0; i < objects->size(); i++)
@@ -215,8 +219,12 @@ void Client::HandleWorldUpdate(RakNet::BitStream& bitstream)
 		{
 			object->SetPosition(pos);
 
-			if(object->GetType() == GLib::PLAYER)
-				((Player*)object)->SetHealth(health);
+			if(object->GetType() == GLib::PLAYER) 
+			{
+				Player* player = (Player*)object;
+				player->SetHealth(health);
+				player->SetGold(gold);
+			}
 		}
 	}
 }
@@ -374,6 +382,7 @@ void Client::HandleItemAdded(RakNet::BitStream& bitstream)
 
 	Player* player = (Player*)mWorld->GetObjectById(playerId);
 	player->AddItem(mItemLoader, ItemKey(name, level));
+	mInventory->UpdateItems();
 }
 
 void Client::HandleItemRemoved(RakNet::BitStream& bitstream)
@@ -386,6 +395,7 @@ void Client::HandleItemRemoved(RakNet::BitStream& bitstream)
 
 	Player* player = (Player*)mWorld->GetObjectById(playerId);
 	player->RemoveItem(mItemLoader, ItemKey(name, level));
+	mInventory->UpdateItems();
 }
 
 void Client::SendServerMessage(RakNet::BitStream& bitstream)

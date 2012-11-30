@@ -98,14 +98,27 @@ void Inventory::OnLeftPress(const ItemSlot& itemSlot)
 
 void Inventory::OnRightPress(const ItemSlot& itemSlot)
 {
+	// Don't do anything unless the local player is selected.
+	if(!GetClient()->IsLocalPlayerSelected())
+		return;
+
 	// Sell item.
 	RemoveItem(GetItemLoader()->StringToName(itemSlot.item.name), itemSlot.item.level);
+	Player* player = GetClient()->GetPlayer();
+	player->SetGold(player->GetGold() + itemSlot.item.cost - 3); // [NOTE][TODO] Hard coded!!!!
+
+	// Send event to server.
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_GOLD_CHANGE);
+	bitstream.Write(player->GetId());
+	bitstream.Write(player->GetGold());
+	GetClient()->SendServerMessage(bitstream);
 }
 
 string Inventory::GetHooverText(const Item& item)
 {
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\n", item.price-3);	// [NOTE][TODO] Maybe enough?
+	sprintf(buffer, "Sell value: %i gold\n", item.cost - 3);	// [NOTE][TODO] Maybe enough?
 	return string(buffer + item.description);
 }
 
