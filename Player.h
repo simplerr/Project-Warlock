@@ -8,6 +8,7 @@ using namespace std;
 
 namespace GLib {
 	class Input;
+	class StaticObject;
 }
 
 class SkillHandler;
@@ -47,6 +48,7 @@ public:
 	void SetSystemAdress(RakNet::SystemAddress adress);
 	RakNet::SystemAddress GetSystemAdress();
 
+	void SetLocalPlayer(bool local);
 	void SetHealth(float health);
 	void SetRegen(float regen);
 	void SetKnockBackResistance(float resistance);
@@ -69,5 +71,7 @@ private:
 	SkillHandler*		  mSkillHandler;	// Should it really be here?
 	multiset<ItemKey>	  mItemList;
 	PlayerAttributes	  mAttributes;
+	GLib::StaticObject*		  mLocalBox;	//[HACK]
 	int mGold;
+	bool mLocalPlayer;
 };

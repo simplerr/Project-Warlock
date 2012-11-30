@@ -5,6 +5,8 @@
 #include "Graphics.h"
 #include "Client.h"
 #include "SkillHandler.h"
+#include "StaticObject.h"
+#include "ModelImporter.h"
 
 Player::Player()
 	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x")
@@ -12,7 +14,12 @@ Player::Player()
 	SetType(GLib::PLAYER);
 	SetHealth(100.0f);
 	SetGold(10);
+	SetLocalPlayer(false);
 	mSkillHandler = new SkillHandler();
+
+	mLocalBox = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/box.obj");
+	mLocalBox->SetMaterials(GLib::Colors::Green);
+	mLocalBox->SetScale(XMFLOAT3(0.6, 0.6, 0.6));
 }
 
 Player::~Player()
@@ -33,6 +40,11 @@ void Player::Update(float dt)
 void Player::Draw(GLib::Graphics* pGraphics)
 {
 	Actor::Draw(pGraphics);
+
+	mLocalBox->SetPosition(GetPosition() + XMFLOAT3(0, 6, 0));
+
+	if(mLocalPlayer)
+		mLocalBox->Draw(pGraphics);
 }
 
 void Player::PollAction(Client* pClient, GLib::Input* pInput)
@@ -139,6 +151,11 @@ void Player::SetLifeSteal(float lifesteal)
 void Player::SetGold(int gold)
 {
 	mGold = gold;
+}
+
+void Player::SetLocalPlayer(bool local)
+{
+	mLocalPlayer = local;
 }
 
 float Player::GetHealth()

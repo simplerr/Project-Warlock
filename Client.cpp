@@ -302,6 +302,7 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 	if(mName == name && mPlayer == nullptr) {
 		OutputDebugString(string("Successfully connected to the server! " + name + "\n").c_str());
 		mPlayer = player;
+		mPlayer->SetLocalPlayer(true);	// Draws a square over the local players head.
 
 		mSelectedPlayer = mPlayer;
 		mSelectedPlayer->SetSelected(true);
