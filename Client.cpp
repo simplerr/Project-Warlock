@@ -40,6 +40,9 @@ Client::Client()
 	fin >> ip;
 	ConnectToServer(ip);
 	fin.close();
+
+	mTimer = 0.0f;
+	mGameState = SHOPPING_STATE;
 }
 
 Client::~Client()
@@ -88,8 +91,8 @@ void Client::Draw(GLib::Graphics* pGraphics)
 
 	if(mSelectedPlayer != nullptr) {
 		char buffer[244];
-		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f\n\nGold: %i", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
-			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold());
+		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f\n\nGold: %i\n\nTimer: %.2f", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
+			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold(), mTimer);
 		pGraphics->DrawText(buffer, 10, 10, 16, 0xff000000);
 	}
 }
@@ -173,6 +176,15 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				mUserInterface->HandleItemRemoved((Player*)mWorld->GetObjectById(playerId), bitstream);
 				break;
 			}
+		case NMSG_STATE_TIMER:
+				bitstream.Read(mTimer);
+				break;
+		case NMSG_CHANGETO_PLAYING:
+				mGameState = PLAYING_STATE;
+				break;
+		case NMSG_CHANGETO_SHOPPING:
+				mGameState = SHOPPING_STATE;
+			break;
 	}
 
 	return true;
@@ -257,6 +269,7 @@ void Client::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 	int numPlayers, id;
 	XMFLOAT3 pos;
 
+	bitstream.Read(mGameState);
 	bitstream.Read(numPlayers);
 
 	for(int i = 0; i < numPlayers; i++)
@@ -438,4 +451,9 @@ bool Client::IsLocalPlayerSelected()
 Player* Client::GetPlayer()
 {
 	return mPlayer;
+}
+
+GameState Client::GetGameState()
+{
+	return mGameState;
 }

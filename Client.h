@@ -2,6 +2,7 @@
 #include "RakPeerInterface.h"
 #include "BitStream.h"
 #include "d3dUtil.h"
+#include "Util.h"
 #include <string>
 
 using namespace std;
@@ -37,10 +38,11 @@ public:
 	void SetSelectedPlayer(Player* pPlayer);
 
 	RakNet::RakPeerInterface* GetRaknetPeer();
-	GLib::World* GetWorld();
-	Player* GetPlayer();
-	int GetPlayerId();
-	bool IsLocalPlayerSelected();
+	GLib::World*	GetWorld();
+	Player*			GetPlayer();
+	int				GetPlayerId();
+	GameState		GetGameState();
+	bool			IsLocalPlayerSelected();
 
 	//
 	// Handle packet functions.
@@ -63,4 +65,7 @@ private:
 	Player*		 mSelectedPlayer;
 	Player*		 mPlayer;
 	string		 mName;
+
+	float		mTimer;
+	GameState   mGameState;
 };

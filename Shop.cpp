@@ -20,9 +20,16 @@ Shop::~Shop()
 
 }
 
+void Shop::Update(GLib::Input* pInput, float dt)
+{
+	if(GetClient()->GetGameState() == SHOPPING_STATE)
+		ItemContainer::Update(pInput, dt);
+}
+
 void Shop::Draw(GLib::Graphics* pGraphics)
 {
-	ItemContainer::Draw(pGraphics);
+	if(GetClient()->GetGameState() == SHOPPING_STATE)
+		ItemContainer::Draw(pGraphics);
 
 	if(GetClient()->IsLocalPlayerSelected())
 		pGraphics->DrawScreenQuad(nullptr, 700, 770, 20, 20);
