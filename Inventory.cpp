@@ -99,7 +99,7 @@ void Inventory::OnLeftPress(const ItemSlot& itemSlot)
 void Inventory::OnRightPress(const ItemSlot& itemSlot)
 {
 	// Don't do anything unless the local player is selected.
-	if(!GetClient()->IsLocalPlayerSelected() || GetClient()->GetGameState() == PLAYING_STATE)
+	if(!GetClient()->IsLocalPlayerSelected() || GetClient()->GetArenaState() == PLAYING_STATE)
 		return;
 
 	// Sell item.

@@ -2,7 +2,7 @@
 #include "RakPeerInterface.h"
 #include "BitStream.h"
 #include "d3dUtil.h"
-#include "Util.h"
+#include "States.h"
 #include <string>
 
 using namespace std;
@@ -41,7 +41,7 @@ public:
 	GLib::World*	GetWorld();
 	Player*			GetPlayer();
 	int				GetPlayerId();
-	GameState		GetGameState();
+	GameState		GetArenaState();
 	bool			IsLocalPlayerSelected();
 
 	//
@@ -66,6 +66,5 @@ private:
 	Player*		 mPlayer;
 	string		 mName;
 
-	float		mTimer;
-	GameState   mGameState;
+	ArenaState	mArenaState;
 };

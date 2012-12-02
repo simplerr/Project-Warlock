@@ -41,8 +41,7 @@ Client::Client()
 	ConnectToServer(ip);
 	fin.close();
 
-	mTimer = 0.0f;
-	mGameState = SHOPPING_STATE;
+	InitShoppingState(mArenaState);
 }
 
 Client::~Client()
@@ -92,7 +91,7 @@ void Client::Draw(GLib::Graphics* pGraphics)
 	if(mSelectedPlayer != nullptr) {
 		char buffer[244];
 		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f\n\nGold: %i\n\nTimer: %.2f", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
-			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold(), mTimer);
+			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold(), mArenaState.elapsed);
 		pGraphics->DrawText(buffer, 10, 10, 16, 0xff000000);
 	}
 }
@@ -177,14 +176,14 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				break;
 			}
 		case NMSG_STATE_TIMER:
-				bitstream.Read(mTimer);
+				bitstream.Read(mArenaState.elapsed);
 				break;
 		case NMSG_CHANGETO_PLAYING:
-				mGameState = PLAYING_STATE;
+				InitPlayingState(mArenaState);
 				break;
 		case NMSG_CHANGETO_SHOPPING:
-				mGameState = SHOPPING_STATE;
-			break;
+				InitShoppingState(mArenaState);
+				break;
 	}
 
 	return true;
@@ -269,7 +268,7 @@ void Client::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 	int numPlayers, id;
 	XMFLOAT3 pos;
 
-	bitstream.Read(mGameState);
+	bitstream.Read(mArenaState.state);
 	bitstream.Read(numPlayers);
 
 	for(int i = 0; i < numPlayers; i++)
@@ -453,7 +452,7 @@ Player* Client::GetPlayer()
 	return mPlayer;
 }
 
-GameState Client::GetGameState()
+GameState Client::GetArenaState()
 {
-	return mGameState;
+	return mArenaState.state;
 }
