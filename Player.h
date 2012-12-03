@@ -56,6 +56,7 @@ public:
 	void SetDamage(float damage);
 	void SetLifeSteal(float lifesteal);
 	void SetGold(int gold);
+	void SetEliminated(bool eliminated);
 
 	float GetHealth();
 	float GetRegen();
@@ -63,7 +64,8 @@ public:
 	float GetLavaImmunity();
 	float GetDamage();
 	float GetLifeSteal();
-	int	GetGold();
+	int	  GetGold();
+	bool  GetEliminated();
 
 	bool IsCastingSkill();
 private:
@@ -71,7 +73,8 @@ private:
 	SkillHandler*		  mSkillHandler;	// Should it really be here?
 	multiset<ItemKey>	  mItemList;
 	PlayerAttributes	  mAttributes;
-	GLib::StaticObject*		  mLocalBox;	//[HACK]
+	GLib::StaticObject*	  mLocalBox;	//[HACK]
+	bool				  mEliminated;
+	bool				  mLocalPlayer;
 	int mGold;
-	bool mLocalPlayer;
 };

@@ -15,6 +15,7 @@ Player::Player()
 	SetHealth(100.0f);
 	SetGold(10);
 	SetLocalPlayer(false);
+	SetEliminated(false);
 	mSkillHandler = new SkillHandler();
 
 	mLocalBox = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/box.obj");
@@ -34,33 +35,43 @@ void Player::Init()
 
 void Player::Update(float dt)
 {
-	Actor::Update(dt);
+	if(GetHealth() <= 0)
+		SetEliminated(true);
+
+	if(!GetEliminated())
+		Actor::Update(dt);
 }
 
 void Player::Draw(GLib::Graphics* pGraphics)
 {
-	Actor::Draw(pGraphics);
+	if(!GetEliminated())
+	{
+		Actor::Draw(pGraphics);
 
-	mLocalBox->SetPosition(GetPosition() + XMFLOAT3(0, 6, 0));
+		mLocalBox->SetPosition(GetPosition() + XMFLOAT3(0, 6, 0));
 
-	if(mLocalPlayer)
-		mLocalBox->Draw(pGraphics);
+		if(mLocalPlayer)
+			mLocalBox->Draw(pGraphics);
+	}
 }
 
 void Player::PollAction(Client* pClient, GLib::Input* pInput)
 {
-	// [TODO] Add mSkillHandler->PollAction().
-	mSkillHandler->PollAction(pClient, pInput, GetPosition(), GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay()));
-
-	// Add movement target for the selected object.
-	if(pInput->KeyPressed(VK_RBUTTON))
+	if(!GetEliminated())
 	{
-		XMFLOAT3 pos = GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
+		// [TODO] Add mSkillHandler->PollAction().
+		mSkillHandler->PollAction(pClient, pInput, GetPosition(), GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay()));
 
-		// Inform the server about what happened.
-		// The server then informs all the clients, including the callee.
-		if(pos.x != numeric_limits<float>::infinity())
-			pClient->SendAddTarget(GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
+		// Add movement target for the selected object.
+		if(pInput->KeyPressed(VK_RBUTTON))
+		{
+			XMFLOAT3 pos = GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
+
+			// Inform the server about what happened.
+			// The server then informs all the clients, including the callee.
+			if(pos.x != numeric_limits<float>::infinity())
+				pClient->SendAddTarget(GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
+		}
 	}
 }
 
@@ -191,4 +202,14 @@ float Player::GetLifeSteal()
 int	Player::GetGold()
 {
 	return mGold;
+}
+
+void Player::SetEliminated(bool eliminated)
+{
+	mEliminated = eliminated;
+}
+
+bool Player::GetEliminated()
+{
+	return mEliminated;
 }

@@ -27,6 +27,9 @@ Client::Client()
 	mWorld = new GLib::World();
 	mWorld->Init(GLib::GetGraphics());
 
+	mWorld->AddObjectAddedListener(&Client::OnObjectAdded, this);
+	mWorld->AddObjectRemovedListener(&Client::OnObjectRemoved, this);
+
 	mSkillInterpreter = new ClientSkillInterpreter();
 	mUserInterface = new UserInterface(this);
 
@@ -42,6 +45,8 @@ Client::Client()
 	fin.close();
 
 	InitShoppingState(mArenaState);
+
+	mRoundEnded = false;
 }
 
 Client::~Client()
@@ -94,6 +99,24 @@ void Client::Draw(GLib::Graphics* pGraphics)
 			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold(), mArenaState.elapsed);
 		pGraphics->DrawText(buffer, 10, 10, 16, 0xff000000);
 	}
+
+	DrawScores(pGraphics);
+
+	if(mRoundEnded)
+		pGraphics->DrawText(mWinner + " won the round!", 600, 200, 20);
+}
+
+void Client::DrawScores(GLib::Graphics* pGraphics)
+{
+	string scoreList;
+	for(auto iter = mScoreMap.begin(); iter != mScoreMap.end(); iter++)
+	{
+		char score[10];
+		sprintf(score, "%i", (*iter).second);
+		scoreList += (*iter).first + ": " + score + "\n";
+	}
+
+	pGraphics->DrawText(scoreList, 900, 100, 14);
 }
 
 bool Client::ConnectToServer(string ip)
@@ -183,6 +206,12 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				break;
 		case NMSG_CHANGETO_SHOPPING:
 				InitShoppingState(mArenaState);
+				break;
+		case NMSG_ROUND_START:
+				HandleRoundStarted(bitstream);
+				break;
+		case NMSG_ROUND_ENDED:
+				HandleRoundEnded(bitstream);
 				break;
 	}
 
@@ -284,6 +313,8 @@ void Client::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 		player->SetPosition(pos);
 		mWorld->AddObject(player);
 		player->SetId(id);	// Use the servers ID.
+
+		mScoreMap[name] = 0;
 	}
 
 	// Send the client info to the server (name etc).
@@ -302,7 +333,7 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 
 	string name = buffer;
 
-	//Sleep(10000);
+	mScoreMap[name] = 0;
 
 	// Add a new player to the World.
 	Player* player = new Player();
@@ -372,6 +403,34 @@ void Client::HandleProjectilePlayerCollision(RakNet::BitStream& bitstream)
 	char buffer[244];
 	sprintf(buffer, "projectile %i collided with player %i health: %.2f\n", projectileId, playerId, player->GetHealth());
 	OutputDebugString(buffer);
+}
+
+void Client::HandleRoundStarted(RakNet::BitStream& bitstream)
+{
+	// [NOTE] The position is set by the server. Then passed by NMSG_UPDATEW_WORLD.
+	for(int i = 0; i < mPlayerList.size(); i++) 
+	{
+		mPlayerList[i]->SetEliminated(false);
+		mPlayerList[i]->SetHealth(100);	// [NOTE][HACK]
+	}
+
+	InitShoppingState(mArenaState);
+
+	OutputDebugString("Round started! Shopping time!");
+
+	mRoundEnded = false;
+}
+
+void Client::HandleRoundEnded(RakNet::BitStream& bitstream)
+{
+	char buffer[244];
+	bitstream.Read(buffer);
+	mWinner = buffer;
+
+	// Increment the winners score.
+	mScoreMap[mWinner]++;
+
+	mRoundEnded = true;
 }
 
 void Client::SendServerMessage(RakNet::BitStream& bitstream)
@@ -445,6 +504,42 @@ GLib::World* Client::GetWorld()
 bool Client::IsLocalPlayerSelected()
 {
 	return (mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId());
+}
+
+//! Gets called in World::AddObject().
+void Client::OnObjectAdded(GLib::Object3D* pObject)
+{
+	// Add player to mPlayerList.
+	if(pObject->GetType() == GLib::PLAYER)
+		mPlayerList.push_back((Player*)pObject);
+}
+
+//! Gets called in World::RemoveObject().
+void Client::OnObjectRemoved(GLib::Object3D* pObject)
+{
+	// Remove player from mPlayerList:
+	if(pObject->GetType() == GLib::PLAYER) 
+		RemovePlayer(pObject->GetId());
+
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_OBJECT_REMOVED);
+	bitstream.Write(pObject->GetId());
+	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+//! Removes a player from mPlayerList.
+void Client::RemovePlayer(int id)
+{
+	// Loop through all objects and find out which one to delete.
+	for(auto iter =  mPlayerList.begin(); iter != mPlayerList.end(); iter++)
+	{
+		if((*iter)->GetId() == id) {
+			mPlayerList.erase(iter);
+			break;
+		}
+		else	
+			iter++;
+	}
 }
 
 Player* Client::GetPlayer()
