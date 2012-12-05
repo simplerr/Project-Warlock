@@ -1,17 +1,21 @@
 #include "Items.h"
 
+//
+// BaseItem
+//
+
 BaseItem::BaseItem(string iconName) 
 {
 	SetCost(4);
 	SetSkill(false);
 	SetLevel(1);
 	mIconTexture = GLib::GetGraphics()->LoadTexture(iconName);
-};
+}
 
 BaseItem::~BaseItem() 
 {
 
-};
+}
 
 GLib::Texture2D* BaseItem::GetIconTexture() 
 {
@@ -33,6 +37,11 @@ void BaseItem::SetSkill(bool skill)
 	mSkill = skill;
 }
 
+void BaseItem::SetAttributes(Attributes attributes)
+{
+	mAttributes = attributes;
+}
+
 bool BaseItem::IsSkill()
 {
 	return mSkill;
@@ -41,6 +50,21 @@ bool BaseItem::IsSkill()
 void BaseItem::SetName(ItemName name)
 {
 	mName = name;
+}
+
+void BaseItem::SetDescription(string description)
+{
+	mDescription = description;
+}
+
+Attributes	BaseItem::GetAttributes()
+{
+	return mAttributes;
+}
+
+string BaseItem::GetDescription()
+{
+	return mDescription;
 }
 
 ItemName BaseItem::GetName()
@@ -58,19 +82,22 @@ int BaseItem::GetLevel()
 	return mLevel;
 }
 
+//
+// Item
+//
 
 Item::Item(string iconName) 
 	: BaseItem(iconName)
 {
-	health =  regen = movementSpeed = knockbakResistance = damage = lifesteal = 0.0f;
+	
 }
 
 Item::~Item() 
 {
 
-};
+}
 
-void Item::Draw(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size) 
+void Item::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size) 
 {
 	pGraphics->DrawScreenQuad(GetIconTexture(), pos.x, pos.y, size, size);
 }

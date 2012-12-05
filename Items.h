@@ -12,13 +12,33 @@ namespace GLib {
 
 enum ItemName
 {
+	//
+	// Items
+	//
 	IRON_ARMOR,		// Health
 	REGEN_CAP,		// Regen
 	VIPER_BOOTS,	// Movement speed
 
-	// Skills.
-	SKILL_FIREBALL,
+	//
+	// Skills
+	//
+	SKILL_FIREBALL,	// Fireball
 
+};
+
+struct Attributes
+{
+	Attributes() {
+		regen = knockbackResistance = lavaImmunity = damage = lifesteal = health = 0.0f;
+	}
+
+	float health;
+	float regen;
+	float movementSpeed;
+	float knockbackResistance;
+	float lavaImmunity;
+	float damage;
+	float lifesteal;
 };
 
 class BaseItem
@@ -28,25 +48,30 @@ public:
 	~BaseItem();
 
 	// Draw the icon.
-	virtual void Draw(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size) = 0;
-
-	GLib::Texture2D* GetIconTexture();
+	virtual void DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size) = 0;
 
 	void SetCost(int cost);
 	void SetSkill(bool skill);
 	void SetName(ItemName name);
 	void SetLevel(int level);
+	void SetAttributes(Attributes attributes);
+	void SetDescription(string description);
 
-	int GetLevel();
-	ItemName GetName();
-	int GetCost();
-	bool IsSkill();
+	GLib::Texture2D* GetIconTexture();
+	ItemName		 GetName();
+	Attributes		 GetAttributes();
+	string			 GetDescription();
+	int				 GetLevel();
+	int				 GetCost();
+	bool			 IsSkill();
 private:
-	GLib::Texture2D* mIconTexture;
-	ItemName mName;
-	int		mCost;
-	int		mLevel;
-	bool	mSkill;
+	GLib::Texture2D*	mIconTexture;
+	ItemName			mName;
+	Attributes			mAttributes;
+	string				mDescription;
+	int		 mCost;
+	int		 mLevel;
+	bool	 mSkill;
 };
 
 class Item : public BaseItem
@@ -55,18 +80,7 @@ public:
 	Item(string iconName);
 	~Item();
 
-	void Draw(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size);
-
-	string description;
-	string icon;
-	string name;
-	float health;
-	float regen;
-	float movementSpeed;
-	float knockbakResistance;
-	float lavaImmunity;
-	float damage;
-	float lifesteal;
+	void DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size);
 };
 
 // Inventory has a map of ItemSlots!

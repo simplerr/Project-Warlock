@@ -15,7 +15,7 @@ public:
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(const ItemSlot& itemSlot);
-	string GetHooverText(const BaseItem* pItem);
+	string GetHooverText(BaseItem* pItem);
 
 	void SetInspectingInventory(ItemContainer* pIventory);
 	void SetClientsPlayerI(int id);

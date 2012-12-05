@@ -46,28 +46,31 @@ ItemLoaderXML::ItemLoaderXML(string filename)
 		// Loop over all levels.
 		for(TiXmlElement* level = item->FirstChildElement("Level"); level != NULL; level = level->NextSiblingElement("Level"))
 		{
+			// Load the attributes.
+			Attributes attributes;
+			attributes.health = level->Attribute("health") == NULL ? 0.0f : atof(level->Attribute("health"));
+			attributes.regen = level->Attribute("regen") == NULL ? 0.0f : atof(level->Attribute("regen"));
+			attributes.movementSpeed = level->Attribute("movementSpeed") == NULL ? 0.0f : atof(level->Attribute("movementSpeed"));
+			attributes.knockbackResistance = level->Attribute("knockbakResistance") == NULL ? 0.0f : atof(level->Attribute("knockbakResistance"));
+			attributes.lavaImmunity = level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
+			attributes.damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
+			attributes.lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
+
+			// Set the attributes and the other data.
 			Item* loadedItem = new Item(icon);
-			loadedItem->name = name;
-			loadedItem->description = desc;
-			loadedItem->icon = icon;
-			loadedItem->SetLevel(atoi(level->Attribute("num")));
-
-			loadedItem->health = level->Attribute("health") == NULL ? 0.0f : atof(level->Attribute("health"));
-			loadedItem->regen = level->Attribute("regen") == NULL ? 0.0f : atof(level->Attribute("regen"));
-			loadedItem->movementSpeed = level->Attribute("movementSpeed") == NULL ? 0.0f : atof(level->Attribute("movementSpeed"));
-			loadedItem->knockbakResistance = level->Attribute("knockbakResistance") == NULL ? 0.0f : atof(level->Attribute("knockbakResistance"));
-			loadedItem->lavaImmunity = level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
-			loadedItem->damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
-			loadedItem->lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
-
+			loadedItem->SetAttributes(attributes);
 			loadedItem->SetCost(level->Attribute("cost") == NULL ? 10.0f : atoi(level->Attribute("cost")));
 			loadedItem->SetSkill(skill);
 			loadedItem->SetName(StringToName(name));
+			loadedItem->SetDescription(desc);
+			loadedItem->SetLevel(atoi(level->Attribute("num")));
 
+			// Create map key.
 			ItemKey key;
-			key.name = (ItemName)mStringKeyMap[loadedItem->name];
+			key.name = (ItemName)mStringKeyMap[name];
 			key.level = loadedItem->GetLevel();
-
+	
+			// Add to map.
 			mItemMap[key] = loadedItem;
 		}
 	}

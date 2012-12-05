@@ -68,13 +68,11 @@ void Shop::OnRightPress(const ItemSlot& itemSlot)
 	}
 }
 
-string Shop::GetHooverText(const BaseItem* pItem)
+string Shop::GetHooverText(BaseItem* pItem)
 {
-	Item* item = (Item*)pItem;
-
 	char buffer[244];
-	sprintf(buffer, "Cost: %i gold\n", item->GetCost());
-	return string(buffer + item->description);
+	sprintf(buffer, "Cost: %i gold\n", pItem->GetCost());
+	return string(buffer + pItem->GetDescription());
 }
 
 void Shop::SetInspectingInventory(ItemContainer* pIventory)

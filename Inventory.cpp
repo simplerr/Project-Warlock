@@ -13,6 +13,7 @@ Inventory::Inventory(int x, int y, int colums, float slotSize)
 {
 	mPlayer = nullptr;
 
+	// Add 6 slots.
 	for(int i = 0; i < 6; i++)
 		AddSlot();
 }
@@ -30,9 +31,6 @@ void Inventory::Update(GLib::Input* pInput, float dt)
 void Inventory::Draw(GLib::Graphics* pGraphics)
 {
 	ItemContainer::Draw(pGraphics);
-
-	if(GetClient()->IsLocalPlayerSelected())
-		pGraphics->DrawScreenQuad(nullptr, 760, 770, 20, 20);
 }
 
 void Inventory::AddItem(ItemName name, int level)
@@ -42,39 +40,39 @@ void Inventory::AddItem(ItemName name, int level)
 
 void Inventory::AddItem(BaseItem* pItem)
 {
+	// Any free slots?
 	if(!HasFreeSlots())
 		return;
 
-	Item* item = (Item*)pItem;
-
-	ItemName name = GetItemLoader()->StringToName(item->name);
-	int level = item->GetLevel();
-
-	mPlayer->AddItem(GetItemLoader(), ItemKey(name, level));
+	// Add item to player.
+	mPlayer->AddItem(pItem);
 
 	// Send to server.
 	RakNet::BitStream bitstream;
 	bitstream.Write((unsigned char)NMSG_ITEM_ADDED);
 	bitstream.Write(mPlayer->GetId());
-	bitstream.Write(name);
-	bitstream.Write(level);
+	bitstream.Write(pItem->GetName());
+	bitstream.Write(pItem->GetLevel());
 	GetClient()->SendServerMessage(bitstream);
 
+	// Clear the inventory and update it with the players current items.
 	UpdateItems();
 }
 
-void Inventory::RemoveItem(ItemName name, int level)
+void Inventory::RemoveItem(BaseItem* pItem)
 {
-	mPlayer->RemoveItem(GetItemLoader(), ItemKey(name, level));
+	// Remove item from player.
+	mPlayer->RemoveItem(pItem);
 
 	// Send to server.
 	RakNet::BitStream bitstream;
 	bitstream.Write((unsigned char)NMSG_ITEM_REMOVED);
 	bitstream.Write(mPlayer->GetId());
-	bitstream.Write(name);
-	bitstream.Write(level);
+	bitstream.Write(pItem->GetName());
+	bitstream.Write(pItem->GetLevel());
 	GetClient()->SendServerMessage(bitstream);
 
+	// Clear the inventory and update it with the players current items.
 	UpdateItems();
 }
 
@@ -83,8 +81,10 @@ void Inventory::UpdateItems()
 	// Get the players items.
 	multiset<ItemKey> playerItems = mPlayer->GetItemList();
 
+	// Free all slots.
 	FreeAllSlots();
 
+	// Add all player items.
 	for(auto iter = playerItems.begin(); iter != playerItems.end(); iter++)
 		PlaceInFreeSlot((*iter));
 }
@@ -105,12 +105,10 @@ void Inventory::OnRightPress(const ItemSlot& itemSlot)
 	if(!GetClient()->IsLocalPlayerSelected() || GetClient()->GetArenaState() == PLAYING_STATE)
 		return;
 
-	Item* item = (Item*)itemSlot.item;
-
 	// Sell item.
-	RemoveItem(GetItemLoader()->StringToName(item->name), item->GetLevel());
+	RemoveItem(itemSlot.item);
 	Player* player = GetClient()->GetPlayer();
-	player->SetGold(player->GetGold() + item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
+	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
 	// Send event to server.
 	RakNet::BitStream bitstream;
@@ -120,13 +118,11 @@ void Inventory::OnRightPress(const ItemSlot& itemSlot)
 	GetClient()->SendServerMessage(bitstream);
 }
 
-string Inventory::GetHooverText(const BaseItem* pItem)
+string Inventory::GetHooverText(BaseItem* pItem)
 {
-	Item* item = (Item*)pItem;
-
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\n", item->GetCost() - 3);	// [NOTE][TODO] Maybe enough?
-	return string(buffer + item->description);
+	sprintf(buffer, "Sell value: %i gold\n", pItem->GetCost() - 3);	// [NOTE][TODO] Maybe enough?
+	return string(buffer + pItem->GetDescription());
 }
 
 void Inventory::SetPlayer(Player* pPlayer)

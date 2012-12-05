@@ -42,7 +42,7 @@ void ItemContainer::Draw(GLib::Graphics* pGraphics)
 	{
 		XMFLOAT2 pos = mItemSlots[i].position;
 		if(mItemSlots[i].taken) {
-			mItemSlots[i].item->Draw(pGraphics, XMFLOAT2(pos.x, pos.y), mSlotSize);
+			mItemSlots[i].item->DrawIcon(pGraphics, XMFLOAT2(pos.x, pos.y), mSlotSize);
 			
 			if(mHooveringSlotId == i) 
 				pGraphics->DrawText(GetHooverText(mItemSlots[i].item), mPosition.x - mSlotSize/2, mPosition.y - mSlotSize/2 - 49, 18);
@@ -56,8 +56,8 @@ void ItemContainer::AddSlot()
 {
 	ItemSlot newSlot;
 	newSlot.position = mPosition;
-	newSlot.position.x += mSlotSize * 1.2 * (mItemSlots.size() % 3);
-	newSlot.position.y += mSlotSize * 1.2 * (mItemSlots.size() / 3);
+	newSlot.position.x += mSlotSize * 1.2 * (mItemSlots.size() % mNumColums);
+	newSlot.position.y += mSlotSize * 1.2 * (mItemSlots.size() / mNumColums);
 	mItemSlots.push_back(newSlot);
 }
 

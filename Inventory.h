@@ -27,13 +27,13 @@ public:
 
 	void AddItem(ItemName name, int level);
 	void AddItem(BaseItem* pItem);
-	void RemoveItem(ItemName name, int level);
+	void RemoveItem(BaseItem* pItem);
 	void UpdateItems();
 
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(const ItemSlot& itemSlot);
-	string GetHooverText(const BaseItem* pItem);
+	string GetHooverText(BaseItem* pItem);
 
 	void SetPlayer(Player* pPlayer);
 private:

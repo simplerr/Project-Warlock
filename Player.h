@@ -3,6 +3,7 @@
 #include "RakPeerInterface.h"
 #include "ItemLoaderXML.h"
 #include "Skills.h"
+#include "Items.h"
 #include <set>
 
 using namespace std;
@@ -17,21 +18,6 @@ class Client;
 class ItemLoaderXML;
 class Skill;
 
-struct PlayerAttributes
-{
-	PlayerAttributes() {
-		regen = knockbackResistance = lavaImmunity = damage = lifesteal = 0.0f;
-		health = 100.0f;
-	}
-
-	float health;
-	float regen;
-	float knockbackResistance;
-	float lavaImmunity;
-	float damage;
-	float lifesteal;
-};
-
 class Player : public Actor
 {
 public:
@@ -45,8 +31,9 @@ public:
 	
 	Skill* AddSkill(ItemName skillName);
 	void RemoveSkill(ItemName name);
+	void AddItem(BaseItem* pItem);
 	void AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
-	void RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
+	void RemoveItem(BaseItem* pItem);
 	multiset<ItemKey> GetItemList();
 	std::map<int, Skill*> GetSkillMap();
 
@@ -77,7 +64,7 @@ private:
 	RakNet::SystemAddress mSystemAdress;
 	SkillHandler*		  mSkillHandler;	// Should it really be here?
 	multiset<ItemKey>	  mItemList;
-	PlayerAttributes	  mAttributes;
+	Attributes			  mAttributes;
 	GLib::StaticObject*	  mLocalBox;	//[HACK]
 	bool				  mEliminated;
 	bool				  mLocalPlayer;

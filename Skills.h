@@ -7,31 +7,19 @@ class Client;
 class Skill : public BaseItem
 {
 public:
-	Skill(string icon) : BaseItem(icon), mLevel(1), mCooldown(3.0f), mCooldownCounter(0.0f) {
-		SetName(SKILL_FIREBALL);
-	};
-	virtual ~Skill() {};
+	Skill(string icon);
+	virtual ~Skill();
 
-	void Update(float dt) {
-		mCooldownCounter -= dt;
-	}
-
+	void Update(float dt);
+	void DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size);
 	virtual void Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end) = 0;
-	void ResetCooldown() {
-		mCooldownCounter = mCooldown;
-	}
 
-	void Draw(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size);
+	void ResetCooldown();
+	void SetOwner(int owner);
 
-	void SetOwner(int owner) {
-		mOwner = owner;
-	}
-
-	int GetLevel() {return mLevel;}
-	int GetOwner() {return mOwner;}
+	int GetOwner();
 protected:
 	int			mOwner;
-	int			mLevel;
 	float		mCooldown;
 	float		mCooldownCounter;
 };

@@ -71,12 +71,10 @@ void UserInterface::HandleItemAdded(Player* pPlayer, RakNet::BitStream& bitstrea
 	if(!item->IsSkill()) {
 		pPlayer->AddItem(mItemLoader, ItemKey(name, level));
 		mInventory->UpdateItems();
-		//mInventory->AddItem(item);
 	}
 	else {
 		pPlayer->AddSkill(name);
 		mSkillInventory->UpdateItems();
-		//mSkillInventory->AddItem(item);
 	}
 }
 
@@ -90,7 +88,7 @@ void UserInterface::HandleItemRemoved(Player* pPlayer, RakNet::BitStream& bitstr
 	BaseItem* item = mItemLoader->GetItem(ItemKey(name, level));
 
 	if(!item->IsSkill()) {
-		pPlayer->RemoveItem(mItemLoader, ItemKey(name, level));
+		pPlayer->RemoveItem(item);
 		mInventory->UpdateItems();
 	}
 	else {

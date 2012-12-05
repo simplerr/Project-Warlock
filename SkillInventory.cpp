@@ -44,39 +44,36 @@ void SkillInventory::AddItem(ItemName name, int level)
 
 void SkillInventory::AddItem(BaseItem* pItem)
 {
+	// Any free slots?
 	if(!HasFreeSlots())
 		return;
 
-	Item* item = (Item*)pItem;
-
-	ItemName name = GetItemLoader()->StringToName(item->name);
-	int level = item->GetLevel();
-
-	Skill* skill = mPlayer->AddSkill(SKILL_FIREBALL);
+	Skill* skill = mPlayer->AddSkill(pItem->GetName());
 	skill->SetCost(pItem->GetCost());
 
 	// Send to server.
 	RakNet::BitStream bitstream;
 	bitstream.Write((unsigned char)NMSG_ITEM_ADDED);
 	bitstream.Write(mPlayer->GetId());
-	bitstream.Write(name);
-	bitstream.Write(level);
+	bitstream.Write(pItem->GetName());
+	bitstream.Write(pItem->GetLevel());
 	GetClient()->SendServerMessage(bitstream);
 
 	UpdateItems();
 }
 
-void SkillInventory::RemoveSkill(ItemName type)
+void SkillInventory::RemoveSkill(BaseItem* pItem)
 {
-	mPlayer->RemoveSkill(type);
+	// Sell item.
+	mPlayer->RemoveSkill(pItem->GetName());
 
-	//// Send to server.
-	//RakNet::BitStream bitstream;
-	//bitstream.Write((unsigned char)NMSG_ITEM_REMOVED);
-	//bitstream.Write(mPlayer->GetId());
-	//bitstream.Write(name);
-	//bitstream.Write(level);
-	//GetClient()->SendServerMessage(bitstream);
+	// Send to server.
+	RakNet::BitStream bitstream1;
+	bitstream1.Write((unsigned char)NMSG_ITEM_REMOVED);
+	bitstream1.Write(mPlayer->GetId());
+	bitstream1.Write(pItem->GetName());
+	bitstream1.Write(pItem->GetLevel());
+	GetClient()->SendServerMessage(bitstream1);
 
 	UpdateItems();
 }
@@ -108,22 +105,8 @@ void SkillInventory::OnRightPress(const ItemSlot& itemSlot)
 	if(!GetClient()->IsLocalPlayerSelected() || GetClient()->GetArenaState() == PLAYING_STATE)
 		return;
 
-	mPlayer->RemoveSkill(((Skill*)itemSlot.item)->GetName());
-
-	// Sell item.
-	mPlayer->RemoveSkill(itemSlot.item->GetName());
-
-	//// Send to server.
-	RakNet::BitStream bitstream1;
-	bitstream1.Write((unsigned char)NMSG_ITEM_REMOVED);
-	bitstream1.Write(mPlayer->GetId());
-	bitstream1.Write(itemSlot.item->GetName());
-	bitstream1.Write(itemSlot.item->GetLevel());
-	GetClient()->SendServerMessage(bitstream1);
-
-	UpdateItems();
-
-
+	// Sell skill.
+	RemoveSkill(itemSlot.item);
 	Player* player = GetClient()->GetPlayer();
 	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
@@ -135,7 +118,7 @@ void SkillInventory::OnRightPress(const ItemSlot& itemSlot)
 	GetClient()->SendServerMessage(bitstream);
 }
 
-string SkillInventory::GetHooverText(const BaseItem* pItem)
+string SkillInventory::GetHooverText(BaseItem* pItem)
 {
 	Skill* item = (Skill*)pItem;
 

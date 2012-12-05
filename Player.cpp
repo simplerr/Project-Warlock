@@ -102,35 +102,41 @@ void Player::RemoveSkill(ItemName name)
 
 void Player::AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
 {
-	mItemList.insert(itemKey);
-
-	// Add item attributes.
-	Item* item = pItemLoader->GetItem(itemKey);
-	SetHealth(GetHealth() + item->health);
-	SetRegen(GetRegen() + item->regen);
-	SetKnockBackResistance(GetKnockBackResistance() + item->knockbakResistance);
-	SetLavaImmunity(GetLavaImmunity() + item->lavaImmunity);
-	SetDamage(GetDamage() + item->damage);
-	SetLifeSteal(GetLifeSteal() + item->lifesteal);
-	SetMovementSpeed(GetMovementSpeed() + item->movementSpeed);
+	AddItem(pItemLoader->GetItem(itemKey));
 }
 
-void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
+void Player::AddItem(BaseItem* pItem)
 {
-	auto iter = mItemList.find(itemKey);
+	mItemList.insert(ItemKey(pItem->GetName(), pItem->GetLevel()));
+
+	Attributes attributes = pItem->GetAttributes();
+	SetHealth(GetHealth() + attributes.health);
+	SetRegen(GetRegen() + attributes.regen);
+	SetKnockBackResistance(GetKnockBackResistance() + attributes.knockbackResistance);
+	SetLavaImmunity(GetLavaImmunity() + attributes.lavaImmunity);
+	SetDamage(GetDamage() + attributes.damage);
+	SetLifeSteal(GetLifeSteal() + attributes.lifesteal);
+	SetMovementSpeed(GetMovementSpeed() + attributes.movementSpeed);
+}
+
+void Player::RemoveItem(BaseItem* pItem)
+{
+	ItemKey key = ItemKey(pItem->GetName(), pItem->GetLevel());
+	auto iter = mItemList.find(key);
 	if(iter != mItemList.end())
 	{
+		// Remove from item set.
 		mItemList.erase(iter);
 
 		// Remove item attributes.
-		Item* item = pItemLoader->GetItem(itemKey);
-		SetHealth(GetHealth() - item->health);
-		SetRegen(GetRegen() - item->regen);
-		SetKnockBackResistance(GetKnockBackResistance() - item->knockbakResistance);
-		SetLavaImmunity(GetLavaImmunity() - item->lavaImmunity);
-		SetDamage(GetDamage() - item->damage);
-		SetLifeSteal(GetLifeSteal() - item->lifesteal);
-		SetMovementSpeed(GetMovementSpeed() - item->movementSpeed);
+		Attributes attributes = pItem->GetAttributes();
+		SetHealth(GetHealth() - attributes.health);
+		SetRegen(GetRegen() - attributes.regen);
+		SetKnockBackResistance(GetKnockBackResistance() - attributes.knockbackResistance);
+		SetLavaImmunity(GetLavaImmunity() - attributes.lavaImmunity);
+		SetDamage(GetDamage() - attributes.damage);
+		SetLifeSteal(GetLifeSteal() - attributes.lifesteal);
+		SetMovementSpeed(GetMovementSpeed() - attributes.movementSpeed);
 	}
 }
 

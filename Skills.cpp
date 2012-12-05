@@ -5,7 +5,42 @@
 #include "NetworkMessages.h"
 #include "Graphics.h"
 
-void Skill::Draw(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
+//
+//	Base skill
+//
+
+Skill::Skill(string icon) 
+	: BaseItem(icon), mCooldown(3.0f), mCooldownCounter(0.0f)
+{
+	SetName(SKILL_FIREBALL);
+}
+
+Skill::~Skill()
+{
+
+}
+
+void Skill::Update(float dt) 
+{
+	mCooldownCounter -= dt;
+}
+
+void Skill::ResetCooldown() 
+{
+	mCooldownCounter = mCooldown;
+}
+
+void Skill::SetOwner(int owner) 
+{
+	mOwner = owner;
+}
+
+int Skill::GetOwner()
+{
+	return mOwner;
+}
+
+void Skill::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
 {
 	pGraphics->DrawScreenQuad(GetIconTexture(), pos.x, pos.y, size, size);
 
@@ -15,6 +50,10 @@ void Skill::Draw(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
 		pGraphics->DrawText(buffer, pos.x, pos.y, 14);
 	}
 }
+
+//
+// Fireball
+//
 
 FireBall::FireBall(string icon) : Skill(icon)
 {
