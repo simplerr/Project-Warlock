@@ -34,6 +34,7 @@ public:
 	void AddItem(BaseItem* pItem);
 	void AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
 	void RemoveItem(BaseItem* pItem);
+	void RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
 	multiset<ItemKey> GetItemList();
 	std::map<int, Skill*> GetSkillMap();
 

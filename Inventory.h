@@ -15,6 +15,7 @@ namespace GLib {
 class ItemLoaderXML;
 class Player;
 class Client;
+class Shop;
 
 class Inventory : public ItemContainer
 {
@@ -32,10 +33,13 @@ public:
 
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
-	void OnRightPress(const ItemSlot& itemSlot);
+	void OnRightPress(ItemSlot& itemSlot);
 	string GetHooverText(BaseItem* pItem);
 
 	void SetPlayer(Player* pPlayer);
+	void SetShop(Shop* pShop);
 private:
-	Player*			 mPlayer;
+	Player*		mPlayer;
+	Shop*		mShop;
+
 };

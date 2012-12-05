@@ -11,22 +11,25 @@ UserInterface::UserInterface(Client* pClient)
 {
 	mItemLoader = new ItemLoaderXML("items.xml");
 
+	mShop = new Shop(60, 770, 3, 60);
+	mSkillShop = new Shop(360, 770, 3, 60);
+
 	mInventory = new Inventory(700, 770, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
 	mInventory->SetClient(pClient);
+	mInventory->SetShop(mShop);
 
 	mSkillInventory = new SkillInventory(950, 755, 4, 42);
 	mSkillInventory->SetItemLoader(mItemLoader);
 	mSkillInventory->SetClient(pClient);
-
-	mShop = new Shop(60, 770, 3, 60);
+	mSkillInventory->SetShop(mSkillShop);
+	
 	mShop->SetClient(pClient);
 	mShop->SetItemLoader(mItemLoader);
 	mShop->SetInspectingInventory(mInventory);
 	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
 	mShop->PlaceInFreeSlot(ItemKey(IRON_ARMOR, 1));
 
-	mSkillShop = new Shop(360, 770, 3, 60);
 	mSkillShop->SetClient(pClient);
 	mSkillShop->SetItemLoader(mItemLoader);
 	mSkillShop->SetInspectingInventory(mSkillInventory);
@@ -73,7 +76,12 @@ void UserInterface::HandleItemAdded(Player* pPlayer, RakNet::BitStream& bitstrea
 		mInventory->UpdateItems();
 	}
 	else {
-		pPlayer->AddSkill(name);
+		Skill* skill = pPlayer->AddSkill(name);
+		skill->SetAttributes(item->GetAttributes());	// [HACK]!!
+		skill->SetDescription(item->GetDescription());
+		skill->SetCost(item->GetCost());
+		skill->SetLevel(item->GetLevel());
+
 		mSkillInventory->UpdateItems();
 	}
 }

@@ -45,7 +45,7 @@ void Shop::OnLeftPress(const ItemSlot& itemSlot)
 	
 }
 
-void Shop::OnRightPress(const ItemSlot& itemSlot)
+void Shop::OnRightPress(ItemSlot& itemSlot)
 {
 	Player* player = GetClient()->GetPlayer();
 
@@ -65,13 +65,23 @@ void Shop::OnRightPress(const ItemSlot& itemSlot)
 		bitstream.Write(player->GetId());
 		bitstream.Write(player->GetGold());
 		GetClient()->SendServerMessage(bitstream);
+	
+		itemSlot.taken = false;
+		// Display the next level item.
+		Item* nextLevel = GetItemLoader()->GetItem(ItemKey(item->GetName(), item->GetLevel()+1));
+
+		// Is there a next level for the item?
+		if(nextLevel != nullptr) {
+			itemSlot.item = nextLevel;
+			itemSlot.taken = true;
+		}
 	}
 }
 
 string Shop::GetHooverText(BaseItem* pItem)
 {
 	char buffer[244];
-	sprintf(buffer, "Cost: %i gold\n", pItem->GetCost());
+	sprintf(buffer, "Cost: %i gold\nLevel: %i", pItem->GetCost(), pItem->GetLevel());
 	return string(buffer + pItem->GetDescription());
 }
 
@@ -83,4 +93,15 @@ void Shop::SetInspectingInventory(ItemContainer* pIventory)
 void Shop::SetClientsPlayerI(int id)
 {
 
+}
+
+// Called from Inventory when a player sells an item.
+void Shop::InventoryItemRemoved(BaseItem* pItem)
+{
+	ItemSlot* slot = GetItemSlot(pItem->GetName());
+
+	if(slot != nullptr)
+		slot->item = GetItemLoader()->GetItem(ItemKey(pItem->GetName(), 1));
+	else
+		PlaceInFreeSlot(ItemKey(pItem->GetName(), 1));
 }

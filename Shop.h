@@ -14,13 +14,15 @@ public:
 	void Draw(GLib::Graphics* pGraphics);
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
-	void OnRightPress(const ItemSlot& itemSlot);
+	void OnRightPress(ItemSlot& itemSlot);
 	string GetHooverText(BaseItem* pItem);
 
 	void SetInspectingInventory(ItemContainer* pIventory);
 	void SetClientsPlayerI(int id);
 
 	void AddItem(BaseItem* pItem) {}
+
+	void InventoryItemRemoved(BaseItem* pItem);
 private:
 	ItemContainer* mInspectingInventory;
 	int			   mClientPlayerId;

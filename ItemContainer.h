@@ -34,7 +34,7 @@ public:
 	virtual void Draw(GLib::Graphics* pGraphics);
 	virtual void OnHoover(const ItemSlot& itemSlot) = 0;
 	virtual void OnLeftPress(const ItemSlot& itemSlot) = 0;
-	virtual void OnRightPress(const ItemSlot& itemSlot) = 0;
+	virtual void OnRightPress(ItemSlot& itemSlot) = 0;
 	virtual string GetHooverText(BaseItem* pItem) = 0;
 	virtual void AddItem(BaseItem* pItem) = 0;
 
@@ -50,6 +50,7 @@ public:
 	bool IsLocalPlayerSelected();
 	ItemLoaderXML* GetItemLoader();
 	Client*	GetClient();
+	ItemSlot* GetItemSlot(ItemName name);
 private:
 	vector<ItemSlot>	mItemSlots;
 	ItemLoaderXML*		mItemLoaderXML;

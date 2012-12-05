@@ -21,7 +21,6 @@ public:
 	bool IsReady();
 protected:
 	int			mOwner;
-	float		mCooldown;
 	float		mCooldownCounter;
 };
 

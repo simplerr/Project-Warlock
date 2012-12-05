@@ -7,11 +7,13 @@
 #include "BitStream.h"
 #include "NetworkMessages.h"
 #include "Skills.h"
+#include "Shop.h"
 
 Inventory::Inventory(int x, int y, int colums, float slotSize)
 	: ItemContainer(x, y, colums, slotSize)
 {
 	mPlayer = nullptr;
+	mShop = nullptr;
 
 	// Add 6 slots.
 	for(int i = 0; i < 6; i++)
@@ -44,6 +46,10 @@ void Inventory::AddItem(BaseItem* pItem)
 	if(!HasFreeSlots())
 		return;
 
+	// Remove previous level item.
+	if(pItem->GetLevel() > 1) 
+		RemoveItem(GetItemLoader()->GetItem(ItemKey(pItem->GetName(), pItem->GetLevel()-1)));
+
 	// Add item to player.
 	mPlayer->AddItem(pItem);
 
@@ -74,6 +80,9 @@ void Inventory::RemoveItem(BaseItem* pItem)
 
 	// Clear the inventory and update it with the players current items.
 	UpdateItems();
+
+	// Tell the shop.
+	mShop->InventoryItemRemoved(pItem);
 }
 
 void Inventory::UpdateItems()
@@ -99,7 +108,7 @@ void Inventory::OnLeftPress(const ItemSlot& itemSlot)
 
 }
 
-void Inventory::OnRightPress(const ItemSlot& itemSlot)
+void Inventory::OnRightPress(ItemSlot& itemSlot)
 {
 	// Don't do anything unless the local player is selected.
 	if(!GetClient()->IsLocalPlayerSelected() || GetClient()->GetArenaState() == PLAYING_STATE)
@@ -121,7 +130,7 @@ void Inventory::OnRightPress(const ItemSlot& itemSlot)
 string Inventory::GetHooverText(BaseItem* pItem)
 {
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\n", pItem->GetCost() - 3);	// [NOTE][TODO] Maybe enough?
+	sprintf(buffer, "Sell value: %i gold\nLevel: %i", pItem->GetCost() - 3, pItem->GetLevel());
 	return string(buffer + pItem->GetDescription());
 }
 
@@ -129,4 +138,9 @@ void Inventory::SetPlayer(Player* pPlayer)
 {
 	mPlayer = pPlayer;
 	UpdateItems();
+}
+
+void Inventory::SetShop(Shop* pShop)
+{
+	mShop = pShop;
 }

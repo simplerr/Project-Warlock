@@ -55,6 +55,7 @@ ItemLoaderXML::ItemLoaderXML(string filename)
 			attributes.lavaImmunity = level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
 			attributes.damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
 			attributes.lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
+			attributes.cooldown = level->Attribute("cooldown") == NULL ? 0.0f : atof(level->Attribute("cooldown"));
 
 			// Set the attributes and the other data.
 			Item* loadedItem = new Item(icon);
@@ -83,7 +84,10 @@ ItemLoaderXML::~ItemLoaderXML()
 
 Item* ItemLoaderXML::GetItem(ItemKey key)
 {
-	return mItemMap[key];
+	if(mItemMap.find(key) != mItemMap.end())
+		return mItemMap[key];
+	else
+		return nullptr;
 }
 
 ItemName ItemLoaderXML::StringToName(string name)

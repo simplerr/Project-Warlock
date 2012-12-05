@@ -142,6 +142,11 @@ void Player::RemoveItem(BaseItem* pItem)
 	}
 }
 
+void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
+{
+	RemoveItem(pItemLoader->GetItem(itemKey));
+}
+
 multiset<ItemKey> Player::GetItemList()
 {
 	return mItemList;

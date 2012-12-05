@@ -9,11 +9,13 @@
 #include "BitStream.h"
 #include "NetworkMessages.h"
 #include "Skills.h"
+#include "Shop.h"
 
 SkillInventory::SkillInventory(int x, int y, int colums, float slotSize)
 	: ItemContainer(x, y, colums, slotSize)
 {
 	mPlayer = nullptr;
+	mShop = nullptr;
 
 	for(int i = 0; i < 8; i++)
 		AddSlot();
@@ -49,7 +51,13 @@ void SkillInventory::AddItem(BaseItem* pItem)
 		return;
 
 	Skill* skill = mPlayer->AddSkill(pItem->GetName());
+	
+	// Pass on the attributes.
+	// [NOTE] REALLY UGLY [HACK][WARNING].
+	skill->SetAttributes(pItem->GetAttributes());
+	skill->SetDescription(pItem->GetDescription());
 	skill->SetCost(pItem->GetCost());
+	skill->SetLevel(pItem->GetLevel());
 
 	// Send to server.
 	RakNet::BitStream bitstream;
@@ -75,6 +83,8 @@ void SkillInventory::RemoveSkill(BaseItem* pItem)
 	bitstream1.Write(pItem->GetLevel());
 	GetClient()->SendServerMessage(bitstream1);
 
+	mShop->InventoryItemRemoved(pItem);
+
 	UpdateItems();
 }
 
@@ -99,7 +109,7 @@ void SkillInventory::OnLeftPress(const ItemSlot& itemSlot)
 
 }
 
-void SkillInventory::OnRightPress(const ItemSlot& itemSlot)
+void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 {
 	// Don't do anything unless the local player is selected.
 	if(!GetClient()->IsLocalPlayerSelected() || GetClient()->GetArenaState() == PLAYING_STATE)
@@ -120,16 +130,18 @@ void SkillInventory::OnRightPress(const ItemSlot& itemSlot)
 
 string SkillInventory::GetHooverText(BaseItem* pItem)
 {
-	Skill* item = (Skill*)pItem;
-
-//	char buffer[244];
-//	sprintf(buffer, "Sell value: %i gold\n", item->cost - 3);	// [NOTE][TODO] Maybe enough?
-//	return string(buffer + item->description);
-	return "hoover text";
+	char buffer[244];
+	sprintf(buffer, "Sell value: %i gold\nLevel: %i", pItem->GetCost() - 3, pItem->GetLevel());	// [NOTE][TODO] Maybe enough?
+	return string(buffer + pItem->GetDescription());
 }
 
 void SkillInventory::SetPlayer(Player* pPlayer)
 {
 	mPlayer = pPlayer;
 	UpdateItems();
+}
+
+void SkillInventory::SetShop(Shop* pShop)
+{
+	mShop = pShop;
 }

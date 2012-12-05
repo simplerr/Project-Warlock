@@ -10,7 +10,7 @@
 //
 
 Skill::Skill(string icon) 
-	: BaseItem(icon), mCooldown(1.0f), mCooldownCounter(0.0f)
+	: BaseItem(icon), mCooldownCounter(0.0f)
 {
 	SetName(SKILL_FIREBALL);
 }
@@ -38,7 +38,7 @@ void Skill::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
 
 void Skill::ResetCooldown() 
 {
-	mCooldownCounter = mCooldown;
+	mCooldownCounter = GetAttributes().cooldown;
 }
 
 void Skill::SetOwner(int owner) 

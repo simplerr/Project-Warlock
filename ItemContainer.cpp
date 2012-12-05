@@ -126,3 +126,14 @@ Client*	ItemContainer::GetClient()
 {
 	return mClient;
 }
+
+ItemSlot* ItemContainer::GetItemSlot(ItemName name)
+{
+	for(int i = 0; i < mItemSlots.size(); i++)
+	{
+		if(mItemSlots[i].taken && mItemSlots[i].item->GetName() == name)
+			return &mItemSlots[i];
+	}
+
+	return nullptr;
+}
