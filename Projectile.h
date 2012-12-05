@@ -1,7 +1,7 @@
 #pragma  once
-
 #include "StaticObject.h"
 #include "Skills.h"
+#include "Items.h"
 
 namespace GLib
 {
@@ -17,13 +17,13 @@ public:
 	void Update(float dt);
 	void Draw(GLib::Graphics* pGraphics);
 
-	void SetSkillType(SkillType type);
+	void SetSkillType(ItemName type);
 	void SetSkillLevel(int level);
 
 	int		 GetOwner();
 	XMFLOAT3 GetDirection();
-	SkillType GetSkillType();
-	int GetSkillLevel();
+	ItemName GetSkillType();
+	int		 GetSkillLevel();
 private:
 	XMFLOAT3	mDirection;
 	int			mOwner;
@@ -32,6 +32,6 @@ private:
 	float		mTravelled;
 
 	// Skill data.
-	SkillType	mSkillType;
+	ItemName	mSkillType;
 	int			mSkillLevel;
 };

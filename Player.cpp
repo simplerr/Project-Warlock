@@ -13,7 +13,7 @@ Player::Player()
 {
 	SetType(GLib::PLAYER);
 	SetHealth(100.0f);
-	SetGold(10);
+	SetGold(100);
 	SetLocalPlayer(false);
 	SetEliminated(false);
 	mSkillHandler = new SkillHandler();
@@ -90,19 +90,29 @@ bool Player::IsCastingSkill()
 	return mSkillHandler->IsCastingSkill();
 }
 
+Skill* Player::AddSkill(ItemName skillName)
+{
+	return mSkillHandler->AddSkill(skillName);
+}
+
+void Player::RemoveSkill(ItemName name)
+{
+	mSkillHandler->RemoveSkill(name);
+}
+
 void Player::AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
 {
 	mItemList.insert(itemKey);
 
 	// Add item attributes.
-	Item item = pItemLoader->GetItem(itemKey);
-	SetHealth(GetHealth() + item.health);
-	SetRegen(GetRegen() + item.regen);
-	SetKnockBackResistance(GetKnockBackResistance() + item.knockbakResistance);
-	SetLavaImmunity(GetLavaImmunity() + item.lavaImmunity);
-	SetDamage(GetDamage() + item.damage);
-	SetLifeSteal(GetLifeSteal() + item.lifesteal);
-	SetMovementSpeed(GetMovementSpeed() + item.movementSpeed);
+	Item* item = pItemLoader->GetItem(itemKey);
+	SetHealth(GetHealth() + item->health);
+	SetRegen(GetRegen() + item->regen);
+	SetKnockBackResistance(GetKnockBackResistance() + item->knockbakResistance);
+	SetLavaImmunity(GetLavaImmunity() + item->lavaImmunity);
+	SetDamage(GetDamage() + item->damage);
+	SetLifeSteal(GetLifeSteal() + item->lifesteal);
+	SetMovementSpeed(GetMovementSpeed() + item->movementSpeed);
 }
 
 void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
@@ -113,20 +123,25 @@ void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
 		mItemList.erase(iter);
 
 		// Remove item attributes.
-		Item item = pItemLoader->GetItem(itemKey);
-		SetHealth(GetHealth() - item.health);
-		SetRegen(GetRegen() - item.regen);
-		SetKnockBackResistance(GetKnockBackResistance() - item.knockbakResistance);
-		SetLavaImmunity(GetLavaImmunity() - item.lavaImmunity);
-		SetDamage(GetDamage() - item.damage);
-		SetLifeSteal(GetLifeSteal() - item.lifesteal);
-		SetMovementSpeed(GetMovementSpeed() - item.movementSpeed);
+		Item* item = pItemLoader->GetItem(itemKey);
+		SetHealth(GetHealth() - item->health);
+		SetRegen(GetRegen() - item->regen);
+		SetKnockBackResistance(GetKnockBackResistance() - item->knockbakResistance);
+		SetLavaImmunity(GetLavaImmunity() - item->lavaImmunity);
+		SetDamage(GetDamage() - item->damage);
+		SetLifeSteal(GetLifeSteal() - item->lifesteal);
+		SetMovementSpeed(GetMovementSpeed() - item->movementSpeed);
 	}
 }
 
 multiset<ItemKey> Player::GetItemList()
 {
 	return mItemList;
+}
+
+std::map<int, Skill*> Player::GetSkillMap()
+{
+	return mSkillHandler->GetSkillMap();
 }
 
 void Player::SetHealth(float health)

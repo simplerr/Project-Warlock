@@ -16,14 +16,12 @@ class Client;
 struct ItemSlot
 {
 	ItemSlot() {
-		texture = nullptr;
 		taken = false;
 	}
 
-	GLib::Texture2D* texture;
-	Item item;
-	XMFLOAT2 position;
-	bool taken;
+	BaseItem*			 item;
+	XMFLOAT2		 position;
+	bool			 taken;
 };
 
 class ItemContainer
@@ -37,9 +35,11 @@ public:
 	virtual void OnHoover(const ItemSlot& itemSlot) = 0;
 	virtual void OnLeftPress(const ItemSlot& itemSlot) = 0;
 	virtual void OnRightPress(const ItemSlot& itemSlot) = 0;
-	virtual string GetHooverText(const Item& item) = 0;
+	virtual string GetHooverText(const BaseItem* pItem) = 0;
+	virtual void AddItem(BaseItem* pItem) = 0;
 
 	void AddSlot();
+	void PlaceInFreeSlot(BaseItem* pItem);
 	void PlaceInFreeSlot(ItemKey itemKey);
 	void FreeAllSlots();
 	void SetItemLoader(ItemLoaderXML* pLoader);

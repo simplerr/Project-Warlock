@@ -53,9 +53,11 @@ void Shop::OnRightPress(const ItemSlot& itemSlot)
 	if(!GetClient()->IsLocalPlayerSelected())
 		GetClient()->SetSelectedPlayer(player);
 
-	if(player->GetGold() >= itemSlot.item.cost && mInspectingInventory != nullptr && itemSlot.taken) {
-		mInspectingInventory->AddItem(itemSlot.item);
-		player->SetGold(player->GetGold() - itemSlot.item.cost);
+	Item* item = (Item*)itemSlot.item;
+
+	if(player->GetGold() >= item->GetCost() && mInspectingInventory != nullptr && itemSlot.taken) {
+		mInspectingInventory->AddItem(item);
+		player->SetGold(player->GetGold() - item->GetCost());
 
 		// Send event to server.
 		RakNet::BitStream bitstream;
@@ -66,14 +68,16 @@ void Shop::OnRightPress(const ItemSlot& itemSlot)
 	}
 }
 
-string Shop::GetHooverText(const Item& item)
+string Shop::GetHooverText(const BaseItem* pItem)
 {
+	Item* item = (Item*)pItem;
+
 	char buffer[244];
-	sprintf(buffer, "Cost: %i gold\n", item.cost);
-	return string(buffer + item.description);
+	sprintf(buffer, "Cost: %i gold\n", item->GetCost());
+	return string(buffer + item->description);
 }
 
-void Shop::SetInspectingInventory(Inventory* pIventory)
+void Shop::SetInspectingInventory(ItemContainer* pIventory)
 {
 	mInspectingInventory = pIventory;
 }

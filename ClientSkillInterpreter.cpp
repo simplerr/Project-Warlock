@@ -22,7 +22,7 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 	{
 		XMFLOAT3 start, end, dir;
 		int id, owner, skillLevel;
-		SkillType skillType;
+		ItemName skillType;
 
 		bitstream.Read(owner);
 		bitstream.Read(id);

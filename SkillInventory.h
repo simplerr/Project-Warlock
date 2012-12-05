@@ -1,33 +1,27 @@
 #pragma once
-#include "Items.h"
 #include "ItemContainer.h"
-#include "ItemLoaderXML.h"
-#include "d3dUtil.h"
-#include <vector>
-using namespace std;
+#include "Skills.h"
 
 namespace GLib {
 	class Graphics;
 	class Input;
-	struct Texture2D;
+	class Texture2D;
 }
 
-class ItemLoaderXML;
 class Player;
-class Client;
 
-class Inventory : public ItemContainer
+class SkillInventory : public ItemContainer
 {
 public:
-	Inventory(int x, int y, int colums, float slotSize);
-	~Inventory();
+	SkillInventory(int x, int y, int colums, float slotSize);
+	~SkillInventory();
 
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 
 	void AddItem(ItemName name, int level);
 	void AddItem(BaseItem* pItem);
-	void RemoveItem(ItemName name, int level);
+	void RemoveSkill(ItemName type);
 	void UpdateItems();
 
 	void OnHoover(const ItemSlot& itemSlot);

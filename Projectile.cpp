@@ -48,7 +48,7 @@ XMFLOAT3 Projectile::GetDirection()
 	return mDirection;
 }
 
-void Projectile::SetSkillType(SkillType type)
+void Projectile::SetSkillType(ItemName type)
 {
 	mSkillType = type;
 }
@@ -58,7 +58,7 @@ void Projectile::SetSkillLevel(int level)
 	mSkillLevel = level;
 }
 
-SkillType Projectile::GetSkillType()
+ItemName Projectile::GetSkillType()
 {
 	return mSkillType;
 }

@@ -24,9 +24,9 @@ public:
 	ItemLoaderXML(string filename);
 	~ItemLoaderXML();
 
-	Item GetItem(ItemKey key);
+	Item* GetItem(ItemKey key);
 	ItemName StringToName(string name);
 private:
-	map<ItemKey, Item>		mItemMap;
+	map<ItemKey, Item*>		mItemMap;
 	map<string, int>		mStringKeyMap;	   
 };

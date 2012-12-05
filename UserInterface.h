@@ -13,6 +13,7 @@ class Inventory;
 class Shop;
 class Player;
 class Client;
+class SkillInventory;
 
 class UserInterface
 {
@@ -30,6 +31,8 @@ public:
 private:
 	ItemLoaderXML*				mItemLoader;
 	Inventory*					mInventory;
+	SkillInventory*				mSkillInventory;
 	Shop*						mShop;
+	Shop*						mSkillShop;
 	GLib::Texture2D*			mBkgdTexture;
 };

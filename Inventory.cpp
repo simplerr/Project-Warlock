@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "BitStream.h"
 #include "NetworkMessages.h"
+#include "Skills.h"
 
 Inventory::Inventory(int x, int y, int colums, float slotSize)
 	: ItemContainer(x, y, colums, slotSize)
@@ -39,13 +40,15 @@ void Inventory::AddItem(ItemName name, int level)
 	AddItem(GetItemLoader()->GetItem(ItemKey(name, level)));
 }
 
-void Inventory::AddItem(Item item)
+void Inventory::AddItem(BaseItem* pItem)
 {
 	if(!HasFreeSlots())
 		return;
 
-	ItemName name = GetItemLoader()->StringToName(item.name);
-	int level = item.level;
+	Item* item = (Item*)pItem;
+
+	ItemName name = GetItemLoader()->StringToName(item->name);
+	int level = item->GetLevel();
 
 	mPlayer->AddItem(GetItemLoader(), ItemKey(name, level));
 
@@ -102,10 +105,12 @@ void Inventory::OnRightPress(const ItemSlot& itemSlot)
 	if(!GetClient()->IsLocalPlayerSelected() || GetClient()->GetArenaState() == PLAYING_STATE)
 		return;
 
+	Item* item = (Item*)itemSlot.item;
+
 	// Sell item.
-	RemoveItem(GetItemLoader()->StringToName(itemSlot.item.name), itemSlot.item.level);
+	RemoveItem(GetItemLoader()->StringToName(item->name), item->GetLevel());
 	Player* player = GetClient()->GetPlayer();
-	player->SetGold(player->GetGold() + itemSlot.item.cost - 3); // [NOTE][TODO] Hard coded!!!!
+	player->SetGold(player->GetGold() + item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
 	// Send event to server.
 	RakNet::BitStream bitstream;
@@ -115,11 +120,13 @@ void Inventory::OnRightPress(const ItemSlot& itemSlot)
 	GetClient()->SendServerMessage(bitstream);
 }
 
-string Inventory::GetHooverText(const Item& item)
+string Inventory::GetHooverText(const BaseItem* pItem)
 {
+	Item* item = (Item*)pItem;
+
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\n", item.cost - 3);	// [NOTE][TODO] Maybe enough?
-	return string(buffer + item.description);
+	sprintf(buffer, "Sell value: %i gold\n", item->GetCost() - 3);	// [NOTE][TODO] Maybe enough?
+	return string(buffer + item->description);
 }
 
 void Inventory::SetPlayer(Player* pPlayer)

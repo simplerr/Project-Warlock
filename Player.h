@@ -2,6 +2,7 @@
 #include "Actor.h"
 #include "RakPeerInterface.h"
 #include "ItemLoaderXML.h"
+#include "Skills.h"
 #include <set>
 
 using namespace std;
@@ -14,6 +15,7 @@ namespace GLib {
 class SkillHandler;
 class Client;
 class ItemLoaderXML;
+class Skill;
 
 struct PlayerAttributes
 {
@@ -41,9 +43,12 @@ public:
 	void Draw(GLib::Graphics* pGraphics);
 	void PollAction(Client* pClient, GLib::Input* pInput);
 	
+	Skill* AddSkill(ItemName skillName);
+	void RemoveSkill(ItemName name);
 	void AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
 	void RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
 	multiset<ItemKey> GetItemList();
+	std::map<int, Skill*> GetSkillMap();
 
 	void SetSystemAdress(RakNet::SystemAddress adress);
 	RakNet::SystemAddress GetSystemAdress();

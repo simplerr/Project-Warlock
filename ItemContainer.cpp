@@ -42,8 +42,8 @@ void ItemContainer::Draw(GLib::Graphics* pGraphics)
 	{
 		XMFLOAT2 pos = mItemSlots[i].position;
 		if(mItemSlots[i].taken) {
-			pGraphics->DrawScreenQuad(mItemSlots[i].texture, pos.x, pos.y, mSlotSize, mSlotSize);
-
+			mItemSlots[i].item->Draw(pGraphics, XMFLOAT2(pos.x, pos.y), mSlotSize);
+			
 			if(mHooveringSlotId == i) 
 				pGraphics->DrawText(GetHooverText(mItemSlots[i].item), mPosition.x - mSlotSize/2, mPosition.y - mSlotSize/2 - 49, 18);
 		}	
@@ -63,13 +63,16 @@ void ItemContainer::AddSlot()
 
 void ItemContainer::PlaceInFreeSlot(ItemKey itemKey)
 {
-	Item item = mItemLoaderXML->GetItem(itemKey);
+	PlaceInFreeSlot(mItemLoaderXML->GetItem(itemKey));
+}
+
+void ItemContainer::PlaceInFreeSlot(BaseItem* pItem)
+{
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
 		if(!mItemSlots[i].taken)
 		{
-			mItemSlots[i].item = item;
-			mItemSlots[i].texture = GLib::GetGraphics()->LoadTexture(item.icon);
+			mItemSlots[i].item = pItem;
 			mItemSlots[i].taken = true;
 			break;
 		}

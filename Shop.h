@@ -2,6 +2,7 @@
 #include "ItemContainer.h"
 
 class Inventory;
+class BaseItem;
 
 class Shop : public ItemContainer
 {
@@ -14,11 +15,13 @@ public:
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(const ItemSlot& itemSlot);
-	string GetHooverText(const Item& item);
+	string GetHooverText(const BaseItem* pItem);
 
-	void SetInspectingInventory(Inventory* pIventory);
+	void SetInspectingInventory(ItemContainer* pIventory);
 	void SetClientsPlayerI(int id);
+
+	void AddItem(BaseItem* pItem) {}
 private:
-	Inventory* mInspectingInventory;
-	int mClientPlayerId;
+	ItemContainer* mInspectingInventory;
+	int			   mClientPlayerId;
 };
