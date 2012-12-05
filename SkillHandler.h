@@ -17,6 +17,7 @@ public:
 	SkillHandler();
 	~SkillHandler();
 
+	void Update(float dt);
 	void PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 position, XMFLOAT3 end);
 	bool IsCastingSkill();
 	Skill* AddSkill(ItemName skillName);

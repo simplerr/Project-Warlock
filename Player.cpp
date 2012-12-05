@@ -40,6 +40,8 @@ void Player::Update(float dt)
 
 	if(!GetEliminated())
 		Actor::Update(dt);
+
+	mSkillHandler->Update(dt);
 }
 
 void Player::Draw(GLib::Graphics* pGraphics)

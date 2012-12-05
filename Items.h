@@ -29,7 +29,7 @@ enum ItemName
 struct Attributes
 {
 	Attributes() {
-		regen = knockbackResistance = lavaImmunity = damage = lifesteal = health = 0.0f;
+		regen = knockbackResistance = lavaImmunity = damage = lifesteal = health = cooldown = 0.0f;
 	}
 
 	float health;
@@ -39,6 +39,7 @@ struct Attributes
 	float lavaImmunity;
 	float damage;
 	float lifesteal;
+	float cooldown;
 };
 
 class BaseItem

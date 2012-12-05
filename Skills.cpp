@@ -10,7 +10,7 @@
 //
 
 Skill::Skill(string icon) 
-	: BaseItem(icon), mCooldown(3.0f), mCooldownCounter(0.0f)
+	: BaseItem(icon), mCooldown(1.0f), mCooldownCounter(0.0f)
 {
 	SetName(SKILL_FIREBALL);
 }
@@ -23,6 +23,17 @@ Skill::~Skill()
 void Skill::Update(float dt) 
 {
 	mCooldownCounter -= dt;
+}
+
+void Skill::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
+{
+	pGraphics->DrawScreenQuad(GetIconTexture(), pos.x, pos.y, size, size);
+
+	if(mCooldownCounter > 0.0f) {
+		char buffer[244];
+		sprintf(buffer, "%.2f", mCooldownCounter);
+		pGraphics->DrawText(buffer, pos.x-10, pos.y-10, 14);
+	}
 }
 
 void Skill::ResetCooldown() 
@@ -40,15 +51,9 @@ int Skill::GetOwner()
 	return mOwner;
 }
 
-void Skill::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
+bool Skill::IsReady()
 {
-	pGraphics->DrawScreenQuad(GetIconTexture(), pos.x, pos.y, size, size);
-
-	if(mCooldownCounter > 0.0f) {
-		char buffer[244];
-		sprintf(buffer, "%.2f", mCooldownCounter);
-		pGraphics->DrawText(buffer, pos.x, pos.y, 14);
-	}
+	return (mCooldownCounter <= 0.0f);
 }
 
 //
@@ -67,8 +72,6 @@ FireBall::~FireBall()
 
 void FireBall::Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end)
 {
-	ResetCooldown();
-
 	// Tell the server to add a fireball.
 	RakNet::BitStream bitstream;
 

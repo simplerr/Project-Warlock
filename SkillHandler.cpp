@@ -13,6 +13,12 @@ SkillHandler::~SkillHandler()
 		delete iter->second;
 }
 
+void SkillHandler::Update(float dt)
+{
+	for(auto iter = mSkillMap.begin(); iter != mSkillMap.end(); iter++)
+		(*iter).second->Update(dt);
+}
+
 void SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 start, XMFLOAT3 end)
 {
 	if(pInput->KeyPressed('Q') && mSkillMap.find('Q') != mSkillMap.end()) 
@@ -22,9 +28,10 @@ void SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 sta
 	if(pInput->KeyPressed(VK_LBUTTON) && mActiveSkill != -1 && end.x != numeric_limits<float>::infinity())
 	{
 		// Use the skill.
-		if(mSkillMap.find(mActiveSkill) != mSkillMap.end())
+		if(mSkillMap.find(mActiveSkill) != mSkillMap.end() && mSkillMap[mActiveSkill]->IsReady())
 		{
 			mSkillMap[mActiveSkill]->Cast(pClient, start, end);
+			mSkillMap[mActiveSkill]->ResetCooldown();
 			mActiveSkill = -1;
 		}
 	}

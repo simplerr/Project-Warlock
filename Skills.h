@@ -18,6 +18,7 @@ public:
 	void SetOwner(int owner);
 
 	int GetOwner();
+	bool IsReady();
 protected:
 	int			mOwner;
 	float		mCooldown;
