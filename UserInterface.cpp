@@ -11,8 +11,10 @@
 UserInterface::UserInterface(Client* pClient)
 {
 	mItemLoader = new ItemLoaderXML("items.xml");
+
 	mChat = new Chat(20, 440, 300, 200);
 	mChat->SetClient(pClient);
+	mChat->AddOnMessageSentListener(&UserInterface::OnMessageSent, this);
 
 	mShop = new Shop(60, 770, 3, 60);
 	mSkillShop = new Shop(360, 770, 3, 60);
@@ -112,6 +114,12 @@ void UserInterface::HandleItemRemoved(Player* pPlayer, RakNet::BitStream& bitstr
 void UserInterface::HandleChatMessage(RakNet::BitStream& bitstream)
 {
 	mChat->HandleMessage(bitstream);
+}
+
+// Callback from Chat.
+void UserInterface::OnMessageSent(string message)
+{
+	OutputDebugString(message.c_str());
 }
 
 void UserInterface::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)

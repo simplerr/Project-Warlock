@@ -191,6 +191,10 @@ void Chat::SendChatMessage()
 	bitstream.Write(inputBuffer);
 	mClient->SendServerMessage(bitstream);
 
+	// Call the callback function, letting it handle the sent message any way it wants to (admin commands etc...).
+	if(!OnMessageSent.empty())
+		OnMessageSent(string(inputBuffer));
+
 	first = false;
 }
 

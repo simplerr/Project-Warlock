@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <string>
+#include <boost\function.hpp>
+#include <boost\bind.hpp>
 #include "RakPeerInterface.h"
 using namespace std;
 
@@ -25,7 +27,15 @@ public:
 	void	HandleMessage(RakNet::BitStream& bitstream);
 
 	void	SetClient(Client* pClient);
+
+	template <class T>
+	void AddOnMessageSentListener(void(T::*_callback)(string), T* _object)	{
+		OnMessageSent = boost::bind(_callback, _object, _1);
+	}
 private:
+	// Callback.
+	boost::function<void(string)> OnMessageSent;
+
 	// Window controls.
 	HWND mhChatBox;
 	HWND mhInputBox;

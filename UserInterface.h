@@ -1,6 +1,7 @@
 #pragma once
 #include "BitStream.h"
 #include "d3dUtil.h"
+#include <string>
 
 namespace GLib {
 	class Graphics;
@@ -39,6 +40,8 @@ public:
 	void HandleChatMessage(RakNet::BitStream& bitstream);
 	void SetSelectedPlayer(Player* pPlayer);
 	bool PointInsideUi(XMFLOAT3 position);
+
+	void OnMessageSent(string message);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:
