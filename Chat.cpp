@@ -6,6 +6,18 @@
 #include <Richedit.h>
 #include <Commctrl.h>
 #include "Client.h"
+#include "World.h"
+#include "Object3D.h"
+
+COLORREF colors[7] = {
+	RGB(255, 0, 0),
+	RGB(0, 255, 0),
+	RGB(0, 0, 255),
+	RGB(255, 255, 0),
+	RGB(255, 0, 255),
+	RGB(0, 0, 255),
+	RGB(0, 255, 255),
+};
 
 void setFont(HWND hwnd, int height, int weight = FW_DONTCARE, string family="Arial")
 {
@@ -146,9 +158,13 @@ void Chat::AddMessage(string from, string message)
 	else
 		name = "<";
 
+	int playerId = mClient->GetWorld()->GetObjectByName(from)->GetId();
+
+	COLORREF nameColor = colors[playerId % 7];	// [NOTE] size (7) is hardcoded!
+
 	name += from;
 	name += ">: ";
-	AddText(mhChatBox, (char*)name.c_str(), RGB(180, 0, 0));
+	AddText(mhChatBox, (char*)name.c_str(), nameColor);
 	AddText(mhChatBox, (char*)message.c_str(), RGB(0, 0, 0));
 
 	if(msg.find("\n") == string::npos)
@@ -164,24 +180,8 @@ void Chat::SendChatMessage()
 	int inputLen = GetWindowTextLength(mhInputBox) + 1;
 	char* inputBuffer = new char[inputLen];
 	GetWindowText(mhInputBox, inputBuffer, inputLen);
-	//string input = string(inputBuffer);
-
-	//string name;
-	//if(first)
-	//	name = "\n<";
-	//else
-	//	name = "<";
-
-	//name += mClient->GetName();
-	//name += ">: ";
-	//AddText(mhChatBox, (char*)name.c_str(), RGB(0, 180, 0));
-	//AddText(mhChatBox, inputBuffer, RGB(0, 0, 0));
-
-	//if(input.find("\n") == string::npos)
-	//	AddText(mhChatBox, "\n", RGB(0, 0, 0));
 
 	SetWindowText(mhInputBox, "");
-	//SendMessage(mhInputBox, EM_SETSEL, 0, MAKELPARAM(-1, -1));	// NOTE: Not needed any more.
 	SetFocus(GLib::GetWindowHandler());
 
 	// Send the message to the server.
