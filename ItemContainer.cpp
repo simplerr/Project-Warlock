@@ -2,6 +2,7 @@
 #include "Client.h"
 #include "Input.h"
 #include "Graphics.h"
+#include "NetworkMessages.h"
 
 ItemContainer::ItemContainer(int x, int y, int colums, float slotSize)
 {
@@ -96,16 +97,6 @@ void ItemContainer::FreeAllSlots()
 		mItemSlots[i].taken = false;
 }
 
-void ItemContainer::SetItemLoader(ItemLoaderXML* pLoader)
-{
-	mItemLoaderXML = pLoader;
-}
-
-ItemLoaderXML* ItemContainer::GetItemLoader()
-{
-	return mItemLoaderXML;
-}
-
 bool ItemContainer::HasFreeSlots()
 {
 	for(int i = 0; i < mItemSlots.size(); i++)
@@ -115,6 +106,49 @@ bool ItemContainer::HasFreeSlots()
 	}
 
 	return false;
+}
+
+void ItemContainer::SendItemAdded(int playerId, ItemName itemName, int itemLevel)
+{
+	// Send to server.
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_ITEM_ADDED);
+	bitstream.Write(playerId);
+	bitstream.Write(itemName);
+	bitstream.Write(itemLevel);
+	mClient->SendServerMessage(bitstream);
+}
+
+
+void ItemContainer::SendItemRemoved(int playerId, ItemName itemName, int itemLevel)
+{
+	// Send to server.
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_ITEM_REMOVED);
+	bitstream.Write(playerId);
+	bitstream.Write(itemName);
+	bitstream.Write(itemLevel);
+	mClient->SendServerMessage(bitstream);
+}
+
+void ItemContainer::SendGoldChange(int playerId, int newGold)
+{
+	// Send to server.
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_GOLD_CHANGE);
+	bitstream.Write(playerId);
+	bitstream.Write(newGold);
+	GetClient()->SendServerMessage(bitstream);
+}
+
+void ItemContainer::SetItemLoader(ItemLoaderXML* pLoader)
+{
+	mItemLoaderXML = pLoader;
+}
+
+ItemLoaderXML* ItemContainer::GetItemLoader()
+{
+	return mItemLoaderXML;
 }
 
 void ItemContainer::SetClient(Client* pClient)

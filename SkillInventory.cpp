@@ -59,13 +59,8 @@ void SkillInventory::AddItem(BaseItem* pItem)
 	skill->SetCost(pItem->GetCost());
 	skill->SetLevel(pItem->GetLevel());
 
-	// Send to server.
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_ITEM_ADDED);
-	bitstream.Write(mPlayer->GetId());
-	bitstream.Write(pItem->GetName());
-	bitstream.Write(pItem->GetLevel());
-	GetClient()->SendServerMessage(bitstream);
+	// Send message to server.
+	SendItemAdded(mPlayer->GetId(), pItem->GetName(), pItem->GetLevel());
 
 	UpdateItems();
 }
@@ -75,16 +70,13 @@ void SkillInventory::RemoveSkill(BaseItem* pItem)
 	// Sell item.
 	mPlayer->RemoveSkill(pItem->GetName());
 
-	// Send to server.
-	RakNet::BitStream bitstream1;
-	bitstream1.Write((unsigned char)NMSG_ITEM_REMOVED);
-	bitstream1.Write(mPlayer->GetId());
-	bitstream1.Write(pItem->GetName());
-	bitstream1.Write(pItem->GetLevel());
-	GetClient()->SendServerMessage(bitstream1);
+	// Send message to server.
+	SendItemRemoved(mPlayer->GetId(), pItem->GetName(), pItem->GetLevel());
 
+	// Tell the shop that an item was sold.
 	mShop->InventoryItemRemoved(pItem);
 
+	// Free all slots and get the current skills from the player.
 	UpdateItems();
 }
 
@@ -120,12 +112,8 @@ void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 	Player* player = GetClient()->GetPlayer();
 	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
-	// Send event to server.
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_GOLD_CHANGE);
-	bitstream.Write(player->GetId());
-	bitstream.Write(player->GetGold());
-	GetClient()->SendServerMessage(bitstream);
+	// Send message to server.
+	SendGoldChange(player->GetId(), player->GetGold());
 }
 
 string SkillInventory::GetHooverText(BaseItem* pItem)

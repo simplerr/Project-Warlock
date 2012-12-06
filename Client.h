@@ -47,6 +47,7 @@ public:
 	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World*	GetWorld();
 	Player*			GetPlayer();
+	string			GetName();
 	int				GetPlayerId();
 	GameState		GetArenaState();
 	bool			IsLocalPlayerSelected();
@@ -66,7 +67,7 @@ public:
 	void HandleRoundStarted(RakNet::BitStream& bitstream);
 	void HandleRoundEnded(RakNet::BitStream& bitstream);
 
-
+	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:
 	RakNet::RakPeerInterface*	mRaknetPeer;
 	GLib::World*				mWorld;

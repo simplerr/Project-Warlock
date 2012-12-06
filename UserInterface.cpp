@@ -1,3 +1,4 @@
+#include "Chat.h"
 #include "UserInterface.h"
 #include "ItemLoaderXML.h"
 #include "Inventory.h"
@@ -10,6 +11,8 @@
 UserInterface::UserInterface(Client* pClient)
 {
 	mItemLoader = new ItemLoaderXML("items.xml");
+	mChat = new Chat(20, 440, 300, 200);
+	mChat->SetClient(pClient);
 
 	mShop = new Shop(60, 770, 3, 60);
 	mSkillShop = new Shop(360, 770, 3, 60);
@@ -40,6 +43,7 @@ UserInterface::UserInterface(Client* pClient)
 
 UserInterface::~UserInterface()
 {
+	delete mChat;
 	delete mShop;
 	delete mInventory;
 	delete mItemLoader;
@@ -103,6 +107,16 @@ void UserInterface::HandleItemRemoved(Player* pPlayer, RakNet::BitStream& bitstr
 		pPlayer->RemoveSkill(item->GetName());
 		mSkillInventory->UpdateItems();
 	}
+}
+
+void UserInterface::HandleChatMessage(RakNet::BitStream& bitstream)
+{
+	mChat->HandleMessage(bitstream);
+}
+
+void UserInterface::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	mChat->MsgProc(msg, wParam, lParam);
 }
 
 void UserInterface::SetSelectedPlayer(Player* pPlayer)

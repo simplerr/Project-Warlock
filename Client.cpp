@@ -199,20 +199,23 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				break;
 			}
 		case NMSG_STATE_TIMER:
-				bitstream.Read(mArenaState.elapsed);
-				break;
+			bitstream.Read(mArenaState.elapsed);
+			break;
 		case NMSG_CHANGETO_PLAYING:
-				InitPlayingState(mArenaState);
-				break;
+			InitPlayingState(mArenaState);
+			break;
 		case NMSG_CHANGETO_SHOPPING:
-				InitShoppingState(mArenaState);
-				break;
+			InitShoppingState(mArenaState);
+			break;
 		case NMSG_ROUND_START:
-				HandleRoundStarted(bitstream);
-				break;
+			HandleRoundStarted(bitstream);
+			break;
 		case NMSG_ROUND_ENDED:
-				HandleRoundEnded(bitstream);
-				break;
+			HandleRoundEnded(bitstream);
+			break;
+		case NMSG_CHAT_MESSAGE_SENT:
+			mUserInterface->HandleChatMessage(bitstream);
+			break;
 	}
 
 	return true;
@@ -542,6 +545,11 @@ void Client::RemovePlayer(int id)
 	}
 }
 
+void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	mUserInterface->MsgProc(msg, wParam, lParam);
+}
+
 Player* Client::GetPlayer()
 {
 	return mPlayer;
@@ -550,4 +558,9 @@ Player* Client::GetPlayer()
 GameState Client::GetArenaState()
 {
 	return mArenaState.state;
+}
+
+string Client::GetName()
+{
+	return mName;
 }

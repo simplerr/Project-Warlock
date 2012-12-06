@@ -42,15 +42,20 @@ public:
 	void PlaceInFreeSlot(BaseItem* pItem);
 	void PlaceInFreeSlot(ItemKey itemKey);
 	void FreeAllSlots();
+
+	void SendItemAdded(int playerId, ItemName itemName, int itemLevel);
+	void SendItemRemoved(int playerId, ItemName itemName, int itemLevel);
+	void SendGoldChange(int playerId, int newGold);
+
 	void SetItemLoader(ItemLoaderXML* pLoader);
 	void SetClient(Client* pClient);
 	
 	bool HasFreeSlots();
 	bool InsideSlot(const ItemSlot& slot, XMFLOAT3 pos);
 	bool IsLocalPlayerSelected();
-	ItemLoaderXML* GetItemLoader();
-	Client*	GetClient();
-	ItemSlot* GetItemSlot(ItemName name);
+	ItemLoaderXML*	GetItemLoader();
+	Client*			GetClient();
+	ItemSlot*		GetItemSlot(ItemName name);
 private:
 	vector<ItemSlot>	mItemSlots;
 	ItemLoaderXML*		mItemLoaderXML;
@@ -60,5 +65,4 @@ private:
 	float				mSlotSize;
 	int					mNumColums;
 	int					mHooveringSlotId;
-
 };

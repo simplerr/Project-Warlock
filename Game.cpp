@@ -40,6 +40,7 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 {
 	// Cap the fps to 100.
 	//SetFpsCap(100.0f);
+	mClient = nullptr;
 }
 	
 Game::~Game()
@@ -98,6 +99,9 @@ LRESULT Game::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		if(wParam == 'f')	
 			SwitchScreenMode();
 	}
+
+	if(mClient != nullptr)
+		mClient->MsgProc(msg, wParam, lParam);
 
 	return Runnable::MsgProc(hwnd, msg, wParam, lParam);
 }

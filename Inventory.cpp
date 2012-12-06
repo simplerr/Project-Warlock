@@ -53,13 +53,8 @@ void Inventory::AddItem(BaseItem* pItem)
 	// Add item to player.
 	mPlayer->AddItem(pItem);
 
-	// Send to server.
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_ITEM_ADDED);
-	bitstream.Write(mPlayer->GetId());
-	bitstream.Write(pItem->GetName());
-	bitstream.Write(pItem->GetLevel());
-	GetClient()->SendServerMessage(bitstream);
+	// Send message to server.
+	SendItemAdded(mPlayer->GetId(), pItem->GetName(), pItem->GetLevel());
 
 	// Clear the inventory and update it with the players current items.
 	UpdateItems();
@@ -70,13 +65,8 @@ void Inventory::RemoveItem(BaseItem* pItem)
 	// Remove item from player.
 	mPlayer->RemoveItem(pItem);
 
-	// Send to server.
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_ITEM_REMOVED);
-	bitstream.Write(mPlayer->GetId());
-	bitstream.Write(pItem->GetName());
-	bitstream.Write(pItem->GetLevel());
-	GetClient()->SendServerMessage(bitstream);
+	// Send message to server.
+	SendItemRemoved(mPlayer->GetId(), pItem->GetName(), pItem->GetLevel());
 
 	// Clear the inventory and update it with the players current items.
 	UpdateItems();
@@ -119,12 +109,8 @@ void Inventory::OnRightPress(ItemSlot& itemSlot)
 	Player* player = GetClient()->GetPlayer();
 	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
-	// Send event to server.
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_GOLD_CHANGE);
-	bitstream.Write(player->GetId());
-	bitstream.Write(player->GetGold());
-	GetClient()->SendServerMessage(bitstream);
+	// Send message to server.
+	SendGoldChange(player->GetId(), player->GetGold());
 }
 
 string Inventory::GetHooverText(BaseItem* pItem)
