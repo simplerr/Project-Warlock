@@ -26,7 +26,7 @@ struct ServerCvars
 		CvarMap[Cvars::GOLD_PER_KILL] = 1;
 		CvarMap[Cvars::GOLD_PER_WIN] = 3;
 		CvarMap[Cvars::LAVA_DMG] = 1;
-		CvarMap[Cvars::PROJECTILE_IMPULSE] =  6; // Divided by 10 later
+		CvarMap[Cvars::PROJECTILE_IMPULSE] =  3; // Divided by 10 later.
 	}
 
 	void SetCvarValue(string cvar, int value) {

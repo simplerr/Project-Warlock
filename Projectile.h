@@ -24,12 +24,14 @@ public:
 	XMFLOAT3 GetDirection();
 	ItemName GetSkillType();
 	int		 GetSkillLevel();
+	float	 GetDamage();
 private:
 	XMFLOAT3	mDirection;
 	int			mOwner;
 	float		mSpeed;
 	float		mMaxDistance;
 	float		mTravelled;
+	float		mDamage;
 
 	// Skill data.
 	ItemName	mSkillType;
