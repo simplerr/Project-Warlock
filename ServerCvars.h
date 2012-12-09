@@ -5,6 +5,7 @@ using namespace std;
 
 namespace Cvars {
 	const string CVAR_LIST_CMD = "/cvarlist";	// [NOTE] No Cvar!!
+	const string RESTART_ROUND = "/restart";	// [NOTE] No Cvar!!
 	const string START_GOLD = "/startgold";
 	const string SHOP_TIME = "/shoptime";
 	const string ROUND_TIME = "/roundtime";
