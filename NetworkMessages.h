@@ -15,6 +15,7 @@ enum MessageId
 	NMSG_PLAYER_DISCONNECTED,		// Sent when a player disconnects.
 	NMSG_REQUEST_CLIENT_NAMES,		// A client has requested a list of all connected player names.
 	NSMG_CONNECTED_CLIENTS,			// Sent when asking the server for all connected clients.
+	NMSG_REQUEST_CVAR_LIST,
 
 	//
 	//	Game events.
@@ -44,5 +45,6 @@ enum MessageId
 	//
 	// Chat events.
 	//
-	NMSG_CHAT_MESSAGE_SENT
+	NMSG_CHAT_MESSAGE_SENT,
+	NMSG_CVAR_CHANGE
 };

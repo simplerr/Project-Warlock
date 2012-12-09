@@ -1,4 +1,5 @@
 #include "Chat.h"
+#include "Utils.h"
 #include "UserInterface.h"
 #include "ItemLoaderXML.h"
 #include "Inventory.h"
@@ -7,6 +8,7 @@
 #include "Player.h"
 #include "Graphics.h"
 #include "SkillInventory.h"
+#include "ServerCvars.h"
 
 UserInterface::UserInterface(Client* pClient)
 {
@@ -119,7 +121,11 @@ void UserInterface::HandleChatMessage(RakNet::BitStream& bitstream)
 // Callback from Chat.
 void UserInterface::OnMessageSent(string message)
 {
-	OutputDebugString(message.c_str());
+	vector<string> elems = SplitString(message, ' ');
+
+	if(elems[0] == Cvars::CVAR_LIST_CMD + "\r\n") {
+		mInventory->GetClient()->RequestCvarList(); // [NOTE][HACK] !!
+	}
 }
 
 void UserInterface::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -136,4 +142,9 @@ void UserInterface::SetSelectedPlayer(Player* pPlayer)
 bool UserInterface::PointInsideUi(XMFLOAT3 position)
 {
 	return (position.y > GLib::GetClientHeight() - 200);
+}
+
+Chat* UserInterface::GetChat()
+{
+	return mChat;
 }

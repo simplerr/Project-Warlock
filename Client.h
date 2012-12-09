@@ -13,6 +13,7 @@ namespace GLib {
 	class Graphics;
 	class World;
 	class Object3D;
+	class StatusText;
 }
 
 class ClientSkillInterpreter;
@@ -39,6 +40,8 @@ public:
 	void RemovePlayer(int id);
 
 	void RequestClientNames();
+	void RequestCvarList();
+
 	void SendServerMessage(RakNet::BitStream& bitstream);
 	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
 
@@ -66,6 +69,8 @@ public:
 	void HandleProjectilePlayerCollision(RakNet::BitStream& bitstream);
 	void HandleRoundStarted(RakNet::BitStream& bitstream);
 	void HandleRoundEnded(RakNet::BitStream& bitstream);
+	void HandleCvarList(RakNet::BitStream& bitstream);
+	void HandleCvarChange(RakNet::BitStream& bitstream);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:
@@ -76,6 +81,7 @@ private:
 	Player*						mSelectedPlayer;
 	Player*						mPlayer;
 	vector<Player*>				mPlayerList;
+	GLib::StatusText*			mStatusText;
 	map<string, int>			mScoreMap;
 	string						mName;
 

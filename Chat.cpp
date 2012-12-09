@@ -45,18 +45,18 @@ bool first = true;
 @param crNewColor The text color.
 @note Works on any window control, without the color effect.
 */
-void Chat::AddText(HWND hwnd, char *szTextIn, COLORREF crNewColor)
+void Chat::AddText(char *szTextIn, COLORREF crNewColor)
 {
 	char *Text = (char *)malloc(lstrlen(szTextIn) + 5);
 	CHARFORMAT cf;
-	int iTotalTextLength = GetWindowTextLength(hwnd);
+	int iTotalTextLength = GetWindowTextLength(mhChatBox);
 	int iStartPos = iTotalTextLength;
 	int iEndPos;
 
 	strcpy(Text, szTextIn);
 
-	SendMessage(hwnd, EM_SETSEL, (WPARAM)(int)iTotalTextLength, (LPARAM)(int)iTotalTextLength);
-	SendMessage(hwnd, EM_REPLACESEL, (WPARAM)(BOOL)FALSE, (LPARAM)(LPCSTR)Text);
+	SendMessage(mhChatBox, EM_SETSEL, (WPARAM)(int)iTotalTextLength, (LPARAM)(int)iTotalTextLength);
+	SendMessage(mhChatBox, EM_REPLACESEL, (WPARAM)(BOOL)FALSE, (LPARAM)(LPCSTR)Text);
 
 	free(Text);
 
@@ -65,13 +65,13 @@ void Chat::AddText(HWND hwnd, char *szTextIn, COLORREF crNewColor)
 	cf.dwEffects   = (unsigned long)~(CFE_AUTOCOLOR | CFE_UNDERLINE | CFE_BOLD);
 	cf.crTextColor = crNewColor;
 
-	iEndPos = GetWindowTextLength(hwnd);
+	iEndPos = GetWindowTextLength(mhChatBox);
 
-	SendMessage(hwnd, EM_SETSEL, (WPARAM)(int)iStartPos, (LPARAM)(int)iEndPos);
-	SendMessage(hwnd, EM_SETCHARFORMAT, (WPARAM)(UINT)SCF_SELECTION, (LPARAM)&cf);
-	SendMessage(hwnd, EM_HIDESELECTION, (WPARAM)(BOOL)TRUE, (LPARAM)(BOOL)FALSE);
+	SendMessage(mhChatBox, EM_SETSEL, (WPARAM)(int)iStartPos, (LPARAM)(int)iEndPos);
+	SendMessage(mhChatBox, EM_SETCHARFORMAT, (WPARAM)(UINT)SCF_SELECTION, (LPARAM)&cf);
+	SendMessage(mhChatBox, EM_HIDESELECTION, (WPARAM)(BOOL)TRUE, (LPARAM)(BOOL)FALSE);
 
-	SendMessage(hwnd, EM_LINESCROLL, (WPARAM)(int)0, (LPARAM)(int)1);
+	SendMessage(mhChatBox, EM_LINESCROLL, (WPARAM)(int)0, (LPARAM)(int)1);
 }
 
 //! Subclassed msg proc for the input box.
@@ -135,7 +135,7 @@ Chat::Chat(int x, int y, int width, int height)
 	DefEditProc = (WNDPROC)SetWindowLong(mhInputBox, GWL_WNDPROC, (DWORD)InputProc);
 
 	// Add info text to the chat
-	AddText(mhChatBox, "Welcome!\nYou can write /stats to see your opponents stats.\nVisit http://simplersnet.com for rankings.", RGB(175, 77, 146));
+	AddText("Welcome!\n", RGB(175, 77, 146));
 }
 
 //! Destructor.
@@ -164,11 +164,11 @@ void Chat::AddMessage(string from, string message)
 
 	name += from;
 	name += ">: ";
-	AddText(mhChatBox, (char*)name.c_str(), nameColor);
-	AddText(mhChatBox, (char*)message.c_str(), RGB(0, 0, 0));
+	AddText((char*)name.c_str(), nameColor);
+	AddText((char*)message.c_str(), RGB(0, 0, 0));
 
 	if(msg.find("\n") == string::npos)
-		AddText(mhChatBox, "\n", RGB(0, 0, 0));
+		AddText("\n", RGB(0, 0, 0));
 
 	first = false;
 }

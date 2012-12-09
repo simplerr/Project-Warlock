@@ -44,6 +44,8 @@ public:
 	void OnMessageSent(string message);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
+
+	Chat* GetChat();
 private:
 	ItemLoaderXML*				mItemLoader;
 	Inventory*					mInventory;

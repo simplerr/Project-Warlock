@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "ServerCvars.h"
 #include "Input.h"
 #include "BitStream.h"
 #include "World.h"
@@ -15,6 +16,8 @@
 #include "Shop.h"
 #include <fstream>
 #include "UserInterface.h"
+#include "Chat.h"
+#include "StatusText.h"
 
 Client::Client()
 {
@@ -32,6 +35,7 @@ Client::Client()
 
 	mSkillInterpreter = new ClientSkillInterpreter();
 	mUserInterface = new UserInterface(this);
+	mStatusText = new GLib::StatusText("Test", 600, 200, 6);
 
 	// Connect the graphics light list.
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
@@ -54,6 +58,7 @@ Client::~Client()
 	delete mWorld;
 	delete mSkillInterpreter;
 	delete mUserInterface;
+	delete mStatusText;
 
 	// Tell the opponent that you left
 	/*RakNet::BitStream bitstream;
@@ -68,7 +73,7 @@ void Client::Update(GLib::Input* pInput, float dt)
 {
 	// Update the world.
 	mWorld->Update(dt);
-
+	mStatusText->Update(dt);
 	mUserInterface->Update(pInput, dt);
 
 	// Poll for object selection.
@@ -90,7 +95,7 @@ void Client::Draw(GLib::Graphics* pGraphics)
 {
 	// Draw the world.
 	mWorld->Draw(pGraphics);
-
+	mStatusText->Draw(pGraphics);
 	mUserInterface->Draw(pGraphics);
 
 	if(mSelectedPlayer != nullptr) {
@@ -216,6 +221,12 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 		case NMSG_CHAT_MESSAGE_SENT:
 			mUserInterface->HandleChatMessage(bitstream);
 			break;
+		case NMSG_REQUEST_CVAR_LIST:
+			HandleCvarList(bitstream);
+			break;
+		case NMSG_CVAR_CHANGE:
+			HandleCvarChange(bitstream);
+			break;
 	}
 
 	return true;
@@ -330,9 +341,10 @@ void Client::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 {
 	char buffer[244];
-	int id;
+	int id, gold;
 	bitstream.Read(buffer);
 	bitstream.Read(id);
+	bitstream.Read(gold);
 
 	string name = buffer;
 
@@ -344,6 +356,7 @@ void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
 	player->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));	// [NOTE]
 	mWorld->AddObject(player);
 	player->SetId(id);	// Use the servers ID.
+	player->SetGold(gold);
 
 	if(mName == name && mPlayer == nullptr) {
 		OutputDebugString(string("Successfully connected to the server! " + name + "\n").c_str());
@@ -436,6 +449,42 @@ void Client::HandleRoundEnded(RakNet::BitStream& bitstream)
 	mRoundEnded = true;
 }
 
+void Client::HandleCvarList(RakNet::BitStream& bitstream)
+{
+	int startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, lavaDamage, projectileImpulse;
+	bitstream.Read(startGold);
+	bitstream.Read(shopTime);
+	bitstream.Read(roundTime);
+	bitstream.Read(numRounds);
+	bitstream.Read(goldPerKill);
+	bitstream.Read(goldPerWin);
+	bitstream.Read(lavaDamage);
+	bitstream.Read(projectileImpulse);
+
+	// Format and add it to the chat.
+	char buffer[2048];
+	sprintf(buffer, "startGold: %i\nshopTime: %i\nroundTime: %i\nnrounds: %i\ngoldPerKill: %i\ngoldPerWin: %i\nlavaDamage: %f\nprojectileImpulse: %f\n",
+		startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, lavaDamage, lavaDamage);
+
+	Chat* chat = mUserInterface->GetChat();
+	chat->AddText(buffer, RGB(0, 0, 0));
+}
+
+void Client::HandleCvarChange(RakNet::BitStream& bitstream)
+{
+	char temp[128];
+	int value;
+
+	bitstream.Read(temp);
+	bitstream.Read(value);
+
+	string cvar = string(temp).substr(1, string(temp).size()-1);
+
+	char buffer[244];
+	sprintf(buffer, "%s changed to %i", cvar.c_str(), value);
+	mStatusText->SetText(buffer, 0xff000000, 4);
+}
+
 void Client::SendServerMessage(RakNet::BitStream& bitstream)
 {
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
@@ -484,8 +533,14 @@ void Client::SetSelectedPlayer(Player* pPlayer)
 void Client::RequestClientNames()
 {
 	RakNet::BitStream bitstream;
-
 	bitstream.Write((unsigned char)NMSG_REQUEST_CLIENT_NAMES);
+	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+}
+
+void Client::RequestCvarList()
+{
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_REQUEST_CVAR_LIST);
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 

@@ -23,7 +23,7 @@ public:
 	void SendChatMessage();
 
 	LRESULT MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
-	void	AddText(HWND hwnd, char *szTextIn, COLORREF crNewColor);
+	void	AddText(char *szTextIn, COLORREF crNewColor);
 	void	HandleMessage(RakNet::BitStream& bitstream);
 
 	void	SetClient(Client* pClient);
