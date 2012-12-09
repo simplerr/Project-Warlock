@@ -50,6 +50,7 @@ public:
 	void SetLifeSteal(float lifesteal);
 	void SetGold(int gold);
 	void SetEliminated(bool eliminated);
+	void SetLastHitter(Player* pPlayer);
 
 	float GetHealth();
 	float GetRegen();
@@ -59,6 +60,7 @@ public:
 	float GetLifeSteal();
 	int	  GetGold();
 	bool  GetEliminated();
+	Player* GetLastHitter();
 
 	bool IsCastingSkill();
 private:
@@ -67,6 +69,7 @@ private:
 	multiset<ItemKey>	  mItemList;
 	Attributes			  mAttributes;
 	GLib::StaticObject*	  mLocalBox;	//[HACK]
+	Player*				  mLastHitter;
 	bool				  mEliminated;
 	bool				  mLocalPlayer;
 	int mGold;

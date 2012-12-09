@@ -482,7 +482,7 @@ void Client::HandleCvarChange(RakNet::BitStream& bitstream)
 
 	char buffer[244];
 	sprintf(buffer, "%s changed to %i", cvar.c_str(), value);
-	mStatusText->SetText(buffer, 0xff000000, 4);
+	mStatusText->SetText(buffer, 4);
 }
 
 void Client::SendServerMessage(RakNet::BitStream& bitstream)

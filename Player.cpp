@@ -16,6 +16,7 @@ Player::Player()
 	SetGold(100);
 	SetLocalPlayer(false);
 	SetEliminated(false);
+	SetLastHitter(nullptr);
 	mSkillHandler = new SkillHandler();
 
 	mLocalBox = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/box.obj");
@@ -35,7 +36,7 @@ void Player::Init()
 
 void Player::Update(float dt)
 {
-	if(GetHealth() <= 0)
+	if(GetHealth() <= 0) 
 		SetEliminated(true);
 
 	if(!GetEliminated())
@@ -240,4 +241,14 @@ void Player::SetEliminated(bool eliminated)
 bool Player::GetEliminated()
 {
 	return mEliminated;
+}
+
+void Player::SetLastHitter(Player* pPlayer)
+{
+	mLastHitter = pPlayer;
+}
+
+Player* Player::GetLastHitter()
+{
+	return mLastHitter;
 }

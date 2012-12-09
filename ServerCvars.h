@@ -23,8 +23,8 @@ struct ServerCvars
 		CvarMap[Cvars::SHOP_TIME] = 20;
 		CvarMap[Cvars::ROUND_TIME] = 120;
 		CvarMap[Cvars::NUM_ROUNDS] = 5;
-		CvarMap[Cvars::GOLD_PER_KILL] = 2;
-		CvarMap[Cvars::GOLD_PER_WIN] = 5;
+		CvarMap[Cvars::GOLD_PER_KILL] = 1;
+		CvarMap[Cvars::GOLD_PER_WIN] = 3;
 		CvarMap[Cvars::LAVA_DMG] = 1;
 		CvarMap[Cvars::PROJECTILE_IMPULSE] =  6; // Divided by 10 later
 	}
