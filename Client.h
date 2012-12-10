@@ -20,6 +20,8 @@ class ClientSkillInterpreter;
 class Actor;
 class Player;
 class UserInterface;
+class Chat;
+class ClientMessageHandler;
 
 class Client
 {
@@ -42,42 +44,34 @@ public:
 	void RequestClientNames();
 	void RequestCvarList();
 
+	void EndRound(string winner);
+	void StartRound();
+
 	void SendServerMessage(RakNet::BitStream& bitstream);
 	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
-
+	void SetArenaState(GameState state);
 	void SetSelectedPlayer(Player* pPlayer);
+	void SetScore(string name, int score);
+	void SetLocalPlayer(Player* pPlayer);
+	void SetStatusText(string text, float duration);
+	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));
 
 	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World*	GetWorld();
 	Player*			GetPlayer();
+	Chat*			GetChat();
+	ClientSkillInterpreter* GetSkillInterpreter();
 	string			GetName();
 	int				GetPlayerId();
 	GameState		GetArenaState();
 	bool			IsLocalPlayerSelected();
-
-	//
-	// Handle packet functions.
-	//
-	void HandleWorldUpdate(RakNet::BitStream& bitstream);
-	void HandleTargetAdded(RakNet::BitStream& bitstream);
-	void HandleObjectRemvoed(RakNet::BitStream& bitstream);
-	void HandleConnectionSuccess(RakNet::BitStream& bitstream);
-	void HandleAddPlayer(RakNet::BitStream& bitstream);
-	void HandlePlayerDisconnected(RakNet::BitStream& bitstream);
-	void HandleGetConnectedPlayers(RakNet::BitStream& bitstream);
-	void HandleSkillCasted(RakNet::BitStream& bitstream);
-	void HandleProjectilePlayerCollision(RakNet::BitStream& bitstream);
-	void HandleRoundStarted(RakNet::BitStream& bitstream);
-	void HandleRoundEnded(RakNet::BitStream& bitstream);
-	void HandleCvarList(RakNet::BitStream& bitstream);
-	void HandleCvarChange(RakNet::BitStream& bitstream);
-	void HandlePlayerEliminated(RakNet::BitStream& bitstream);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:
 	RakNet::RakPeerInterface*	mRaknetPeer;
 	GLib::World*				mWorld;
 	ClientSkillInterpreter*		mSkillInterpreter;
+	ClientMessageHandler*		mMessageHandler;
 	UserInterface*				mUserInterface;
 	Player*						mSelectedPlayer;
 	Player*						mPlayer;
@@ -89,5 +83,5 @@ private:
 	bool						mRoundEnded;
 	string						mWinner;
 
-	ArenaState	mArenaState;
+	ArenaState					mArenaState;
 };

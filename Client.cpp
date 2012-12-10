@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "ClientMessageHandler.h"
 #include "ServerCvars.h"
 #include "Input.h"
 #include "BitStream.h"
@@ -34,6 +35,7 @@ Client::Client()
 	mWorld->AddObjectRemovedListener(&Client::OnObjectRemoved, this);
 
 	mSkillInterpreter = new ClientSkillInterpreter();
+	mMessageHandler = new ClientMessageHandler(this);
 	mUserInterface = new UserInterface(this);
 	mStatusText = new GLib::StatusText("Test", 600, 200, 6);
 
@@ -57,6 +59,7 @@ Client::~Client()
 {
 	delete mWorld;
 	delete mSkillInterpreter;
+	delete mMessageHandler;
 	delete mUserInterface;
 	delete mStatusText;
 
@@ -163,31 +166,31 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 	switch(packetID)
 	{
 		case NMSG_WORLD_UPDATE:
-			HandleWorldUpdate(bitstream);
+			mMessageHandler->HandleWorldUpdate(bitstream);
 			break;
 		case NMSG_TARGET_ADDED:
-			HandleTargetAdded(bitstream);
+			mMessageHandler->HandleTargetAdded(bitstream);
 			break;
 		case NMSG_OBJECT_REMOVED:
-			HandleObjectRemvoed(bitstream);
+			mMessageHandler->HandleObjectRemvoed(bitstream);
 			break;
 		case NMSG_CONNECTION_SUCCESS:
-			HandleConnectionSuccess(bitstream);
+			mMessageHandler->HandleConnectionSuccess(bitstream);
 			break;
 		case NMSG_ADD_PLAYER:
-			HandleAddPlayer(bitstream);
+			mMessageHandler->HandleAddPlayer(bitstream);
 			break;
 		case NMSG_PLAYER_DISCONNECTED:
-			HandlePlayerDisconnected(bitstream);
+			mMessageHandler->HandlePlayerDisconnected(bitstream);
 			break;
 		case NSMG_CONNECTED_CLIENTS:
-			HandleGetConnectedPlayers(bitstream);
+			mMessageHandler->HandleGetConnectedPlayers(bitstream);
 			break;
 		case NMSG_SKILL_CAST:
-			HandleSkillCasted(bitstream);
+			mMessageHandler->HandleSkillCasted(bitstream);
 			break;
 		case NMSG_PROJECTILE_PLAYER_COLLISION:
-			HandleProjectilePlayerCollision(bitstream);
+			mMessageHandler->HandleProjectilePlayerCollision(bitstream);
 			break;
 		case NMSG_ITEM_ADDED:
 			{
@@ -213,22 +216,22 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			InitShoppingState(mArenaState);
 			break;
 		case NMSG_ROUND_START:
-			HandleRoundStarted(bitstream);
+			mMessageHandler->HandleRoundStarted(bitstream);
 			break;
 		case NMSG_ROUND_ENDED:
-			HandleRoundEnded(bitstream);
+			mMessageHandler->HandleRoundEnded(bitstream);
 			break;
 		case NMSG_CHAT_MESSAGE_SENT:
 			mUserInterface->HandleChatMessage(bitstream);
 			break;
 		case NMSG_REQUEST_CVAR_LIST:
-			HandleCvarList(bitstream);
+			mMessageHandler->HandleCvarList(bitstream);
 			break;
 		case NMSG_CVAR_CHANGE:
-			HandleCvarChange(bitstream);
+			mMessageHandler->HandleCvarChange(bitstream);
 			break;
 		case NMSG_PLAYER_ELIMINATED:
-			HandlePlayerEliminated(bitstream);
+			mMessageHandler->HandlePlayerEliminated(bitstream);
 			break;
 		case NMSG_ADD_CHAT_TEXT:
 			mUserInterface->HandleAddChatText(bitstream);
@@ -236,271 +239,6 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 	}
 
 	return true;
-}
-
-void Client::HandleWorldUpdate(RakNet::BitStream& bitstream)
-{
-	GLib::ObjectType type;
-	unsigned char id;
-	XMFLOAT3 pos;
-	float health;
-	int gold;
-
-	bitstream.Read(type);
-	bitstream.Read(id);
-	bitstream.Read(pos.x);
-	bitstream.Read(pos.y);
-	bitstream.Read(pos.z);
-
-	if(type == GLib::PLAYER)
-	{
-		bitstream.Read(health);
-		bitstream.Read(gold);
-	}
-
-	GLib::ObjectList* objects = mWorld->GetObjects();
-	for(int i = 0; i < objects->size(); i++)
-	{
-		GLib::Object3D* object = objects->operator[](i);
-
-		// Do interpolation stuff here.
-		if(object->GetId() == id)
-		{
-			object->SetPosition(pos);
-
-			if(object->GetType() == GLib::PLAYER) 
-			{
-				Player* player = (Player*)object;
-				player->SetHealth(health);
-				player->SetGold(gold);
-			}
-		}
-	}
-}
-
-void Client::HandleTargetAdded(RakNet::BitStream& bitstream)
-{
-	char name[244];
-	unsigned char id;
-	float x, y, z;
-	bool clear;
-	bitstream.Read(name);
-
-	/*if(string(name) == mName)
-		break;*/
-	bitstream.Read(id);
-	bitstream.Read(x);
-	bitstream.Read(y);
-	bitstream.Read(z);
-	bitstream.Read(clear);
-
-	GLib::ObjectList* objects = mWorld->GetObjects();
-	for(int i = 0; i < objects->size(); i++)
-	{
-		Actor* object = (Actor*)objects->operator[](i);
-		if(object->GetId() == id)
-			object->AddTarget(XMFLOAT3(x, y, z), clear);
-	}
-}
-
-void Client::HandleObjectRemvoed(RakNet::BitStream& bitstream)
-{
-	int id;
-	bitstream.Read(id);
-	mWorld->RemoveObject(id);
-}
-
-void Client::HandleConnectionSuccess(RakNet::BitStream& bitstream)
-{
-	// Add the players already connected.
-	char name[244];
-	int numPlayers, id;
-	XMFLOAT3 pos;
-
-	bitstream.Read(mArenaState.state);
-	bitstream.Read(numPlayers);
-
-	for(int i = 0; i < numPlayers; i++)
-	{
-		bitstream.Read(name);
-		bitstream.Read(id);
-		bitstream.Read(pos);
-
-		// Add a new player to the World.
-		Player* player = new Player();
-		player->SetName(name);
-		player->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));	
-		player->SetPosition(pos);
-		mWorld->AddObject(player);
-		player->SetId(id);	// Use the servers ID.
-
-		mScoreMap[name] = 0;
-	}
-
-	// Send the client info to the server (name etc).
-	RakNet::BitStream sendBitstream;
-	sendBitstream.Write((unsigned char)NMSG_CLIENT_CONNECTION_DATA);
-	sendBitstream.Write(mName.c_str());
-	mRaknetPeer->Send(&sendBitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-}
-
-void Client::HandleAddPlayer(RakNet::BitStream& bitstream)
-{
-	char buffer[244];
-	int id, gold;
-	bitstream.Read(buffer);
-	bitstream.Read(id);
-	bitstream.Read(gold);
-
-	string name = buffer;
-
-	mScoreMap[name] = 0;
-
-	// Add a new player to the World.
-	Player* player = new Player();
-	player->SetName(name);
-	player->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));	// [NOTE]
-	mWorld->AddObject(player);
-	player->SetId(id);	// Use the servers ID.
-	player->SetGold(gold);
-
-	if(mName == name && mPlayer == nullptr) {
-		OutputDebugString(string("Successfully connected to the server! " + name + "\n").c_str());
-		mPlayer = player;
-		mPlayer->SetLocalPlayer(true);	// Draws a square over the local players head.
-
-		mSelectedPlayer = mPlayer;
-		mSelectedPlayer->SetSelected(true);
-		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
-
-		// [NOTEOTOEOTOE]
-		mUserInterface->SetSelectedPlayer(mPlayer);
-	}
-	else
-		OutputDebugString(string(name + " has connected!\n").c_str());
-}
-
-void Client::HandlePlayerDisconnected(RakNet::BitStream& bitstream)
-{
-	char buffer[244];
-	bitstream.Read(buffer);
-
-	string name = buffer;
-	OutputDebugString(string(name + " has disconnected!").c_str());
-}
-
-void Client::HandleGetConnectedPlayers(RakNet::BitStream& bitstream)
-{
-	int numConnected;
-	vector<string> names;
-
-	bitstream.Read(numConnected);
-	for(int i = 0; i < numConnected; i++)
-	{
-		char buffer[244];
-		bitstream.Read(buffer);
-		names.push_back(buffer);
-	}
-
-	OutputDebugString(string("Users connected:\n").c_str());
-	for(int i = 0; i < numConnected; i++)
-		OutputDebugString(string(names[i] + "\n").c_str());
-}
-
-void Client::HandleSkillCasted(RakNet::BitStream& bitstream)
-{
-	unsigned char skillCasted;
-	bitstream.Read(skillCasted);
-	mSkillInterpreter->Interpret(this, (MessageId)skillCasted, bitstream);
-}
-
-void Client::HandleProjectilePlayerCollision(RakNet::BitStream& bitstream)
-{
-	int projectileId, playerId;
-	bitstream.Read(projectileId);
-	bitstream.Read(playerId);
-
-	Player* player = (Player*)mWorld->GetObjectById(playerId);
-
-	char buffer[244];
-	sprintf(buffer, "projectile %i collided with player %i health: %.2f\n", projectileId, playerId, player->GetHealth());
-	OutputDebugString(buffer);
-}
-
-void Client::HandleRoundStarted(RakNet::BitStream& bitstream)
-{
-	// [NOTE] The position is set by the server. Then passed by NMSG_UPDATEW_WORLD.
-	for(int i = 0; i < mPlayerList.size(); i++) 
-	{
-		mPlayerList[i]->SetEliminated(false);
-		mPlayerList[i]->SetHealth(100);	// [NOTE][HACK]
-	}
-
-	InitShoppingState(mArenaState);
-
-	OutputDebugString("Round started! Shopping time!");
-
-	mRoundEnded = false;
-}
-
-void Client::HandleRoundEnded(RakNet::BitStream& bitstream)
-{
-	char buffer[244];
-	bitstream.Read(buffer);
-	mWinner = buffer;
-
-	// Increment the winners score.
-	mScoreMap[mWinner]++;
-
-	mRoundEnded = true;
-}
-
-void Client::HandleCvarList(RakNet::BitStream& bitstream)
-{
-	int startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, lavaDamage, projectileImpulse;
-	bitstream.Read(startGold);
-	bitstream.Read(shopTime);
-	bitstream.Read(roundTime);
-	bitstream.Read(numRounds);
-	bitstream.Read(goldPerKill);
-	bitstream.Read(goldPerWin);
-	bitstream.Read(lavaDamage);
-	bitstream.Read(projectileImpulse);
-
-	// Format and add it to the chat.
-	char buffer[2048];
-	sprintf(buffer, "startGold: %i\nshopTime: %i\nroundTime: %i\nnrounds: %i\ngoldPerKill: %i\ngoldPerWin: %i\nlavaDamage: %f\nprojectileImpulse: %f\n",
-		startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, lavaDamage, lavaDamage);
-
-	Chat* chat = mUserInterface->GetChat();
-	chat->AddText(buffer, RGB(0, 0, 0));
-}
-
-void Client::HandleCvarChange(RakNet::BitStream& bitstream)
-{
-	char temp[128];
-	int value;
-
-	bitstream.Read(temp);
-	bitstream.Read(value);
-
-	string cvar = string(temp).substr(1, string(temp).size()-1);
-
-	char buffer[244];
-	sprintf(buffer, "%s changed to %i", cvar.c_str(), value);
-	mStatusText->SetText(buffer, 4);
-}
-
-void Client::HandlePlayerEliminated(RakNet::BitStream& bitstream)
-{
-	char killed[128];
-	char eliminator[128];
-
-	bitstream.Read(killed);
-	bitstream.Read(eliminator);
-
-	string chatText = string(killed) + " was pwnd by " + string(eliminator) + "!\n";
-	mUserInterface->GetChat()->AddText((char*)chatText.c_str(), RGB(255, 0, 0));
 }
 
 void Client::SendServerMessage(RakNet::BitStream& bitstream)
@@ -618,6 +356,29 @@ void Client::RemovePlayer(int id)
 	}
 }
 
+void Client::StartRound()
+{
+	// [NOTE] The position is set by the server. Then passed by NMSG_UPDATEW_WORLD.
+	for(int i = 0; i < mPlayerList.size(); i++) 
+	{
+		mPlayerList[i]->SetEliminated(false);
+		mPlayerList[i]->SetHealth(100);	// [NOTE][HACK]
+	}
+
+	InitShoppingState(mArenaState);
+
+	OutputDebugString("Round started! Shopping time!");
+
+	mRoundEnded = false;
+}
+
+void Client::EndRound(string winner)
+{
+	mWinner = winner;
+	mScoreMap[mWinner]++;
+	mRoundEnded = true;
+}
+
 void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mUserInterface->MsgProc(msg, wParam, lParam);
@@ -636,4 +397,40 @@ GameState Client::GetArenaState()
 string Client::GetName()
 {
 	return mName;
+}
+
+void Client::SetArenaState(GameState state)
+{
+	mArenaState.state = state;
+}
+
+void Client::SetScore(string name, int score)
+{
+	mScoreMap[name] = score;
+}
+
+void Client::SetLocalPlayer(Player* pPlayer)
+{
+	mPlayer = pPlayer;
+	mPlayer->SetLocalPlayer(true);	// Draws a square over the local players head.
+}
+
+Chat* Client::GetChat()
+{
+	return mUserInterface->GetChat();
+}
+
+ClientSkillInterpreter* Client::GetSkillInterpreter()
+{
+	return mSkillInterpreter;
+}
+
+void Client::AddChatText(string text, COLORREF color)
+{
+	mUserInterface->GetChat()->AddText((char*)text.c_str(), color);
+}
+
+void Client::SetStatusText(string text, float duration)
+{
+	mStatusText->SetText(text, duration);
 }
