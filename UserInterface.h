@@ -38,6 +38,7 @@ public:
 	void HandleItemAdded(Player* pPlayer, RakNet::BitStream& bitstream);
 	void HandleItemRemoved(Player* pPlayer, RakNet::BitStream& bitstream);
 	void HandleChatMessage(RakNet::BitStream& bitstream);
+	void HandleAddChatText(RakNet::BitStream& bitstream);
 	void SetSelectedPlayer(Player* pPlayer);
 	bool PointInsideUi(XMFLOAT3 position);
 

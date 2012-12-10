@@ -118,6 +118,17 @@ void UserInterface::HandleChatMessage(RakNet::BitStream& bitstream)
 	mChat->HandleMessage(bitstream);
 }
 
+void UserInterface::HandleAddChatText(RakNet::BitStream& bitstream)
+{
+	char buffer[1024];
+	COLORREF color;
+
+	bitstream.Read(buffer);
+	bitstream.Read(color);
+
+	mChat->AddText(buffer, color);
+}
+
 // Callback from Chat.
 void UserInterface::OnMessageSent(string message)
 {

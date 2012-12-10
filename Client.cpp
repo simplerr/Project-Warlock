@@ -230,6 +230,9 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 		case NMSG_PLAYER_ELIMINATED:
 			HandlePlayerEliminated(bitstream);
 			break;
+		case NMSG_ADD_CHAT_TEXT:
+			mUserInterface->HandleAddChatText(bitstream);
+			break;
 	}
 
 	return true;

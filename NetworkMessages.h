@@ -16,6 +16,7 @@ enum MessageId
 	NMSG_REQUEST_CLIENT_NAMES,		// A client has requested a list of all connected player names.
 	NSMG_CONNECTED_CLIENTS,			// Sent when asking the server for all connected clients.
 	NMSG_REQUEST_CVAR_LIST,
+	NMSG_ADD_CHAT_TEXT,
 
 	//
 	//	Game events.
