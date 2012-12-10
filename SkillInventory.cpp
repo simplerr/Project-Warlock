@@ -109,7 +109,7 @@ void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 
 	// Sell skill.
 	RemoveSkill(itemSlot.item);
-	Player* player = GetClient()->GetPlayer();
+	Player* player = GetClient()->GetLocalPlayer();
 	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
 	// Send message to server.

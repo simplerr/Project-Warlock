@@ -106,7 +106,7 @@ void Inventory::OnRightPress(ItemSlot& itemSlot)
 
 	// Sell item.
 	RemoveItem(itemSlot.item);
-	Player* player = GetClient()->GetPlayer();
+	Player* player = GetClient()->GetLocalPlayer();
 	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
 	// Send message to server.

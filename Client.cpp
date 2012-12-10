@@ -19,28 +19,18 @@
 #include "UserInterface.h"
 #include "Chat.h"
 #include "StatusText.h"
+#include "ClientArena.h"
 
 Client::Client()
 {
 	// Create the RakNet peer
-	mRaknetPeer		= RakNet::RakPeerInterface::GetInstance();
-	mSelectedPlayer = nullptr;
-	mPlayer			= nullptr;
+	mRaknetPeer		  = RakNet::RakPeerInterface::GetInstance();
 
-	// Create the world.
-	mWorld = new GLib::World();
-	mWorld->Init(GLib::GetGraphics());
-
-	mWorld->AddObjectAddedListener(&Client::OnObjectAdded, this);
-	mWorld->AddObjectRemovedListener(&Client::OnObjectRemoved, this);
-
+	mArena			  = new ClientArena(this);
 	mSkillInterpreter = new ClientSkillInterpreter();
-	mMessageHandler = new ClientMessageHandler(this);
-	mUserInterface = new UserInterface(this);
-	mStatusText = new GLib::StatusText("Test", 600, 200, 6);
-
-	// Connect the graphics light list.
-	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
+	mMessageHandler	  = new ClientMessageHandler(this);
+	mUserInterface    = new UserInterface(this);
+	mStatusText       = new GLib::StatusText("Test", 600, 200, 6);
 
 	// Read the name and ip to connect to.
 	std::ifstream fin("config.txt");
@@ -57,16 +47,11 @@ Client::Client()
 
 Client::~Client()
 {
-	delete mWorld;
 	delete mSkillInterpreter;
 	delete mMessageHandler;
 	delete mUserInterface;
 	delete mStatusText;
-
-	// Tell the opponent that you left
-	/*RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)ID_LEFT_GAME);
-	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);*/
+	delete mArena;
 
 	mRaknetPeer->Shutdown(300);
 	RakNet::RakPeerInterface::DestroyInstance(mRaknetPeer);
@@ -74,21 +59,13 @@ Client::~Client()
 
 void Client::Update(GLib::Input* pInput, float dt)
 {
-	// Update the world.
-	mWorld->Update(dt);
+	mArena->Update(pInput, dt);
 	mStatusText->Update(dt);
 	mUserInterface->Update(pInput, dt);
 
-	// Poll for object selection.
-	PollSelection(pInput);
-
-	// If the selected object is the player then poll for action.
-	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId() && !mUserInterface->PointInsideUi(pInput->MousePosition())) 
-		mPlayer->PollAction(this, pInput);
-
 	// Testing..
-	if(pInput->KeyPressed('C'))
-		RequestClientNames();
+	//if(pInput->KeyPressed('C'))
+	//	RequestClientNames();
 
 	// Listen for incoming packets.
 	ListenForPackets();
@@ -96,17 +73,9 @@ void Client::Update(GLib::Input* pInput, float dt)
 
 void Client::Draw(GLib::Graphics* pGraphics)
 {
-	// Draw the world.
-	mWorld->Draw(pGraphics);
+	mArena->Draw(pGraphics);
 	mStatusText->Draw(pGraphics);
 	mUserInterface->Draw(pGraphics);
-
-	if(mSelectedPlayer != nullptr) {
-		char buffer[244];
-		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f\n\nGold: %i\n\nTimer: %.2f", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
-			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold(), mArenaState.elapsed);
-		pGraphics->DrawText(buffer, 10, 10, 16, 0xff000000);
-	}
 
 	DrawScores(pGraphics);
 
@@ -125,6 +94,10 @@ void Client::DrawScores(GLib::Graphics* pGraphics)
 	}
 
 	pGraphics->DrawText(scoreList, 900, 100, 14);
+
+	char buffer[128];
+	sprintf(buffer, "Timer: %.2f", mArenaState.elapsed);
+	pGraphics->DrawText(buffer, 900, 200, 14);
 }
 
 bool Client::ConnectToServer(string ip)
@@ -196,14 +169,14 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			{
 				int playerId;
 				bitstream.Read(playerId);
-				mUserInterface->HandleItemAdded((Player*)mWorld->GetObjectById(playerId), bitstream);
+				mUserInterface->HandleItemAdded((Player*)mArena->GetWorld()->GetObjectById(playerId), bitstream);
 				break;
 			}
 		case NMSG_ITEM_REMOVED:
 			{
 				int playerId;
 				bitstream.Read(playerId);
-				mUserInterface->HandleItemRemoved((Player*)mWorld->GetObjectById(playerId), bitstream);
+				mUserInterface->HandleItemRemoved((Player*)mArena->GetWorld()->GetObjectById(playerId), bitstream);
 				break;
 			}
 		case NMSG_STATE_TIMER:
@@ -260,32 +233,6 @@ void Client::SendAddTarget(int id, XMFLOAT3 pos, bool clear)
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
-void Client::PollSelection(GLib::Input* pInput)
-{
-	// Get the selected object.
-	if(pInput->KeyPressed(VK_LBUTTON) && !mPlayer->IsCastingSkill() && !mUserInterface->PointInsideUi(pInput->MousePosition()))
-	{
-		Player* selected = (Player*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay(), GLib::PLAYER);
-		SetSelectedPlayer(selected);
-	}
-}
-
-void Client::SetSelectedPlayer(Player* pPlayer)
-{
-	if(pPlayer != nullptr) 
-	{
-		if(mSelectedPlayer != nullptr) {
-			mSelectedPlayer->SetSelected(false);
-			mSelectedPlayer->SetMaterials(GLib::Material(GLib::Colors::White));
-		}
-
-		mSelectedPlayer = pPlayer;
-		mSelectedPlayer->SetSelected(true);
-		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
-		mUserInterface->SetSelectedPlayer(mSelectedPlayer);
-	}
-}
-
 void Client::RequestClientNames()
 {
 	RakNet::BitStream bitstream;
@@ -305,70 +252,26 @@ RakNet::RakPeerInterface* Client::GetRaknetPeer()
 	return mRaknetPeer;
 }
 
-int Client::GetPlayerId()
+int Client::GetLocalPlayerId()
 {
-	return mPlayer->GetId();
+	return mArena->GetLocalPlayer()->GetId();
 }
 
 GLib::World* Client::GetWorld()
 {
-	return mWorld;
+	return mArena->GetWorld();
 }
 
 bool Client::IsLocalPlayerSelected()
 {
-	return (mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId());
-}
-
-//! Gets called in World::AddObject().
-void Client::OnObjectAdded(GLib::Object3D* pObject)
-{
-	// Add player to mPlayerList.
-	if(pObject->GetType() == GLib::PLAYER)
-		mPlayerList.push_back((Player*)pObject);
-}
-
-//! Gets called in World::RemoveObject().
-void Client::OnObjectRemoved(GLib::Object3D* pObject)
-{
-	// Remove player from mPlayerList:
-	if(pObject->GetType() == GLib::PLAYER) 
-		RemovePlayer(pObject->GetId());
-
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_OBJECT_REMOVED);
-	bitstream.Write(pObject->GetId());
-	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-}
-
-//! Removes a player from mPlayerList.
-void Client::RemovePlayer(int id)
-{
-	// Loop through all objects and find out which one to delete.
-	for(auto iter =  mPlayerList.begin(); iter != mPlayerList.end(); iter++)
-	{
-		if((*iter)->GetId() == id) {
-			mPlayerList.erase(iter);
-			break;
-		}
-		else	
-			iter++;
-	}
+	return mArena->IsLocalPlayerSelected();
 }
 
 void Client::StartRound()
 {
-	// [NOTE] The position is set by the server. Then passed by NMSG_UPDATEW_WORLD.
-	for(int i = 0; i < mPlayerList.size(); i++) 
-	{
-		mPlayerList[i]->SetEliminated(false);
-		mPlayerList[i]->SetHealth(100);	// [NOTE][HACK]
-	}
-
+	mArena->ResetPlayers();
 	InitShoppingState(mArenaState);
-
-	OutputDebugString("Round started! Shopping time!");
-
+	AddChatText("Round started! Shopping time!\n", RGB(0, 200, 0));
 	mRoundEnded = false;
 }
 
@@ -384,9 +287,9 @@ void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 	mUserInterface->MsgProc(msg, wParam, lParam);
 }
 
-Player* Client::GetPlayer()
+Player* Client::GetLocalPlayer()
 {
-	return mPlayer;
+	return mArena->GetLocalPlayer();
 }
 
 GameState Client::GetArenaState()
@@ -397,6 +300,11 @@ GameState Client::GetArenaState()
 string Client::GetName()
 {
 	return mName;
+}
+
+ClientArena* Client::GetArena()
+{
+	return mArena;
 }
 
 void Client::SetArenaState(GameState state)
@@ -411,8 +319,12 @@ void Client::SetScore(string name, int score)
 
 void Client::SetLocalPlayer(Player* pPlayer)
 {
-	mPlayer = pPlayer;
-	mPlayer->SetLocalPlayer(true);	// Draws a square over the local players head.
+	mArena->SetLocalPlayer(pPlayer);
+}
+
+void Client::SetSelectedPlayer(Player* pPlayer)
+{
+	mArena->SetSelectedPlayer(pPlayer);
 }
 
 Chat* Client::GetChat()
@@ -433,4 +345,9 @@ void Client::AddChatText(string text, COLORREF color)
 void Client::SetStatusText(string text, float duration)
 {
 	mStatusText->SetText(text, duration);
+}
+
+UserInterface* Client::GetUi()
+{
+	return mUserInterface;
 }

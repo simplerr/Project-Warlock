@@ -145,7 +145,7 @@ void ClientMessageHandler::HandleAddPlayer(RakNet::BitStream& bitstream)
 	player->SetId(id);	// Use the servers ID.
 	player->SetGold(gold);
 
-	if(mClient->GetName() == name && mClient->GetPlayer() == nullptr) {
+	if(mClient->GetName() == name && mClient->GetLocalPlayer() == nullptr) {
 		mClient->AddChatText("Successfully connected to the server!\n", RGB(0, 200, 0));
 		mClient->SetLocalPlayer(player);
 		mClient->SetSelectedPlayer(player);

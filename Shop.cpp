@@ -47,7 +47,7 @@ void Shop::OnLeftPress(const ItemSlot& itemSlot)
 
 void Shop::OnRightPress(ItemSlot& itemSlot)
 {
-	Player* player = GetClient()->GetPlayer();
+	Player* player = GetClient()->GetLocalPlayer();
 
 	// If the Clients Player isn't selected then select it before adding item to inventory.
 	if(!GetClient()->IsLocalPlayerSelected())

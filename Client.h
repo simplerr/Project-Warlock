@@ -16,12 +16,13 @@ namespace GLib {
 	class StatusText;
 }
 
-class ClientSkillInterpreter;
 class Actor;
 class Player;
 class UserInterface;
 class Chat;
+class ClientSkillInterpreter;
 class ClientMessageHandler;
+class ClientArena;
 
 class Client
 {
@@ -32,14 +33,12 @@ public:
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 	void DrawScores(GLib::Graphics* pGraphics);
-	void PollSelection(GLib::Input* pInput);
 	bool ConnectToServer(string ip);
 	bool ListenForPackets();
 	bool HandlePacket(RakNet::Packet* pPacket);
 	
 	void OnObjectAdded(GLib::Object3D* pObject);
 	void OnObjectRemoved(GLib::Object3D* pObject);
-	void RemovePlayer(int id);
 
 	void RequestClientNames();
 	void RequestCvarList();
@@ -50,38 +49,35 @@ public:
 	void SendServerMessage(RakNet::BitStream& bitstream);
 	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
 	void SetArenaState(GameState state);
-	void SetSelectedPlayer(Player* pPlayer);
 	void SetScore(string name, int score);
 	void SetLocalPlayer(Player* pPlayer);
+	void SetSelectedPlayer(Player* pPlayer);
 	void SetStatusText(string text, float duration);
 	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));
 
 	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World*	GetWorld();
-	Player*			GetPlayer();
+	Player*			GetLocalPlayer();
 	Chat*			GetChat();
 	ClientSkillInterpreter* GetSkillInterpreter();
+	UserInterface*	GetUi();
+	ClientArena*	GetArena();
 	string			GetName();
-	int				GetPlayerId();
+	int				GetLocalPlayerId();
 	GameState		GetArenaState();
 	bool			IsLocalPlayerSelected();
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:
 	RakNet::RakPeerInterface*	mRaknetPeer;
-	GLib::World*				mWorld;
+	ClientArena*				mArena;
 	ClientSkillInterpreter*		mSkillInterpreter;
 	ClientMessageHandler*		mMessageHandler;
 	UserInterface*				mUserInterface;
-	Player*						mSelectedPlayer;
-	Player*						mPlayer;
-	vector<Player*>				mPlayerList;
 	GLib::StatusText*			mStatusText;
+	ArenaState					mArenaState;
 	map<string, int>			mScoreMap;
 	string						mName;
-
-	bool						mRoundEnded;
 	string						mWinner;
-
-	ArenaState					mArenaState;
+	bool						mRoundEnded;
 };
