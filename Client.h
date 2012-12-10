@@ -71,6 +71,7 @@ public:
 	void HandleRoundEnded(RakNet::BitStream& bitstream);
 	void HandleCvarList(RakNet::BitStream& bitstream);
 	void HandleCvarChange(RakNet::BitStream& bitstream);
+	void HandlePlayerEliminated(RakNet::BitStream& bitstream);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:

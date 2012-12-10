@@ -227,6 +227,9 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 		case NMSG_CVAR_CHANGE:
 			HandleCvarChange(bitstream);
 			break;
+		case NMSG_PLAYER_ELIMINATED:
+			HandlePlayerEliminated(bitstream);
+			break;
 	}
 
 	return true;
@@ -483,6 +486,18 @@ void Client::HandleCvarChange(RakNet::BitStream& bitstream)
 	char buffer[244];
 	sprintf(buffer, "%s changed to %i", cvar.c_str(), value);
 	mStatusText->SetText(buffer, 4);
+}
+
+void Client::HandlePlayerEliminated(RakNet::BitStream& bitstream)
+{
+	char killed[128];
+	char eliminator[128];
+
+	bitstream.Read(killed);
+	bitstream.Read(eliminator);
+
+	string chatText = string(killed) + " was pwnd by " + string(eliminator) + "!\n";
+	mUserInterface->GetChat()->AddText((char*)chatText.c_str(), RGB(255, 0, 0));
 }
 
 void Client::SendServerMessage(RakNet::BitStream& bitstream)
