@@ -55,6 +55,9 @@ public:
 	void SetStatusText(string text, float duration);
 	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));
 
+	//
+	// Getters                                                             
+	//
 	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World*	GetWorld();
 	Player*			GetLocalPlayer();

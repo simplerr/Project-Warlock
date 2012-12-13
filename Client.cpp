@@ -247,26 +247,6 @@ void Client::RequestCvarList()
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
-RakNet::RakPeerInterface* Client::GetRaknetPeer()
-{
-	return mRaknetPeer;
-}
-
-int Client::GetLocalPlayerId()
-{
-	return mArena->GetLocalPlayer()->GetId();
-}
-
-GLib::World* Client::GetWorld()
-{
-	return mArena->GetWorld();
-}
-
-bool Client::IsLocalPlayerSelected()
-{
-	return mArena->IsLocalPlayerSelected();
-}
-
 void Client::StartRound()
 {
 	mArena->ResetPlayers();
@@ -285,6 +265,26 @@ void Client::EndRound(string winner)
 void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	mUserInterface->MsgProc(msg, wParam, lParam);
+}
+
+RakNet::RakPeerInterface* Client::GetRaknetPeer()
+{
+	return mRaknetPeer;
+}
+
+int Client::GetLocalPlayerId()
+{
+	return mArena->GetLocalPlayer()->GetId();
+}
+
+GLib::World* Client::GetWorld()
+{
+	return mArena->GetWorld();
+}
+
+bool Client::IsLocalPlayerSelected()
+{
+	return mArena->IsLocalPlayerSelected();
 }
 
 Player* Client::GetLocalPlayer()

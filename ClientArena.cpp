@@ -1,4 +1,5 @@
 #include "ClientArena.h"
+#include "BloodParticles.h"
 #include "Client.h"
 #include "World.h"
 #include "d3dUtil.h"
@@ -8,6 +9,7 @@
 #include "Player.h"
 #include "UserInterface.h"
 #include "Input.h"
+#include "ParticleSystem.h"
 
 ClientArena::ClientArena(Client* pClient)
 {
@@ -26,6 +28,8 @@ ClientArena::ClientArena(Client* pClient)
 	// Connect the graphics light list.
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
 
+	/*mParticleSystem = new BloodPSystem(XMFLOAT3(0, 20, 0), "textures/torch.dds");
+	mWorld->AddObject(mParticleSystem);*/
 }
 
 ClientArena::~ClientArena()
@@ -40,6 +44,14 @@ void ClientArena::Update(GLib::Input* pInput, float dt)
 
 	// Poll for object selection.
 	PollSelection(pInput);
+
+	// TESTING
+	if(pInput->KeyPressed(VK_SPACE))
+	{
+		XMFLOAT3 pos = mWorld->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
+		GLib::ParticleSystem* psystem = new GLib::ParticleSystem(pos, "FireParticle.lua");
+		mWorld->AddObject(psystem);
+	}
 
 	// If the selected object is the player then poll for action.
 	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId() && !mClient->GetUi()->PointInsideUi(pInput->MousePosition())) 

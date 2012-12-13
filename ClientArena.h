@@ -12,6 +12,7 @@ namespace GLib {
 
 class Client;
 class Player;
+class BloodPSystem;
 
 class ClientArena
 {
@@ -41,4 +42,5 @@ private:
 	Player*				mSelectedPlayer;
 	Player*				mPlayer;
 	vector<Player*>		mPlayerList;
+	BloodPSystem*		mParticleSystem;
 };
