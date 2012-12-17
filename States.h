@@ -3,7 +3,7 @@
 const float SHOPPING_TIME = 20.0f;
 const float PLAYING_TIME = 120.0f;
 
-enum GameState
+enum CurrentState
 {
 	PLAYING_STATE,
 	SHOPPING_STATE
@@ -11,7 +11,7 @@ enum GameState
 
 struct ArenaState
 {
-	GameState state;
+	CurrentState state;
 	float length;
 	float elapsed;
 };

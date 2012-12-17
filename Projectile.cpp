@@ -3,12 +3,11 @@
 #include "Graphics.h"
 #include "Skills.h"
 
-Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir)
-	: StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/box.obj")
+Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
+	: ParticleSystem(pos, luaScript)
 {
 	SetMaterials(GLib::Material(GLib::Colors::Red));
 	SetType(GLib::PROJECTILE);
-	SetPosition(pos);
 	SetSkillType(SKILL_FIREBALL);
 	SetSkillLevel(1);
 	mDirection = dir;
@@ -25,6 +24,8 @@ Projectile::~Projectile()
 
 void Projectile::Update(float dt)
 {
+	ParticleSystem::Update(dt);
+
 	XMFLOAT3 velocity = mDirection * mSpeed;
 	SetPosition(GetPosition() + velocity);
 	mTravelled += sqrt(velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z);
@@ -35,7 +36,7 @@ void Projectile::Update(float dt)
 
 void Projectile::Draw(GLib::Graphics* pGraphics)
 {
-	StaticObject::Draw(pGraphics);
+	ParticleSystem::Draw(pGraphics);
 }
 
 int Projectile::GetOwner()

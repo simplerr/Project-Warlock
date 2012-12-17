@@ -17,8 +17,11 @@ namespace GLib {
 	class AnimatedObject;
 }
 
+class ControlManager;
+class GameState;
 class Arena;
 class Client;
+
 #pragma endregion
 
 class Game : public GLib::Runnable
@@ -31,9 +34,9 @@ public:
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 	void OnResize(int width, int height);
+	void ChangeState(GameState* pGameState);
 
 	LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 private:
-	Arena* mArena;
-	Client* mClient;
+	GameState*	mCurrentState;
 };

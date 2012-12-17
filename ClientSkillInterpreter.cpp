@@ -32,7 +32,7 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 		bitstream.Read(end);
 
 		XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&start) - XMLoadFloat3(&start)));
-		Projectile* projectile = new Projectile(owner, start, dir);
+		Projectile* projectile = new Projectile(owner, start, dir, "FireParticle.lua");
 		projectile->SetSkillLevel(skillLevel);
 		projectile->SetSkillLevel(skillType);
 		world->AddObject(projectile);

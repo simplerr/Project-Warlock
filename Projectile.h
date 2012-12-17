@@ -1,5 +1,5 @@
 #pragma  once
-#include "StaticObject.h"
+#include "ParticleSystem.h"
 #include "Skills.h"
 #include "Items.h"
 
@@ -8,10 +8,10 @@ namespace GLib
 	class Graphics;
 }
 
-class Projectile : public GLib::StaticObject
+class Projectile : public GLib::ParticleSystem
 {
 public:
-	Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir);
+	Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript);
 	~Projectile();
 
 	void Update(float dt);

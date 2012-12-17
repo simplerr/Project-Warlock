@@ -2,7 +2,7 @@
 #include "BitStream.h"
 #include "NetworkMessages.h"
 
-class Server;
+class ServerData;
 class Client;
 
 class ClientSkillInterpreter

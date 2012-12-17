@@ -48,7 +48,7 @@ public:
 
 	void SendServerMessage(RakNet::BitStream& bitstream);
 	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
-	void SetArenaState(GameState state);
+	void SetArenaState(CurrentState state);
 	void SetScore(string name, int score);
 	void SetLocalPlayer(Player* pPlayer);
 	void SetSelectedPlayer(Player* pPlayer);
@@ -67,7 +67,7 @@ public:
 	ClientArena*	GetArena();
 	string			GetName();
 	int				GetLocalPlayerId();
-	GameState		GetArenaState();
+	CurrentState	GetArenaState();
 	bool			IsLocalPlayerSelected();
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);

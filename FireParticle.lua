@@ -4,19 +4,20 @@ math.randomseed(os.time())
 
 ParticleSystemData = {
 	accel_x = 0;
-	accel_y = -100;
+	accel_y = -0;
 	accel_z = 0;
-	spawn_frequency = 0.01;
+	spawn_frequency = 0.02;
 	lifetime = 5;
 	max_particles = 100;
+	radius = 5;
 }
 
 ParticleData = {
-	texture = "textures/torch.dds",
-	size = 15,
-	lifetime = 5.0,
+	texture = "textures/torch.png",
+	size = 10,
+	lifetime = 1.2,
 	mass = 0.1,
-	speed = 50,
+	speed = 1,
 }
 
 -- Updates the particle with a custom function.
@@ -34,5 +35,5 @@ function UpdateParticle(particle, time)
 	particle:SetPosition(pos_x, pos_y, pos_z);
 
 	-- Set new size.
-	particle:SetSize(particle:GetInitialSize() * math.sin(age * 6.0) * 3);
+	particle:SetSize(particle:GetInitialSize() * math.sin(age * 12.0));
 end

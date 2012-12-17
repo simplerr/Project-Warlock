@@ -12,11 +12,18 @@
 #include "CameraFPS.h"
 #include "CameraRTS.h"
 #include "Client.h"
+#include "ControlManager.h"
+#include "Label.h"
 #include <fstream>
+#include "TextMenu.h"
+#include "GameState.h"
+#include "BrowsingState.h"
 
 using namespace GLib;
 
 #define _HAS_ITERATOR_DEBUGGING 0
+
+float mx, my;
 
 // Set global to NULL.
 GLib::Runnable* GLib::GlobalApp = nullptr;
@@ -40,12 +47,12 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 {
 	// Cap the fps to 100.
 	//SetFpsCap(100.0f);
-	mClient = nullptr;
+	mCurrentState = nullptr;
 }
 	
 Game::~Game()
 {
-	delete mClient;
+	
 }
 
 void Game::Init()
@@ -53,29 +60,35 @@ void Game::Init()
 	// Important to run Systems Init() function.
 	Runnable::Init();
 
-	// Create the peer.
-	mClient = new Client();
-
 	// Add a camera.
 	GLib::CameraRTS* camera = new GLib::CameraRTS();
 	GetGraphics()->SetCamera(camera);
 
 	// Set the fog color.
 	GetGraphics()->SetFogColor(XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f));
+
+	ChangeState(BrowsingState::Instance());
 }
 
 void Game::Update(GLib::Input* pInput, float dt)
 {
-	mClient->Update(pInput, dt);
+	mCurrentState->Update(pInput, dt);
+
+	mx = pInput->MousePosition().x;
+	my = pInput->MousePosition().y;
 }
 	
 void Game::Draw(GLib::Graphics* pGraphics)
 {
 	// Clear the render target and depth/stencil.
 	pGraphics->ClearScene();
-
-	mClient->Draw(pGraphics);
 	pGraphics->DrawBillboards();
+
+	mCurrentState->Draw(pGraphics);
+
+	char buffer[244];
+	sprintf(buffer, "x: %f\ny: %f", mx, my);
+	pGraphics->DrawText(buffer, 10, 10, 20);
 
 	// Present the backbuffer.
 	pGraphics->Present();
@@ -84,6 +97,17 @@ void Game::Draw(GLib::Graphics* pGraphics)
 	ID3D11ShaderResourceView *const nullSRV[4] = {NULL, NULL, NULL, NULL};
 	pGraphics->GetContext()->PSSetShaderResources(0, 4, nullSRV);
 	Effects::BasicFX->Apply(GetD3DContext());
+}
+
+void Game::ChangeState(GameState* pGameState)
+{
+	// Cleanup the old state.
+	if(mCurrentState != NULL)
+		mCurrentState->Cleanup();
+
+	// Set and init the new state.
+	mCurrentState = pGameState;
+	mCurrentState->Init(this);
 }
 
 //! Called when the window gets resized.
@@ -100,8 +124,8 @@ LRESULT Game::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			SwitchScreenMode();
 	}
 
-	if(mClient != nullptr)
-		mClient->MsgProc(msg, wParam, lParam);
+	if(mCurrentState != nullptr)
+		mCurrentState->MsgProc(msg, wParam, lParam);
 
 	return Runnable::MsgProc(hwnd, msg, wParam, lParam);
 }

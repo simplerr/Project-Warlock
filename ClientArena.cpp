@@ -63,12 +63,12 @@ void ClientArena::Draw(GLib::Graphics* pGraphics)
 	// Draw the world.
 	mWorld->Draw(pGraphics);
 
-	if(mSelectedPlayer != nullptr) {
+	/*if(mSelectedPlayer != nullptr) {
 		char buffer[244];
 		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f\n\nGold: %i\n\n", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
 			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold());
 		pGraphics->DrawText(buffer, 10, 10, 16, 0xff000000);
-	}
+	}*/
 }
 
 void ClientArena::PollSelection(GLib::Input* pInput)

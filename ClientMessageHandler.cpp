@@ -94,7 +94,7 @@ void ClientMessageHandler::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 	char name[244];
 	int numPlayers, id;
 	XMFLOAT3 pos;
-	GameState state;
+	CurrentState state;
 
 	bitstream.Read(state);
 	bitstream.Read(numPlayers);

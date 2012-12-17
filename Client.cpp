@@ -32,13 +32,14 @@ Client::Client()
 	mUserInterface    = new UserInterface(this);
 	mStatusText       = new GLib::StatusText("Test", 600, 200, 6);
 
-	// Read the name and ip to connect to.
-	std::ifstream fin("config.txt");
-	string ip;
-	fin >> mName;
-	fin >> ip;
-	ConnectToServer(ip);
-	fin.close();
+	//// Read the name and ip to connect to.
+	//std::ifstream fin("config.txt");
+	//string ip;
+	//fin >> mName;
+	//fin >> ip;
+	//fin.close();
+
+	//ConnectToServer(ip);
 
 	InitShoppingState(mArenaState);
 
@@ -64,8 +65,8 @@ void Client::Update(GLib::Input* pInput, float dt)
 	mUserInterface->Update(pInput, dt);
 
 	// Testing..
-	//if(pInput->KeyPressed('C'))
-	//	RequestClientNames();
+	if(pInput->KeyPressed('C'))
+		RequestClientNames();
 
 	// Listen for incoming packets.
 	ListenForPackets();
@@ -77,7 +78,7 @@ void Client::Draw(GLib::Graphics* pGraphics)
 	mStatusText->Draw(pGraphics);
 	mUserInterface->Draw(pGraphics);
 
-	DrawScores(pGraphics);
+	//DrawScores(pGraphics);
 
 	if(mRoundEnded)
 		pGraphics->DrawText(mWinner + " won the round!", 600, 200, 20);
@@ -102,6 +103,7 @@ void Client::DrawScores(GLib::Graphics* pGraphics)
 
 bool Client::ConnectToServer(string ip)
 {
+	// [TODO] If this returns true it doesn't mean that the connection was successful.
 	if(mRaknetPeer->Startup(1, &RakNet::SocketDescriptor(), 1) == RakNet::RAKNET_STARTED)		{
 		if(mRaknetPeer->Connect(ip.c_str(), 27020, NULL, NULL) == RakNet::CONNECTION_ATTEMPT_STARTED)		
 			return true;
@@ -292,7 +294,7 @@ Player* Client::GetLocalPlayer()
 	return mArena->GetLocalPlayer();
 }
 
-GameState Client::GetArenaState()
+CurrentState Client::GetArenaState()
 {
 	return mArenaState.state;
 }
@@ -307,7 +309,7 @@ ClientArena* Client::GetArena()
 	return mArena;
 }
 
-void Client::SetArenaState(GameState state)
+void Client::SetArenaState(CurrentState state)
 {
 	mArenaState.state = state;
 }
