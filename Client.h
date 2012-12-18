@@ -60,6 +60,7 @@ public:
 	//
 	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World*	GetWorld();
+	vector<Player*> GetPlayerList();
 	Player*			GetLocalPlayer();
 	Chat*			GetChat();
 	ClientSkillInterpreter* GetSkillInterpreter();

@@ -36,6 +36,7 @@ public:
 	bool IsLocalPlayerSelected();
 
 	GLib::World* GetWorld();
+	vector<Player*> GetPlayerList();
 private:
 	Client*				mClient;	
 	GLib::World*		mWorld;

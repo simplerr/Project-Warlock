@@ -27,3 +27,45 @@ ServerMenu = {
 	font_size = 30,
 	spacing = 0,
 }
+
+-- Titles
+
+BrowsingTitle = {
+	pos_x = 400,
+	pos_y = 50,
+	font_size = 60,
+	font_family = "Arial",
+	font_color = "255 255 50 255",
+}
+
+ServerName = {
+	pos_x = 400,
+	pos_y = 100,
+	font_size = 60,
+	font_family = "Arial",
+	font_color = "255 255 255 255",
+}
+
+-- Buttons
+
+StartGameButton = {
+	pos_x = 950,
+	pos_y = 50,
+	font_size = 30,
+	font_family = "Arial",
+	font_color = "255 255 255 255",
+	default_texture = "textures/button_default.png",
+	disabled_texture = "textures/button_disabled.png",
+	hoover_texture = "textures/button_hoover.png"
+}
+
+LeaveLobbyButton = {
+	pos_x = 950,
+	pos_y = 100,
+	font_size = 30,
+	font_family = "Arial",
+	font_color = "255 255 255 255",
+	default_texture = "textures/button_default.png",
+	disabled_texture = "textures/button_disabled.png",
+	hoover_texture = "textures/button_hoover.png"
+}

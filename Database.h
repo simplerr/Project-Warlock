@@ -15,6 +15,7 @@ using namespace std;
 struct ServerData
 {
 	string host;
+	string name;
 	string publicIp;
 	string localIp;
 	int numPlayers;
@@ -26,12 +27,14 @@ public:
 	Database();
 	~Database();
 
-	void AddServer(string host, string publicIp, string localIp);
+	void AddServer(string host, string name, string publicIp, string localIp);
 	void RemoveServer(string host);
-	vector<ServerData> GetServers();
+	void IncrementPlayerCounter(string host, int num);
 
+	vector<ServerData> GetServers();
 	string GetPublicIp();
 	string GetLocalIp();
+	ServerData GetServerData(string host);
 private:
 	mysqlpp::Connection mConnection;
 };

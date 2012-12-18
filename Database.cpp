@@ -27,9 +27,9 @@ Database::~Database()
 
 }
 
-void Database::AddServer(string host, string publicIp, string localIp)
+void Database::AddServer(string host, string name, string publicIp, string localIp)
 {
-	string q = "INSERT INTO Warlock_Servers VALUES ('"+host+"', '"+publicIp+"', '"+localIp+"', '0')";
+	string q = "INSERT INTO Warlock_Servers VALUES ('"+host+"', '"+name+"', '"+publicIp+"', '"+localIp+"', '0')";
 	//mConnection.query(q.c_str()).store();
 	mysqlpp::Query query = mConnection.query(q);
 	query.store();
@@ -46,6 +46,31 @@ void Database::RemoveServer(string host)
 	mConnection.query(q.c_str()).store();
 }
 
+void Database::IncrementPlayerCounter(string host, int num)
+{
+	// Get current wins.
+	char buffer[256];
+	int players = GetServerData(host).numPlayers;
+	string q = "UPDATE Warlock_Servers SET Players="+string(itoa(players+num, buffer, 10))+" WHERE Host='"+host+"'";
+	mysqlpp::Query query(&mConnection, true, q.c_str());
+	query.exec();
+}
+
+ServerData Database::GetServerData(string host)
+{
+	string q = "SELECT * FROM Warlock_Servers";
+	mysqlpp::Query query = mConnection.query(q);
+	mysqlpp::StoreQueryResult res = query.store();
+	ServerData server;
+	server.host = res[0]["Host"];
+	server.name = res[0]["Name"];
+	server.publicIp = res[0]["Public_Ip"];
+	server.localIp = res[0]["Local_ip"];
+	server.numPlayers = res[0]["Players"];
+
+	return server;
+}
+
 vector<ServerData> Database::GetServers()
 {
 	vector<ServerData> servers;
@@ -58,6 +83,7 @@ vector<ServerData> Database::GetServers()
 		{
 			ServerData server;
 			server.host = res[i]["Host"];
+			server.name = res[i]["Name"];
 			server.publicIp = res[i]["Public_Ip"];
 			server.localIp = res[i]["Local_ip"];
 			server.numPlayers = res[i]["Players"];

@@ -20,6 +20,8 @@
 #include "Chat.h"
 #include "StatusText.h"
 #include "ClientArena.h"
+#include "LobbyState.h"
+#include "PlayingState.h"
 
 Client::Client()
 {
@@ -33,11 +35,11 @@ Client::Client()
 	mStatusText       = new GLib::StatusText("Test", 600, 200, 6);
 
 	//// Read the name and ip to connect to.
-	//std::ifstream fin("config.txt");
-	//string ip;
-	//fin >> mName;
-	//fin >> ip;
-	//fin.close();
+	std::ifstream fin("config.txt");
+	string ip;
+	fin >> mName;
+	fin >> ip;
+	fin.close();
 
 	//ConnectToServer(ip);
 
@@ -211,6 +213,9 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 		case NMSG_ADD_CHAT_TEXT:
 			mUserInterface->HandleAddChatText(bitstream);
 			break;
+		case NMSG_GAME_STARTED:
+			//LobbyState::Instance()->ChangeState(PlayingState::Instance());
+			break;
 	}
 
 	return true;
@@ -352,4 +357,9 @@ void Client::SetStatusText(string text, float duration)
 UserInterface* Client::GetUi()
 {
 	return mUserInterface;
+}
+
+vector<Player*> Client::GetPlayerList()
+{
+	return mArena->GetPlayerList();
 }

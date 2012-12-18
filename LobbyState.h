@@ -1,11 +1,13 @@
 #pragma once
 #include "GameState.h"
+#include "Database.h"
 
 class ControlManager;
 class Client;
 class Database;
+class Button;
 
-class PlayingState : public GameState
+class LobbyState : public GameState
 {
 public:
 	void Init(Game* pGame);
@@ -18,18 +20,21 @@ public:
 	void Update(GLib::Input* pInput, double dt);
 	void Draw(GLib::Graphics* pGraphics);
 
-	static PlayingState* Instance() {
-		return &mPlayingState;
+	static LobbyState* Instance() {
+		return &mLobbyState;
 	}
 
-	void SetDatabase(Database* pDatabase);
-	void SetClient(Client* pClient);
-	Client* GetClient();
+	void BuildUi();
+	void SetServerData(ServerData data);
+	void ButtonPressed(Button* pButton);
 protected:
-	PlayingState() {};
+	LobbyState() {};
 private:
-	static PlayingState mPlayingState;
+	static LobbyState mLobbyState;
 
-	Client*			mClient;
 	ControlManager* mControlManager;
+	Client*			mClient;
+	ServerData		mServerData;
+	Database*		mDatabase;
+	bool			mIsHost;
 };

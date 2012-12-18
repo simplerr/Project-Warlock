@@ -163,3 +163,8 @@ bool ClientArena::IsLocalPlayerSelected()
 {
 	return (mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId());
 }
+
+vector<Player*> ClientArena::GetPlayerList()
+{
+	return mPlayerList;
+}

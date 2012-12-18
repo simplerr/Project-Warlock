@@ -6,6 +6,7 @@
 #include "TextMenu.h"
 #include "Label.h"
 #include "Client.h"
+#include "LobbyState.h"
 
 BrowsingState BrowsingState::mBrowsingState;
 
@@ -51,13 +52,14 @@ void BrowsingState::Update(GLib::Input* pInput, double dt)
 void BrowsingState::Draw(GLib::Graphics* pGraphics)
 {
 	mControlManager->Draw(pGraphics);
-
-	pGraphics->DrawText("BrowsingState", 600, 400, 60);
 }
 
 void BrowsingState::BuildUi()
 {
 	vector<ServerData> serverList = mDatabase->GetServers();
+
+	Label* title = new Label(300, 50, "BrowsingTitle", "Select a server");
+	mControlManager->AddControl(title);
 
 	TextMenu* serverMenu = new TextMenu(600, 400, "ServerMenu");
 	serverMenu->AddItemPressedListener(&BrowsingState::OnServerPressed, this);
@@ -71,11 +73,12 @@ void BrowsingState::BuildUi()
 		sprintf(numPlayers, "%i/4", serverList[i].numPlayers);
 
 		string serverItem;
-		serverItem.resize(62, ' ');
+		serverItem.resize(50, ' ');
 
 		serverItem.replace(0, serverList[i].host.length(), serverList[i].host);
-		serverItem.replace(20, serverList[i].publicIp.length(), serverList[i].publicIp);
-		serverItem.replace(40, string(numPlayers).length(), numPlayers);
+		serverItem.replace(20, serverList[i].name.length(), serverList[i].name);
+		serverItem.replace(30, serverList[i].publicIp.length(), serverList[i].publicIp);
+		serverItem.replace(43, string(numPlayers).length(), numPlayers);
 
 		serverMenu->AddItem(serverList[i].host, serverItem);
 	}
@@ -90,8 +93,13 @@ void BrowsingState::OnServerPressed(Label* pLabel)
 	string host = pLabel->GetName();
 	ServerData server = mServerMap[host];
 
-	ChangeState(PlayingState::Instance());
+	ChangeState(LobbyState::Instance());
+	LobbyState::Instance()->SetServerData(server);
 
-	//if(!PlayingState::Instance()->GetClient()->ConnectToServer(server.publicIp))
-		PlayingState::Instance()->GetClient()->ConnectToServer(server.localIp);
+	//PlayingState::Instance()->GetClient()->ConnectToServer(server.localIp);
+
+	//ChangeState(PlayingState::Instance());
+
+	////if(!PlayingState::Instance()->GetClient()->ConnectToServer(server.publicIp))
+	//	PlayingState::Instance()->GetClient()->ConnectToServer(server.localIp);
 }

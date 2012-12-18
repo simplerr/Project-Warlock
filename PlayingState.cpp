@@ -17,14 +17,6 @@ void PlayingState::Init(Game* pGame)
 	mClient = new Client();
 
 	mControlManager = new ControlManager("ui_layout.lua");
-
-	/*TextMenu* menu = new TextMenu(300, 300, "TextMenu");
-	menu->AddItem("test_label", "teXTING");
-	menu->AddItem("test_label2", "hehe");
-	menu->AddItem("test_label3", "h");
-	menu->AddItem("test_label4", "kanske en apa");
-	mControlManager->AddControl(menu);
-	mControlManager->LoadLuaProperties();*/
 }
 
 void PlayingState::Cleanup(void)
@@ -71,4 +63,14 @@ void PlayingState::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 Client* PlayingState::GetClient()
 {
 	return mClient;
+}
+
+void PlayingState::SetClient(Client* pClient)
+{
+	mClient = pClient;
+}
+
+void PlayingState::SetDatabase(Database* pDatabase)
+{
+
 }

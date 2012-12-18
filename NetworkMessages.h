@@ -17,6 +17,8 @@ enum MessageId
 	NSMG_CONNECTED_CLIENTS,			// Sent when asking the server for all connected clients.
 	NMSG_REQUEST_CVAR_LIST,
 	NMSG_ADD_CHAT_TEXT,
+	NMSG_START_COUNTDOWN,
+	NMSG_GAME_STARTED,
 
 	//
 	//	Game events.

@@ -1,5 +1,4 @@
 #include "Chat.h"
-#include "Utils.h"
 #include "UserInterface.h"
 #include "ItemLoaderXML.h"
 #include "Inventory.h"
@@ -132,7 +131,7 @@ void UserInterface::HandleAddChatText(RakNet::BitStream& bitstream)
 // Callback from Chat.
 void UserInterface::OnMessageSent(string message)
 {
-	vector<string> elems = SplitString(message, ' ');
+	vector<string> elems = GLib::SplitString(message, ' ');
 
 	if(elems[0] == Cvars::CVAR_LIST_CMD + "\r\n") {
 		mInventory->GetClient()->RequestCvarList(); // [NOTE][HACK] !!

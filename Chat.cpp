@@ -235,3 +235,10 @@ void Chat::SetClient(Client* pClient)
 {
 	mClient = pClient;
 }
+
+void Chat::SetDimensions(int x, int y, int width, int height)
+{
+	SetWindowPos(mhChatBox, HWND_TOP, x, y, width, height, SWP_SHOWWINDOW);
+	SetWindowPos(mhInputBox, HWND_TOP, x, y+height+10, width-80, 40, SWP_SHOWWINDOW);
+	SetWindowPos(mhSendButton, HWND_TOP, x+width-70, y+height+10, 70, 40, SWP_SHOWWINDOW);
+}

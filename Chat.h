@@ -27,6 +27,7 @@ public:
 	void	HandleMessage(RakNet::BitStream& bitstream);
 
 	void	SetClient(Client* pClient);
+	void	SetDimensions(int x, int y, int width, int height);
 
 	template <class T>
 	void AddOnMessageSentListener(void(T::*_callback)(string), T* _object)	{
