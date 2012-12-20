@@ -1,8 +1,13 @@
+#pragma once
+#include <string>
+#include <map>
 #include "GameState.h"
-#include "Database.h"
+#include "ServerData.h"
+using namespace std;
 
 class ControlManager;
 class Label;
+class Database;
 
 class BrowsingState : public GameState
 {

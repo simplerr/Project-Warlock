@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <map>
 using namespace std;
 
 namespace GLib {
@@ -13,6 +14,7 @@ namespace GLib {
 class Client;
 class Player;
 class BloodPSystem;
+class PlayerModule;
 
 class ClientArena
 {
@@ -31,17 +33,21 @@ public:
 	void PollSelection(GLib::Input* pInput);
 	void ResetPlayers();
 
-	void SetLocalPlayer(Player* pPlayer);
+	void SetLocalModule(PlayerModule* pModule);
 	Player*	GetLocalPlayer();
+	PlayerModule* GetLocalPlayerModule();
 	bool IsLocalPlayerSelected();
 
 	GLib::World* GetWorld();
 	vector<Player*> GetPlayerList();
+	PlayerModule* GetPlayerModule(int id);
 private:
 	Client*				mClient;	
 	GLib::World*		mWorld;
 	Player*				mSelectedPlayer;
-	Player*				mPlayer;
+	PlayerModule*		mPlayer;
 	vector<Player*>		mPlayerList;
 	BloodPSystem*		mParticleSystem;
+
+	map<int, PlayerModule*> mModuleList;
 };

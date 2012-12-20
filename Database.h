@@ -8,18 +8,9 @@
 // Must include winsock2.h before mysql++.h
 #include <winsock2.h>
 #include "mysql++.h"
+#include "ServerData.h"
 
 using namespace std;
-
-//! Name and IP of a server.
-struct ServerData
-{
-	string host;
-	string name;
-	string publicIp;
-	string localIp;
-	int numPlayers;
-};
 
 class Database
 {

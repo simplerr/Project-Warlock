@@ -10,6 +10,7 @@
 #include "NetworkMessages.h"
 #include "Skills.h"
 #include "Shop.h"
+#include "PlayerModule.h"
 
 SkillInventory::SkillInventory(int x, int y, int colums, float slotSize)
 	: ItemContainer(x, y, colums, slotSize)
@@ -60,7 +61,7 @@ void SkillInventory::AddItem(BaseItem* pItem)
 	skill->SetLevel(pItem->GetLevel());
 
 	// Send message to server.
-	SendItemAdded(mPlayer->GetId(), pItem->GetName(), pItem->GetLevel());
+	SendItemAdded(mPlayer->GetPlayer()->GetId(), pItem->GetName(), pItem->GetLevel());
 
 	UpdateItems();
 }
@@ -71,7 +72,7 @@ void SkillInventory::RemoveSkill(BaseItem* pItem)
 	mPlayer->RemoveSkill(pItem->GetName());
 
 	// Send message to server.
-	SendItemRemoved(mPlayer->GetId(), pItem->GetName(), pItem->GetLevel());
+	SendItemRemoved(mPlayer->GetPlayer()->GetId(), pItem->GetName(), pItem->GetLevel());
 
 	// Tell the shop that an item was sold.
 	mShop->InventoryItemRemoved(pItem);
@@ -123,7 +124,7 @@ string SkillInventory::GetHooverText(BaseItem* pItem)
 	return string(buffer + pItem->GetDescription());
 }
 
-void SkillInventory::SetPlayer(Player* pPlayer)
+void SkillInventory::SetPlayer(PlayerModule* pPlayer)
 {
 	mPlayer = pPlayer;
 	UpdateItems();

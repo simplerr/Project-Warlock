@@ -7,6 +7,7 @@
 #include "Label.h"
 #include "Client.h"
 #include "LobbyState.h"
+#include "Database.h"
 
 BrowsingState BrowsingState::mBrowsingState;
 
@@ -45,8 +46,8 @@ void BrowsingState::Update(GLib::Input* pInput, double dt)
 {
 	mControlManager->Update(pInput, dt);
 
-	if(pInput->KeyPressed(VK_SPACE))
-		ChangeState(PlayingState::Instance());
+	//if(pInput->KeyPressed(VK_SPACE))
+	//	ChangeState(PlayingState::Instance());
 }
 
 void BrowsingState::Draw(GLib::Graphics* pGraphics)

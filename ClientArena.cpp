@@ -10,13 +10,14 @@
 #include "UserInterface.h"
 #include "Input.h"
 #include "ParticleSystem.h"
+#include "PlayerModule.h"
 
 ClientArena::ClientArena(Client* pClient)
 {
 	mClient = pClient;
 
 	mSelectedPlayer = nullptr;
-	mPlayer			= nullptr;
+	mPlayer			= new PlayerModule();
 
 	// Create the world.
 	mWorld = new GLib::World();
@@ -35,26 +36,28 @@ ClientArena::ClientArena(Client* pClient)
 ClientArena::~ClientArena()
 {
 	delete mWorld;
+	delete mPlayer;
 }
 
 void ClientArena::Update(GLib::Input* pInput, float dt)
 {
 	// Update the world.
 	mWorld->Update(dt);
+	mPlayer->Update(dt);
 
 	// Poll for object selection.
 	PollSelection(pInput);
 
 	// TESTING
-	if(pInput->KeyPressed(VK_SPACE))
+	/*if(pInput->KeyPressed(VK_SPACE))
 	{
 		XMFLOAT3 pos = mWorld->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
 		GLib::ParticleSystem* psystem = new GLib::ParticleSystem(pos, "FireParticle.lua");
 		mWorld->AddObject(psystem);
-	}
+	}*/
 
 	// If the selected object is the player then poll for action.
-	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId() && !mClient->GetUi()->PointInsideUi(pInput->MousePosition())) 
+	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetPlayer()->GetId() && !mClient->GetUi()->PointInsideUi(pInput->MousePosition())) 
 		mPlayer->PollAction(mClient, pInput);
 }
 
@@ -63,12 +66,12 @@ void ClientArena::Draw(GLib::Graphics* pGraphics)
 	// Draw the world.
 	mWorld->Draw(pGraphics);
 
-	/*if(mSelectedPlayer != nullptr) {
+	if(mSelectedPlayer != nullptr) {
 		char buffer[244];
 		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f\n\nGold: %i\n\n", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
 			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold());
-		pGraphics->DrawText(buffer, 10, 10, 16, 0xff000000);
-	}*/
+		pGraphics->DrawText(buffer, 10, 100, 16, 0xff000000);
+	}
 }
 
 void ClientArena::PollSelection(GLib::Input* pInput)
@@ -93,7 +96,7 @@ void ClientArena::SetSelectedPlayer(Player* pPlayer)
 		mSelectedPlayer = pPlayer;
 		mSelectedPlayer->SetSelected(true);
 		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
-		mClient->GetUi()->SetSelectedPlayer(mSelectedPlayer);
+		mClient->GetUi()->SetSelectedPlayer(GetPlayerModule(pPlayer->GetId()));
 	}
 }
 
@@ -116,8 +119,16 @@ void ClientArena::RemovePlayer(int id)
 void ClientArena::OnObjectAdded(GLib::Object3D* pObject)
 {
 	// Add player to mPlayerList.
-	if(pObject->GetType() == GLib::PLAYER)
+	if(pObject->GetType() == GLib::PLAYER) {
 		mPlayerList.push_back((Player*)pObject);
+	
+		PlayerModule* module = new PlayerModule();
+		module->SetPlayer((Player*)pObject);
+		mModuleList[pObject->GetId()] = module;
+
+		if(mClient->GetName() == pObject->GetName() && mClient->GetLocalPlayer() == nullptr)
+			SetLocalModule(module);
+	}
 }
 
 //! Gets called in World::RemoveObject().
@@ -150,21 +161,34 @@ GLib::World* ClientArena::GetWorld()
 
 Player*	ClientArena::GetLocalPlayer()
 {
-	return mPlayer;
+	return mPlayer->GetPlayer();
 }
 
-void ClientArena::SetLocalPlayer(Player* pPlayer)
+void ClientArena::SetLocalModule(PlayerModule* pModule)
 {
-	mPlayer = pPlayer;
-	mPlayer->SetLocalPlayer(true);
+	pModule->GetPlayer()->SetLocalPlayer(true);
+	mPlayer = pModule;
 }
 
 bool ClientArena::IsLocalPlayerSelected()
 {
-	return (mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetId());
+	return (mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetPlayer()->GetId());
 }
 
 vector<Player*> ClientArena::GetPlayerList()
 {
 	return mPlayerList;
+}
+
+PlayerModule* ClientArena::GetLocalPlayerModule()
+{
+	return mPlayer;
+}
+
+PlayerModule* ClientArena::GetPlayerModule(int id)
+{
+	if(mModuleList.find(id) != mModuleList.end())
+		return mModuleList[id];
+	else
+		return nullptr;
 }

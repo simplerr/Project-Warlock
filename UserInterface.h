@@ -16,6 +16,7 @@ class Player;
 class Client;
 class SkillInventory;
 class Chat;
+class PlayerModule;
 
 /*
 	--Item and Skill system breakdown--
@@ -35,11 +36,11 @@ public:
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 
-	void HandleItemAdded(Player* pPlayer, RakNet::BitStream& bitstream);
-	void HandleItemRemoved(Player* pPlayer, RakNet::BitStream& bitstream);
+	void HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
+	void HandleItemRemoved(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
 	void HandleChatMessage(RakNet::BitStream& bitstream);
 	void HandleAddChatText(RakNet::BitStream& bitstream);
-	void SetSelectedPlayer(Player* pPlayer);
+	void SetSelectedPlayer(PlayerModule* pPlayer);
 	bool PointInsideUi(XMFLOAT3 position);
 
 	void OnMessageSent(string message);

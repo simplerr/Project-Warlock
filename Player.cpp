@@ -17,7 +17,6 @@ Player::Player()
 	SetLocalPlayer(false);
 	SetEliminated(false);
 	SetLastHitter(nullptr);
-	mSkillHandler = new SkillHandler();
 
 	mLocalBox = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/box.obj");
 	mLocalBox->SetMaterials(GLib::Colors::Green);
@@ -26,7 +25,7 @@ Player::Player()
 
 Player::~Player()
 {
-	delete mSkillHandler;
+	
 }
 
 void Player::Init()
@@ -41,8 +40,6 @@ void Player::Update(float dt)
 
 	if(!GetEliminated())
 		Actor::Update(dt);
-
-	mSkillHandler->Update(dt);
 }
 
 void Player::Draw(GLib::Graphics* pGraphics)
@@ -58,26 +55,6 @@ void Player::Draw(GLib::Graphics* pGraphics)
 	}
 }
 
-void Player::PollAction(Client* pClient, GLib::Input* pInput)
-{
-	if(!GetEliminated())
-	{
-		// [TODO] Add mSkillHandler->PollAction().
-		mSkillHandler->PollAction(pClient, pInput, GetPosition(), GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay()));
-
-		// Add movement target for the selected object.
-		if(pInput->KeyPressed(VK_RBUTTON))
-		{
-			XMFLOAT3 pos = GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
-
-			// Inform the server about what happened.
-			// The server then informs all the clients, including the callee.
-			if(pos.x != numeric_limits<float>::infinity())
-				pClient->SendAddTarget(GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
-		}
-	}
-}
-
 void Player::SetSystemAdress(RakNet::SystemAddress adress)
 {
 	mSystemAdress = adress;
@@ -86,21 +63,6 @@ void Player::SetSystemAdress(RakNet::SystemAddress adress)
 RakNet::SystemAddress Player::GetSystemAdress()
 {
 	return mSystemAdress;
-}
-
-bool Player::IsCastingSkill()
-{
-	return mSkillHandler->IsCastingSkill();
-}
-
-Skill* Player::AddSkill(ItemName skillName)
-{
-	return mSkillHandler->AddSkill(skillName);
-}
-
-void Player::RemoveSkill(ItemName name)
-{
-	mSkillHandler->RemoveSkill(name);
 }
 
 void Player::AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
@@ -151,11 +113,6 @@ void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
 multiset<ItemKey> Player::GetItemList()
 {
 	return mItemList;
-}
-
-std::map<int, Skill*> Player::GetSkillMap()
-{
-	return mSkillHandler->GetSkillMap();
 }
 
 void Player::SetHealth(float health)

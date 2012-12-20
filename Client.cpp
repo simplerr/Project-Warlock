@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "PlayerModule.h"
 #include "ClientMessageHandler.h"
 #include "ServerCvars.h"
 #include "Input.h"
@@ -173,14 +174,16 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			{
 				int playerId;
 				bitstream.Read(playerId);
-				mUserInterface->HandleItemAdded((Player*)mArena->GetWorld()->GetObjectById(playerId), bitstream);
+				PlayerModule* module = mArena->GetPlayerModule(playerId);
+				mUserInterface->HandleItemAdded(module, bitstream);
 				break;
 			}
 		case NMSG_ITEM_REMOVED:
 			{
 				int playerId;
 				bitstream.Read(playerId);
-				mUserInterface->HandleItemRemoved((Player*)mArena->GetWorld()->GetObjectById(playerId), bitstream);
+				PlayerModule* module = mArena->GetPlayerModule(playerId);
+				mUserInterface->HandleItemRemoved(module, bitstream);
 				break;
 			}
 		case NMSG_STATE_TIMER:
@@ -214,7 +217,8 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			mUserInterface->HandleAddChatText(bitstream);
 			break;
 		case NMSG_GAME_STARTED:
-			//LobbyState::Instance()->ChangeState(PlayingState::Instance());
+			LobbyState::Instance()->ChangeState(PlayingState::Instance());
+			PlayingState::Instance()->SetClient(this);
 			break;
 	}
 
@@ -322,11 +326,6 @@ void Client::SetArenaState(CurrentState state)
 void Client::SetScore(string name, int score)
 {
 	mScoreMap[name] = score;
-}
-
-void Client::SetLocalPlayer(Player* pPlayer)
-{
-	mArena->SetLocalPlayer(pPlayer);
 }
 
 void Client::SetSelectedPlayer(Player* pPlayer)

@@ -50,7 +50,6 @@ public:
 	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
 	void SetArenaState(CurrentState state);
 	void SetScore(string name, int score);
-	void SetLocalPlayer(Player* pPlayer);
 	void SetSelectedPlayer(Player* pPlayer);
 	void SetStatusText(string text, float duration);
 	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));

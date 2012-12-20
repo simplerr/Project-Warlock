@@ -27,16 +27,12 @@ public:
 	void Init();
 	void Update(float dt);
 	void Draw(GLib::Graphics* pGraphics);
-	void PollAction(Client* pClient, GLib::Input* pInput);
 	
-	Skill* AddSkill(ItemName skillName);
-	void RemoveSkill(ItemName name);
 	void AddItem(BaseItem* pItem);
 	void AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
 	void RemoveItem(BaseItem* pItem);
 	void RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
 	multiset<ItemKey> GetItemList();
-	std::map<int, Skill*> GetSkillMap();
 
 	void SetSystemAdress(RakNet::SystemAddress adress);
 	RakNet::SystemAddress GetSystemAdress();
@@ -61,11 +57,8 @@ public:
 	int	  GetGold();
 	bool  GetEliminated();
 	Player* GetLastHitter();
-
-	bool IsCastingSkill();
 private:
 	RakNet::SystemAddress mSystemAdress;
-	SkillHandler*		  mSkillHandler;	// Should it really be here?
 	multiset<ItemKey>	  mItemList;
 	Attributes			  mAttributes;
 	GLib::StaticObject*	  mLocalBox;	//[HACK]

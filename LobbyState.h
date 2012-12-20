@@ -1,6 +1,6 @@
 #pragma once
 #include "GameState.h"
-#include "Database.h"
+#include "ServerData.h"
 
 class ControlManager;
 class Client;
@@ -27,6 +27,7 @@ public:
 	void BuildUi();
 	void SetServerData(ServerData data);
 	void ButtonPressed(Button* pButton);
+	void StartGame();
 protected:
 	LobbyState() {};
 private:

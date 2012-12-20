@@ -107,3 +107,8 @@ void LobbyState::ButtonPressed(Button* pButton)
 		pButton->SetDisabled(true);
 	}
 }
+
+void LobbyState::StartGame()
+{
+	//ChangeState(PlayingState::Instance());
+}

@@ -141,15 +141,11 @@ void ClientMessageHandler::HandleAddPlayer(RakNet::BitStream& bitstream)
 	Player* player = new Player();
 	player->SetName(name);
 	player->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));	// [NOTE]
-	mClient->GetWorld()->AddObject(player);
-	player->SetId(id);	// Use the servers ID.
+	mClient->GetWorld()->AddObject(player, id);		// Callback that calls ClientArena::OnObjectAdded(), this adds Players to the ModuleMap.
 	player->SetGold(gold);
 
-	if(mClient->GetName() == name && mClient->GetLocalPlayer() == nullptr) {
+	if(mClient->GetName() == name && mClient->GetLocalPlayer() == nullptr) 
 		mClient->AddChatText("Successfully connected to the server!\n", RGB(0, 200, 0));
-		mClient->SetLocalPlayer(player);
-		mClient->SetSelectedPlayer(player);
-	}
 	else
 		mClient->AddChatText(name + " has connected!\n", RGB(0, 200, 0));
 }

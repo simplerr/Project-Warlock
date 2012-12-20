@@ -8,6 +8,7 @@
 #include "Graphics.h"
 #include "SkillInventory.h"
 #include "ServerCvars.h"
+#include "PlayerModule.h"
 
 UserInterface::UserInterface(Client* pClient)
 {
@@ -69,7 +70,7 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	mSkillShop->Draw(pGraphics);
 }
 
-void UserInterface::HandleItemAdded(Player* pPlayer, RakNet::BitStream& bitstream)
+void UserInterface::HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream)
 {
 	ItemName name;
 	int playerId, level;
@@ -79,7 +80,7 @@ void UserInterface::HandleItemAdded(Player* pPlayer, RakNet::BitStream& bitstrea
 	BaseItem* item = mItemLoader->GetItem(ItemKey(name, level));
 
 	if(!item->IsSkill()) {
-		pPlayer->AddItem(mItemLoader, ItemKey(name, level));
+		pPlayer->GetPlayer()->AddItem(mItemLoader, ItemKey(name, level));
 		mInventory->UpdateItems();
 	}
 	else {
@@ -93,7 +94,7 @@ void UserInterface::HandleItemAdded(Player* pPlayer, RakNet::BitStream& bitstrea
 	}
 }
 
-void UserInterface::HandleItemRemoved(Player* pPlayer, RakNet::BitStream& bitstream)
+void UserInterface::HandleItemRemoved(PlayerModule* pPlayer, RakNet::BitStream& bitstream)
 {
 	ItemName name;
 	int playerId, level;
@@ -103,7 +104,7 @@ void UserInterface::HandleItemRemoved(Player* pPlayer, RakNet::BitStream& bitstr
 	BaseItem* item = mItemLoader->GetItem(ItemKey(name, level));
 
 	if(!item->IsSkill()) {
-		pPlayer->RemoveItem(item);
+		pPlayer->GetPlayer()->RemoveItem(item);
 		mInventory->UpdateItems();
 	}
 	else {
@@ -143,9 +144,9 @@ void UserInterface::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 	mChat->MsgProc(msg, wParam, lParam);
 }
 
-void UserInterface::SetSelectedPlayer(Player* pPlayer)
+void UserInterface::SetSelectedPlayer(PlayerModule* pPlayer)
 {
-	mInventory->SetPlayer(pPlayer);
+	mInventory->SetPlayer(pPlayer->GetPlayer());
 	mSkillInventory->SetPlayer(pPlayer);
 }
 

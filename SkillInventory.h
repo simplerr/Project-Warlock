@@ -9,6 +9,7 @@ namespace GLib {
 }
 
 class Player;
+class PlayerModule;
 class Shop;
 
 class SkillInventory : public ItemContainer
@@ -30,9 +31,9 @@ public:
 	void OnRightPress(ItemSlot& itemSlot);
 	string GetHooverText(BaseItem* pItem);
 
-	void SetPlayer(Player* pPlayer);
+	void SetPlayer(PlayerModule* pPlayer);
 	void SetShop(Shop* pShop);
 private:
-	Player*		mPlayer;
-	Shop*		mShop;	 
+	PlayerModule*	mPlayer;
+	Shop*			mShop;	 
 };
