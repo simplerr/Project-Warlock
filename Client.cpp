@@ -23,6 +23,7 @@
 #include "ClientArena.h"
 #include "LobbyState.h"
 #include "PlayingState.h"
+#include "RoundHandler.h"
 
 Client::Client()
 {
@@ -30,10 +31,9 @@ Client::Client()
 	mRaknetPeer		  = RakNet::RakPeerInterface::GetInstance();
 
 	mArena			  = new ClientArena(this);
-	mSkillInterpreter = new ClientSkillInterpreter();
 	mMessageHandler	  = new ClientMessageHandler(this);
 	mUserInterface    = new UserInterface(this);
-	mStatusText       = new GLib::StatusText("Test", 600, 200, 6);
+	mRoundHandler	  = new RoundHandler();
 
 	//// Read the name and ip to connect to.
 	std::ifstream fin("config.txt");
@@ -42,20 +42,15 @@ Client::Client()
 	fin >> ip;
 	fin.close();
 
-	//ConnectToServer(ip);
-
-	InitShoppingState(mArenaState);
-
-	mRoundEnded = false;
+	InitShoppingState(mRoundHandler->GetArenaState());
 }
 
 Client::~Client()
 {
-	delete mSkillInterpreter;
 	delete mMessageHandler;
 	delete mUserInterface;
-	delete mStatusText;
 	delete mArena;
+	delete mRoundHandler;
 
 	mRaknetPeer->Shutdown(300);
 	RakNet::RakPeerInterface::DestroyInstance(mRaknetPeer);
@@ -64,12 +59,7 @@ Client::~Client()
 void Client::Update(GLib::Input* pInput, float dt)
 {
 	mArena->Update(pInput, dt);
-	mStatusText->Update(dt);
 	mUserInterface->Update(pInput, dt);
-
-	// Testing..
-	if(pInput->KeyPressed('C'))
-		RequestClientNames();
 
 	// Listen for incoming packets.
 	ListenForPackets();
@@ -78,30 +68,8 @@ void Client::Update(GLib::Input* pInput, float dt)
 void Client::Draw(GLib::Graphics* pGraphics)
 {
 	mArena->Draw(pGraphics);
-	mStatusText->Draw(pGraphics);
 	mUserInterface->Draw(pGraphics);
-
-	//DrawScores(pGraphics);
-
-	if(mRoundEnded)
-		pGraphics->DrawText(mWinner + " won the round!", 600, 200, 20);
-}
-
-void Client::DrawScores(GLib::Graphics* pGraphics)
-{
-	string scoreList;
-	for(auto iter = mScoreMap.begin(); iter != mScoreMap.end(); iter++)
-	{
-		char score[10];
-		sprintf(score, "%i", (*iter).second);
-		scoreList += (*iter).first + ": " + score + "\n";
-	}
-
-	pGraphics->DrawText(scoreList, 900, 100, 14);
-
-	char buffer[128];
-	sprintf(buffer, "Timer: %.2f", mArenaState.elapsed);
-	pGraphics->DrawText(buffer, 900, 200, 14);
+	mRoundHandler->Draw(pGraphics);
 }
 
 bool Client::ConnectToServer(string ip)
@@ -187,13 +155,13 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				break;
 			}
 		case NMSG_STATE_TIMER:
-			bitstream.Read(mArenaState.elapsed);
+			bitstream.Read(mRoundHandler->GetArenaState().elapsed);
 			break;
 		case NMSG_CHANGETO_PLAYING:
-			InitPlayingState(mArenaState);
+			InitPlayingState(mRoundHandler->GetArenaState());
 			break;
 		case NMSG_CHANGETO_SHOPPING:
-			InitShoppingState(mArenaState);
+			InitShoppingState(mRoundHandler->GetArenaState());
 			break;
 		case NMSG_ROUND_START:
 			mMessageHandler->HandleRoundStarted(bitstream);
@@ -230,47 +198,23 @@ void Client::SendServerMessage(RakNet::BitStream& bitstream)
 	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
-// Sent from client when a target is added.
-void Client::SendAddTarget(int id, XMFLOAT3 pos, bool clear)
-{
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_TARGET_ADDED);
-	bitstream.Write(mName.c_str());
-	bitstream.Write((unsigned char)id);
-	bitstream.Write(pos.x);
-	bitstream.Write(pos.y);
-	bitstream.Write(pos.z);
-	bitstream.Write(clear);
-	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-}
-
-void Client::RequestClientNames()
-{
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_REQUEST_CLIENT_NAMES);
-	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-}
-
-void Client::RequestCvarList()
-{
-	RakNet::BitStream bitstream;
-	bitstream.Write((unsigned char)NMSG_REQUEST_CVAR_LIST);
-	mRaknetPeer->Send(&bitstream, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-}
-
 void Client::StartRound()
 {
 	mArena->ResetPlayers();
-	InitShoppingState(mArenaState);
+	InitShoppingState(mRoundHandler->GetArenaState());
 	AddChatText("Round started! Shopping time!\n", RGB(0, 200, 0));
-	mRoundEnded = false;
+
+	// Remove the "PlayerX won the round!" status text.
+	mUserInterface->SetStatusText("nothing", 0);
 }
 
 void Client::EndRound(string winner)
 {
-	mWinner = winner;
-	mScoreMap[mWinner]++;
-	mRoundEnded = true;
+	mRoundHandler->SetWinner(winner);
+	mRoundHandler->AddScore(winner, 1);
+
+	// Set the status text.
+	mUserInterface->SetStatusText(winner + " won the round!", 1337, 40, GLib::ColorRGBA(255, 0, 0, 255));
 }
 
 void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -305,7 +249,7 @@ Player* Client::GetLocalPlayer()
 
 CurrentState Client::GetArenaState()
 {
-	return mArenaState.state;
+	return mRoundHandler->GetArenaState().state;
 }
 
 string Client::GetName()
@@ -318,16 +262,6 @@ ClientArena* Client::GetArena()
 	return mArena;
 }
 
-void Client::SetArenaState(CurrentState state)
-{
-	mArenaState.state = state;
-}
-
-void Client::SetScore(string name, int score)
-{
-	mScoreMap[name] = score;
-}
-
 void Client::SetSelectedPlayer(Player* pPlayer)
 {
 	mArena->SetSelectedPlayer(pPlayer);
@@ -338,19 +272,9 @@ Chat* Client::GetChat()
 	return mUserInterface->GetChat();
 }
 
-ClientSkillInterpreter* Client::GetSkillInterpreter()
-{
-	return mSkillInterpreter;
-}
-
 void Client::AddChatText(string text, COLORREF color)
 {
 	mUserInterface->GetChat()->AddText((char*)text.c_str(), color);
-}
-
-void Client::SetStatusText(string text, float duration)
-{
-	mStatusText->SetText(text, duration);
 }
 
 UserInterface* Client::GetUi()
@@ -361,4 +285,9 @@ UserInterface* Client::GetUi()
 vector<Player*> Client::GetPlayerList()
 {
 	return mArena->GetPlayerList();
+}
+
+RoundHandler* Client::GetRoundHandler()
+{
+	return mRoundHandler;
 }

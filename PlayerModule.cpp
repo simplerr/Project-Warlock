@@ -8,6 +8,7 @@
 #include "SkillHandler.h"
 #include "StaticObject.h"
 #include "ModelImporter.h"
+#include "NetworkMessages.h"
 
 PlayerModule::PlayerModule()
 {
@@ -45,9 +46,23 @@ void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 			// Inform the server about what happened.
 			// The server then informs all the clients, including the callee.
 			if(pos.x != numeric_limits<float>::infinity())
-				pClient->SendAddTarget(mPlayer->GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
+				SendAddTarget(pClient, mPlayer->GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
 		}
 	}
+}
+
+// Sent from client when a target is added.
+void PlayerModule::SendAddTarget(Client* pClient, int id, XMFLOAT3 pos, bool clear)
+{
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_TARGET_ADDED);
+	bitstream.Write(pClient->GetName().c_str());
+	bitstream.Write((unsigned char)id);
+	bitstream.Write(pos.x);
+	bitstream.Write(pos.y);
+	bitstream.Write(pos.z);
+	bitstream.Write(clear);
+	pClient->SendServerMessage(bitstream);
 }
 
 bool PlayerModule::IsCastingSkill()

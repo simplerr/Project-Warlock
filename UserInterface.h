@@ -7,6 +7,7 @@ namespace GLib {
 	class Graphics;
 	class Input;
 	class Texture2D;
+	class StatusText;
 }
 
 class ItemLoaderXML;
@@ -43,6 +44,7 @@ public:
 	void SetSelectedPlayer(PlayerModule* pPlayer);
 	bool PointInsideUi(XMFLOAT3 position);
 
+	void SetStatusText(string text, float time, float size = 30, UINT32 color = GLib::ColorRGBA(0, 0, 0, 255));
 	void OnMessageSent(string message);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
@@ -55,5 +57,6 @@ private:
 	Shop*						mShop;
 	Shop*						mSkillShop;
 	GLib::Texture2D*			mBkgdTexture;
+	GLib::StatusText*			mStatusText;
 	Chat*						mChat;
 };

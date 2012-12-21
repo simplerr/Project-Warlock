@@ -9,6 +9,8 @@
 #include "SkillInventory.h"
 #include "ServerCvars.h"
 #include "PlayerModule.h"
+#include "NetworkMessages.h"
+#include "StatusText.h"
 
 UserInterface::UserInterface(Client* pClient)
 {
@@ -43,6 +45,8 @@ UserInterface::UserInterface(Client* pClient)
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_FIREBALL, 1));
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/ui_bkgd.png");
+
+	mStatusText = new GLib::StatusText("nothing", 400, 200, 6);
 }
 
 UserInterface::~UserInterface()
@@ -59,6 +63,7 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 	mSkillInventory->Update(pInput, dt);
 	mShop->Update(pInput, dt);
 	mSkillShop->Update(pInput, dt);
+	mStatusText->Update(dt);
 }
 
 void UserInterface::Draw(GLib::Graphics* pGraphics)
@@ -68,6 +73,7 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	mSkillInventory->Draw(pGraphics);
 	mShop->Draw(pGraphics);
 	mSkillShop->Draw(pGraphics);
+	mStatusText->Draw(pGraphics);
 }
 
 void UserInterface::HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream)
@@ -134,8 +140,11 @@ void UserInterface::OnMessageSent(string message)
 {
 	vector<string> elems = GLib::SplitString(message, ' ');
 
+	// Request cvarlist with "-cvarlist".
 	if(elems[0] == Cvars::CVAR_LIST_CMD + "\r\n") {
-		mInventory->GetClient()->RequestCvarList(); // [NOTE][HACK] !!
+		RakNet::BitStream bitstream;
+		bitstream.Write((unsigned char)NMSG_REQUEST_CVAR_LIST);
+		mInventory->GetClient()->SendServerMessage(bitstream);
 	}
 }
 
@@ -158,4 +167,10 @@ bool UserInterface::PointInsideUi(XMFLOAT3 position)
 Chat* UserInterface::GetChat()
 {
 	return mChat;
+}
+
+void UserInterface::SetStatusText(string text, float time, float size, UINT32 color)
+{
+	mStatusText->SetText(text, time, color);
+	mStatusText->SetSize(size);
 }

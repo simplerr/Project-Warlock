@@ -5,15 +5,17 @@
 #include "Player.h"
 #include "NetworkMessages.h"
 #include "ClientSkillInterpreter.h"
+#include "RoundHandler.h"
 
 ClientMessageHandler::ClientMessageHandler(Client* pClient)
 {
 	mClient = pClient;
+	mSkillInterpreter = new ClientSkillInterpreter();
 }
 
 ClientMessageHandler::~ClientMessageHandler()
 {
-
+	delete mSkillInterpreter;
 }
 
 void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
@@ -99,7 +101,7 @@ void ClientMessageHandler::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 	bitstream.Read(state);
 	bitstream.Read(numPlayers);
 
-	mClient->SetArenaState(state);
+	mClient->GetRoundHandler()->SetCurrentState(state);
 
 	for(int i = 0; i < numPlayers; i++)
 	{
@@ -114,8 +116,6 @@ void ClientMessageHandler::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 		player->SetPosition(pos);
 		mClient->GetWorld()->AddObject(player);
 		player->SetId(id);	// Use the servers ID.
-
-		mClient->SetScore(name, 0);
 	}
 
 	// Send the client info to the server (name etc).
@@ -135,14 +135,15 @@ void ClientMessageHandler::HandleAddPlayer(RakNet::BitStream& bitstream)
 
 	string name = buffer;
 
-	mClient->SetScore(name, 0);
-
 	// Add a new player to the World.
 	Player* player = new Player();
 	player->SetName(name);
 	player->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));	// [NOTE]
 	mClient->GetWorld()->AddObject(player, id);		// Callback that calls ClientArena::OnObjectAdded(), this adds Players to the ModuleMap.
 	player->SetGold(gold);
+
+	// Add to score map.
+	mClient->GetRoundHandler()->AddScore(name, 0);
 
 	if(mClient->GetName() == name && mClient->GetLocalPlayer() == nullptr) 
 		mClient->AddChatText("Successfully connected to the server!\n", RGB(0, 200, 0));
@@ -180,7 +181,7 @@ void ClientMessageHandler::HandleSkillCasted(RakNet::BitStream& bitstream)
 {
 	unsigned char skillCasted;
 	bitstream.Read(skillCasted);
-	mClient->GetSkillInterpreter()->Interpret(mClient, (MessageId)skillCasted, bitstream);
+	mSkillInterpreter->Interpret(mClient, (MessageId)skillCasted, bitstream);
 }
 
 void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bitstream)
@@ -239,10 +240,8 @@ void ClientMessageHandler::HandleCvarChange(RakNet::BitStream& bitstream)
 
 	string cvar = string(temp).substr(1, string(temp).size()-1);
 
-	// Set status text.
 	char buffer[244];
 	sprintf(buffer, "%s changed to %i\n", cvar.c_str(), value);
-	mClient->SetStatusText(buffer, 4);
 
 	// Add to chat.
 	mClient->AddChatText(buffer, RGB(0, 200, 0));

@@ -20,6 +20,7 @@ public:
 	void Init();
 	void Update(float dt);
 	void PollAction(Client* pClient, GLib::Input* pInput);
+	void SendAddTarget(Client* pClient, int id, XMFLOAT3 pos, bool clear);
 
 	Skill* AddSkill(ItemName skillName);
 	void RemoveSkill(ItemName name);

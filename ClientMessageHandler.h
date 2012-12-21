@@ -2,6 +2,7 @@
 #include "BitStream.h"
 
 class Client;
+class ClientSkillInterpreter;
 
 class ClientMessageHandler
 {
@@ -28,4 +29,5 @@ public:
 	void HandlePlayerEliminated(RakNet::BitStream& bitstream);
 private:
 	Client* mClient;
+	ClientSkillInterpreter*		mSkillInterpreter;
 };

@@ -23,6 +23,7 @@ class Chat;
 class ClientSkillInterpreter;
 class ClientMessageHandler;
 class ClientArena;
+class RoundHandler;
 
 class Client
 {
@@ -32,27 +33,20 @@ public:
 
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
-	void DrawScores(GLib::Graphics* pGraphics);
+	
 	bool ConnectToServer(string ip);
 	bool ListenForPackets();
 	bool HandlePacket(RakNet::Packet* pPacket);
-	
-	void OnObjectAdded(GLib::Object3D* pObject);
-	void OnObjectRemoved(GLib::Object3D* pObject);
-
-	void RequestClientNames();
-	void RequestCvarList();
+	void SendServerMessage(RakNet::BitStream& bitstream);
 
 	void EndRound(string winner);
 	void StartRound();
 
-	void SendServerMessage(RakNet::BitStream& bitstream);
-	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
-	void SetArenaState(CurrentState state);
-	void SetScore(string name, int score);
 	void SetSelectedPlayer(Player* pPlayer);
-	void SetStatusText(string text, float duration);
 	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));
+
+	// Try to move these
+	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
 
 	//
 	// Getters                                                             
@@ -62,9 +56,9 @@ public:
 	vector<Player*> GetPlayerList();
 	Player*			GetLocalPlayer();
 	Chat*			GetChat();
-	ClientSkillInterpreter* GetSkillInterpreter();
 	UserInterface*	GetUi();
 	ClientArena*	GetArena();
+	RoundHandler*	GetRoundHandler();
 	string			GetName();
 	int				GetLocalPlayerId();
 	CurrentState	GetArenaState();
@@ -74,13 +68,8 @@ public:
 private:
 	RakNet::RakPeerInterface*	mRaknetPeer;
 	ClientArena*				mArena;
-	ClientSkillInterpreter*		mSkillInterpreter;
 	ClientMessageHandler*		mMessageHandler;
 	UserInterface*				mUserInterface;
-	GLib::StatusText*			mStatusText;
-	ArenaState					mArenaState;
-	map<string, int>			mScoreMap;
+	RoundHandler*				mRoundHandler;
 	string						mName;
-	string						mWinner;
-	bool						mRoundEnded;
 };
