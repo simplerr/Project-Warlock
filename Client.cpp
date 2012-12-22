@@ -185,6 +185,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			mUserInterface->HandleAddChatText(bitstream);
 			break;
 		case NMSG_GAME_STARTED:
+			// This is a bit ugly [NOTE].
 			LobbyState::Instance()->ChangeState(PlayingState::Instance());
 			PlayingState::Instance()->SetClient(this);
 			break;
@@ -222,16 +223,6 @@ void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 	mUserInterface->MsgProc(msg, wParam, lParam);
 }
 
-RakNet::RakPeerInterface* Client::GetRaknetPeer()
-{
-	return mRaknetPeer;
-}
-
-int Client::GetLocalPlayerId()
-{
-	return mArena->GetLocalPlayer()->GetId();
-}
-
 GLib::World* Client::GetWorld()
 {
 	return mArena->GetWorld();
@@ -255,11 +246,6 @@ CurrentState Client::GetArenaState()
 string Client::GetName()
 {
 	return mName;
-}
-
-ClientArena* Client::GetArena()
-{
-	return mArena;
 }
 
 void Client::SetSelectedPlayer(Player* pPlayer)

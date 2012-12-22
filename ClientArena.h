@@ -24,30 +24,29 @@ public:
 
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
+	void PollSelection(GLib::Input* pInput);
 
 	void OnObjectAdded(GLib::Object3D* pObject);
 	void OnObjectRemoved(GLib::Object3D* pObject);
 
 	void RemovePlayer(int id);
-	void SetSelectedPlayer(Player* pPlayer);
-	void PollSelection(GLib::Input* pInput);
 	void ResetPlayers();
 
+	void SetSelectedPlayer(Player* pPlayer);
 	void SetLocalModule(PlayerModule* pModule);
-	Player*	GetLocalPlayer();
-	PlayerModule* GetLocalPlayerModule();
-	bool IsLocalPlayerSelected();
 
-	GLib::World* GetWorld();
+	GLib::World*	GetWorld();
+	PlayerModule*	GetLocalPlayerModule();
+	Player*			GetLocalPlayer();
 	vector<Player*> GetPlayerList();
-	PlayerModule* GetPlayerModule(int id);
+	PlayerModule*	GetPlayerModule(int id);
+	bool			IsLocalPlayerSelected();
 private:
 	Client*				mClient;	
 	GLib::World*		mWorld;
 	Player*				mSelectedPlayer;
 	PlayerModule*		mPlayer;
 	vector<Player*>		mPlayerList;
-	BloodPSystem*		mParticleSystem;
 
 	map<int, PlayerModule*> mModuleList;
 };

@@ -45,22 +45,16 @@ public:
 	void SetSelectedPlayer(Player* pPlayer);
 	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));
 
-	// Try to move these
-	void SendAddTarget(int id, XMFLOAT3 pos, bool clear);
-
 	//
 	// Getters                                                             
 	//
-	RakNet::RakPeerInterface* GetRaknetPeer();
 	GLib::World*	GetWorld();
 	vector<Player*> GetPlayerList();
 	Player*			GetLocalPlayer();
 	Chat*			GetChat();
 	UserInterface*	GetUi();
-	ClientArena*	GetArena();
 	RoundHandler*	GetRoundHandler();
 	string			GetName();
-	int				GetLocalPlayerId();
 	CurrentState	GetArenaState();
 	bool			IsLocalPlayerSelected();
 

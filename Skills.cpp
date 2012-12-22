@@ -4,6 +4,7 @@
 #include "BitStream.h"
 #include "NetworkMessages.h"
 #include "Graphics.h"
+#include "Player.h"
 
 //
 //	Base skill
@@ -77,7 +78,7 @@ void FireBall::Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end)
 
 	bitstream.Write((unsigned char)NMSG_SKILL_CAST);
 	bitstream.Write((unsigned char)NMSG_ADD_FIREBALL);
-	bitstream.Write(pClient->GetLocalPlayerId());
+	bitstream.Write(pClient->GetLocalPlayer()->GetId());
 	bitstream.Write(GetName());
 	bitstream.Write(GetLevel());
 	bitstream.Write(start);
