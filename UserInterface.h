@@ -36,6 +36,7 @@ public:
 
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
+	void OnResize(float width, float height);
 
 	void HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
 	void HandleItemRemoved(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
@@ -44,6 +45,7 @@ public:
 	void SetSelectedPlayer(PlayerModule* pPlayer);
 	bool PointInsideUi(XMFLOAT3 position);
 
+	void UpdateChatPosition();
 	void SetStatusText(string text, float time, float size = 30, UINT32 color = GLib::ColorRGBA(0, 0, 0, 255));
 	void OnMessageSent(string message);
 

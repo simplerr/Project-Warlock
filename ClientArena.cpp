@@ -28,9 +28,6 @@ ClientArena::ClientArena(Client* pClient)
 
 	// Connect the graphics light list.
 	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
-
-	/*mParticleSystem = new BloodPSystem(XMFLOAT3(0, 20, 0), "textures/torch.dds");
-	mWorld->AddObject(mParticleSystem);*/
 }
 
 ClientArena::~ClientArena()
@@ -47,14 +44,6 @@ void ClientArena::Update(GLib::Input* pInput, float dt)
 
 	// Poll for object selection.
 	PollSelection(pInput);
-
-	// TESTING
-	/*if(pInput->KeyPressed(VK_SPACE))
-	{
-		XMFLOAT3 pos = mWorld->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
-		GLib::ParticleSystem* psystem = new GLib::ParticleSystem(pos, "FireParticle.lua");
-		mWorld->AddObject(psystem);
-	}*/
 
 	// If the selected object is the player then poll for action.
 	if(mSelectedPlayer != nullptr && mSelectedPlayer->GetId() == mPlayer->GetPlayer()->GetId() && !mClient->GetUi()->PointInsideUi(pInput->MousePosition())) 

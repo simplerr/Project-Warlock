@@ -28,6 +28,7 @@ public:
 
 	void BuildUi();
 	void OnServerPressed(Label* pLabel);
+	void OnResize(float width, float height);
 protected:
 	BrowsingState() {};
 private:

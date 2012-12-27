@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "BrowsingState.h"
 #include "Chat.h"
+#include "UserInterface.h"
 
 PlayingState PlayingState::mPlayingState;
 
@@ -13,9 +14,6 @@ void PlayingState::Init(Game* pGame)
 {
 	// Important!!
 	SetGame(pGame);
-
-	// Create the peer.
-	//mClient = new Client();
 
 	mControlManager = new ControlManager("ui_layout.lua");
 }
@@ -69,10 +67,15 @@ Client* PlayingState::GetClient()
 void PlayingState::SetClient(Client* pClient)
 {
 	mClient = pClient;
-	mClient->GetChat()->SetDimensions(20, 440, 300, 200);
+	mClient->GetUi()->UpdateChatPosition();
 }
 
 void PlayingState::SetDatabase(Database* pDatabase)
 {
 
+}
+
+void PlayingState::OnResize(float width, float height)
+{
+	mClient->GetUi()->OnResize(width, height);
 }

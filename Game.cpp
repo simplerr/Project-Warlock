@@ -18,6 +18,7 @@
 #include "TextMenu.h"
 #include "GameState.h"
 #include "BrowsingState.h"
+#include "D3DCore.h"
 
 using namespace GLib;
 
@@ -32,11 +33,13 @@ GLib::Runnable* GLib::GlobalApp = nullptr;
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
 	// Create a Game instance.
-	Game game(hInstance, "Client", 1200, 900);
+	Game game(hInstance, "Client", 1600, 900);
 	GLib::GlobalApp = &game;
 
 	// Init the app.
 	game.Init();
+
+	//game.SwitchScreenMode();
 
 	// Run the app.
 	return GLib::GlobalApp->Run();
@@ -57,6 +60,8 @@ Game::~Game()
 
 void Game::Init()
 {
+	SetUseWindowBorder(false);
+
 	// Important to run Systems Init() function.
 	Runnable::Init();
 
@@ -76,6 +81,13 @@ void Game::Update(GLib::Input* pInput, float dt)
 
 	mx = pInput->MousePosition().x;
 	my = pInput->MousePosition().y;
+
+	if(pInput->KeyReleased('F')) {
+		float width = GetSystemMetrics(SM_CXSCREEN);
+		float height = GetSystemMetrics(SM_CYSCREEN);
+
+		ResizeWindow(width, height);
+	}
 }
 	
 void Game::Draw(GLib::Graphics* pGraphics)
@@ -113,17 +125,11 @@ void Game::ChangeState(GameState* pGameState)
 //! Called when the window gets resized.
 void Game::OnResize(int width, int height)
 {
-
+	mCurrentState->OnResize(width, height);
 }
 
 LRESULT Game::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	// Toggle screen mode?
-	if(msg == WM_CHAR) {
-		if(wParam == 'f')	
-			SwitchScreenMode();
-	}
-
 	if(mCurrentState != nullptr)
 		mCurrentState->MsgProc(msg, wParam, lParam);
 

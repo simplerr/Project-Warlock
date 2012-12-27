@@ -45,9 +45,6 @@ void BrowsingState::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 void BrowsingState::Update(GLib::Input* pInput, double dt)
 {
 	mControlManager->Update(pInput, dt);
-
-	//if(pInput->KeyPressed(VK_SPACE))
-	//	ChangeState(PlayingState::Instance());
 }
 
 void BrowsingState::Draw(GLib::Graphics* pGraphics)
@@ -59,10 +56,10 @@ void BrowsingState::BuildUi()
 {
 	vector<ServerData> serverList = mDatabase->GetServers();
 
-	Label* title = new Label(300, 50, "BrowsingTitle", "Select a server");
+	Label* title = new Label(800, 50, "StateHeader", "Select a server");
 	mControlManager->AddControl(title);
 
-	TextMenu* serverMenu = new TextMenu(600, 400, "ServerMenu");
+	TextMenu* serverMenu = new TextMenu(800, 400, "ServerMenu");
 	serverMenu->AddItemPressedListener(&BrowsingState::OnServerPressed, this);
 
 	for(int i = 0; i < serverList.size(); i++)
@@ -103,4 +100,9 @@ void BrowsingState::OnServerPressed(Label* pLabel)
 
 	////if(!PlayingState::Instance()->GetClient()->ConnectToServer(server.publicIp))
 	//	PlayingState::Instance()->GetClient()->ConnectToServer(server.localIp);
+}
+
+void BrowsingState::OnResize(float width, float height)
+{
+	mControlManager->OnResize(width, height);
 }

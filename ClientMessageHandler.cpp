@@ -112,7 +112,7 @@ void ClientMessageHandler::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 		// Add a new player to the World.
 		Player* player = new Player();
 		player->SetName(name);
-		player->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));	
+		player->SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
 		player->SetPosition(pos);
 		mClient->GetWorld()->AddObject(player);
 		player->SetId(id);	// Use the servers ID.
@@ -138,7 +138,7 @@ void ClientMessageHandler::HandleAddPlayer(RakNet::BitStream& bitstream)
 	// Add a new player to the World.
 	Player* player = new Player();
 	player->SetName(name);
-	player->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));	// [NOTE]
+	player->SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
 	mClient->GetWorld()->AddObject(player, id);		// Callback that calls ClientArena::OnObjectAdded(), this adds Players to the ModuleMap.
 	player->SetGold(gold);
 

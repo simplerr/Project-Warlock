@@ -28,6 +28,7 @@ public:
 	void SetServerData(ServerData data);
 	void ButtonPressed(Button* pButton);
 	void StartGame();
+	void OnResize(float width, float height);
 protected:
 	LobbyState() {};
 private:

@@ -21,6 +21,7 @@ public:
 	virtual void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam) = 0;
 	virtual void Update(GLib::Input* pInput, double dt) = 0;
 	virtual void Draw(GLib::Graphics* pGraphics) = 0;
+	virtual void OnResize(float width, float height) {};
 
 	void SetGame(Game* game) {
 		mGame = game;

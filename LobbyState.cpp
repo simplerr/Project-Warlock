@@ -12,6 +12,7 @@
 #include "Player.h"
 #include "Chat.h"
 #include <vector>
+#include "UserInterface.h"
 
 LobbyState LobbyState::mLobbyState;
 
@@ -58,27 +59,29 @@ void LobbyState::Draw(GLib::Graphics* pGraphics)
 
 	vector<Player*> playerList = mClient->GetPlayerList();
 
-	for(int i = 0; i < playerList.size(); i++)
-		pGraphics->DrawText(playerList[i]->GetName(), 400, 400 + i*30, 40);
+	for(int i = 0; i < playerList.size(); i++) {
+		GLib::Rect textSize = pGraphics->MeasureText(playerList[i]->GetName(), 40, "Arial");
+		pGraphics->DrawText(playerList[i]->GetName(), GLib::GetClientWidth()/2-textSize.right/2, 100 + i*30, 40);
+	}
 
 	mControlManager->Draw(pGraphics);
 }
 
 void LobbyState::BuildUi()
 {
-	Label* title = new Label(400, 50, "BrowsingTitle", "Game lobby");
-	mControlManager->AddControl(title);
-
-	Label* serverName = new Label(400, 100, "ServerName", mServerData.name);
+	Label* serverName = new Label(800, 100, "StateHeader", mServerData.name);
+	serverName->SetAlignment(false, true);
 	mControlManager->AddControl(serverName);
 
 	Button* startButton = new Button(800, 600, "StartGameButton", "Start game");
 	startButton->AddPressedListener(&LobbyState::ButtonPressed, this);
 	startButton->SetDisabled(!mIsHost);
+	startButton->SetAlignment(false, true);
 	mControlManager->AddControl(startButton);
 
 	Button* leaveButton = new Button(800, 600, "LeaveLobbyButton", "Leave lobby");
 	leaveButton->AddPressedListener(&LobbyState::ButtonPressed, this);
+	leaveButton->SetAlignment(false, true);
 	mControlManager->AddControl(leaveButton);
 
 	mControlManager->LoadLuaProperties();
@@ -88,12 +91,15 @@ void LobbyState::SetServerData(ServerData data)
 {
 	mServerData = data;
 	mClient->ConnectToServer(data.localIp);
-	mClient->GetChat()->SetDimensions(300, 550, 600, 250);
+	float chatWidth = 600;
+	float chatHeight = 250;
+	mClient->GetChat()->SetDimensions(GLib::GetClientWidth()/2-chatWidth/2, GLib::GetClientHeight() - chatHeight - 100, chatWidth, chatHeight);
 
 	mIsHost = mClient->GetName() == mServerData.host ? true : false;
 
 	// [NOTE][HACK]
 	BuildUi();
+	OnResize(GLib::GetClientWidth(), GLib::GetClientHeight());
 }
 
 void LobbyState::ButtonPressed(Button* pButton)
@@ -111,4 +117,10 @@ void LobbyState::ButtonPressed(Button* pButton)
 void LobbyState::StartGame()
 {
 	//ChangeState(PlayingState::Instance());
+}
+
+void LobbyState::OnResize(float width, float height)
+{
+	mControlManager->OnResize(width, height);
+	mControlManager->LoadLuaProperties();
 }

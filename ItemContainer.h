@@ -42,6 +42,8 @@ public:
 	void PlaceInFreeSlot(BaseItem* pItem);
 	void PlaceInFreeSlot(ItemKey itemKey);
 	void FreeAllSlots();
+	void PerformLayout();
+	void OnResolutionChange();
 
 	void SendItemAdded(int playerId, ItemName itemName, int itemLevel);
 	void SendItemRemoved(int playerId, ItemName itemName, int itemLevel);
@@ -49,6 +51,7 @@ public:
 
 	void SetItemLoader(ItemLoaderXML* pLoader);
 	void SetClient(Client* pClient);
+	void SetPosition(float x, float y);
 	
 	bool HasFreeSlots();
 	bool InsideSlot(const ItemSlot& slot, XMFLOAT3 pos);
@@ -56,6 +59,8 @@ public:
 	ItemLoaderXML*	GetItemLoader();
 	Client*			GetClient();
 	ItemSlot*		GetItemSlot(ItemName name);
+	XMFLOAT2		GetPosition();
+	int				GetHeightInSlots();
 private:
 	vector<ItemSlot>	mItemSlots;
 	ItemLoaderXML*		mItemLoaderXML;

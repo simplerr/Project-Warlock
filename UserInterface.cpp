@@ -11,24 +11,27 @@
 #include "PlayerModule.h"
 #include "NetworkMessages.h"
 #include "StatusText.h"
+#include "d3dUtil.h"
+#include "D3DCore.h"
+#include "UiCoordinate.h"
 
 UserInterface::UserInterface(Client* pClient)
 {
 	mItemLoader = new ItemLoaderXML("items.xml");
 
-	mChat = new Chat(20, 440, 300, 200);
+	mChat = new Chat(20, 740, 300, 200);
 	mChat->SetClient(pClient);
 	mChat->AddOnMessageSentListener(&UserInterface::OnMessageSent, this);
 
-	mShop = new Shop(60, 770, 3, 60);
-	mSkillShop = new Shop(360, 770, 3, 60);
+	mShop = new Shop(60, 770+75, 3, 60);
+	mSkillShop = new Shop(360, 770+75, 3, 60);
 
-	mInventory = new Inventory(700, 770, 3, 60);
+	mInventory = new Inventory(1200, 770+75, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
 	mInventory->SetClient(pClient);
 	mInventory->SetShop(mShop);
 
-	mSkillInventory = new SkillInventory(950, 755, 4, 42);
+	mSkillInventory = new SkillInventory(1450, 755+75, 4, 42);
 	mSkillInventory->SetItemLoader(mItemLoader);
 	mSkillInventory->SetClient(pClient);
 	mSkillInventory->SetShop(mSkillShop);
@@ -47,6 +50,8 @@ UserInterface::UserInterface(Client* pClient)
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/ui_bkgd.png");
 
 	mStatusText = new GLib::StatusText("nothing", 400, 200, 6);
+
+	OnResize(GLib::GetClientWidth(), GLib::GetClientHeight());
 }
 
 UserInterface::~UserInterface()
@@ -68,7 +73,8 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 
 void UserInterface::Draw(GLib::Graphics* pGraphics)
 {
-	pGraphics->DrawScreenQuad(mBkgdTexture, 600, 800, 1200, 200);
+	UiCoordinate coords(UiAlignmentX::CENTER, BOTTOM, 800, 800, 1600, 200, false, true);
+	pGraphics->DrawScreenQuad(mBkgdTexture, coords.x, coords.y, coords.width, coords.height);
 	mInventory->Draw(pGraphics);
 	mSkillInventory->Draw(pGraphics);
 	mShop->Draw(pGraphics);
@@ -173,4 +179,19 @@ void UserInterface::SetStatusText(string text, float time, float size, UINT32 co
 {
 	mStatusText->SetText(text, time, color);
 	mStatusText->SetSize(size);
+}
+
+void UserInterface::OnResize(float width, float height)
+{
+	UpdateChatPosition();
+
+	mShop->OnResolutionChange();
+	mSkillShop->OnResolutionChange();
+	mInventory->OnResolutionChange();
+	mSkillInventory->OnResolutionChange();
+}
+
+void UserInterface::UpdateChatPosition()
+{
+	mChat->SetDimensions(10, GLib::GetClientHeight()-460, 300, 200);
 }

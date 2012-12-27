@@ -17,6 +17,7 @@ public:
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 	void Update(GLib::Input* pInput, double dt);
 	void Draw(GLib::Graphics* pGraphics);
+	void OnResize(float width, float height);
 
 	static PlayingState* Instance() {
 		return &mPlayingState;

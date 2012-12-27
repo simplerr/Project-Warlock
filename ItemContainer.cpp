@@ -3,6 +3,9 @@
 #include "Input.h"
 #include "Graphics.h"
 #include "NetworkMessages.h"
+#include "d3dUtil.h"
+#include "D3DCore.h"
+#include "UiCoordinate.h"
 
 ItemContainer::ItemContainer(int x, int y, int colums, float slotSize)
 {
@@ -24,7 +27,11 @@ void ItemContainer::Update(GLib::Input* pInput, float dt)
 	mHooveringSlotId = -1;
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
-		if(mItemSlots[i].taken && InsideSlot(mItemSlots[i], pInput->MousePosition()))
+		XMFLOAT3 mousePos = pInput->MousePosition();
+		/*mousePos.x *= GLib::GetGraphics()->GetD3D()->GetDimensionRatio().right;
+		mousePos.y *= GLib::GetGraphics()->GetD3D()->GetDimensionRatio().bottom;*/
+
+		if(mItemSlots[i].taken && InsideSlot(mItemSlots[i], mousePos))
 		{
 			OnHoover(mItemSlots[i]);
 			if(pInput->KeyPressed(VK_LBUTTON))
@@ -46,11 +53,17 @@ void ItemContainer::Draw(GLib::Graphics* pGraphics)
 			mItemSlots[i].item->DrawIcon(pGraphics, XMFLOAT2(pos.x, pos.y), mSlotSize);
 			
 			if(mHooveringSlotId == i) 
-				pGraphics->DrawText(GetHooverText(mItemSlots[i].item), mPosition.x - mSlotSize/2, mPosition.y - mSlotSize/2 - 49, 18);
+				pGraphics->DrawText(GetHooverText(mItemSlots[i].item), mPosition.x - mSlotSize/2, mPosition.y - mSlotSize * 1.2 * (mItemSlots.size() / mNumColums) / 2 - mSlotSize/2 - 49, 18);
 		}	
-		else
+		else {
 			pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mSlotSize, mSlotSize);
+
+			//UiCoordinate coord(UiAlignmentX::CENTER, BOTTOM, pos.x, pos.y, mSlotSize, mSlotSize, false, false);
+			//pGraphics->DrawScreenQuad(mEmptySlotTexture, coord.x, coord.y, coord.width, coord.height);
+		}
 	}
+
+	pGraphics->DrawScreenQuad(mEmptySlotTexture, mPosition.x, mPosition.y, 20, 20);
 }
 
 void ItemContainer::AddSlot()
@@ -60,6 +73,21 @@ void ItemContainer::AddSlot()
 	newSlot.position.x += mSlotSize * 1.2 * (mItemSlots.size() % mNumColums);
 	newSlot.position.y += mSlotSize * 1.2 * (mItemSlots.size() / mNumColums);
 	mItemSlots.push_back(newSlot);
+	PerformLayout();
+}
+
+void ItemContainer::PerformLayout()
+{
+	for(int i = 0; i < mItemSlots.size(); i++)
+	{
+		mItemSlots[i].position = mPosition; 
+		mItemSlots[i].position.x -= mSlotSize * 1.2 * (mItemSlots.size() %  mNumColums) / 2;
+		mItemSlots[i].position.y -= mSlotSize * 1.2 * (mItemSlots.size() / mNumColums) / 2;
+
+
+		mItemSlots[i].position.x += mSlotSize * 1.2 * (i % mNumColums);
+		mItemSlots[i].position.y += mSlotSize * 1.2 * (i / mNumColums);
+	}
 }
 
 void ItemContainer::PlaceInFreeSlot(ItemKey itemKey)
@@ -146,6 +174,12 @@ void ItemContainer::SetItemLoader(ItemLoaderXML* pLoader)
 	mItemLoaderXML = pLoader;
 }
 
+void ItemContainer::SetPosition(float x, float y)
+{
+	mPosition = XMFLOAT2(x, y);
+	PerformLayout();
+}
+
 ItemLoaderXML* ItemContainer::GetItemLoader()
 {
 	return mItemLoaderXML;
@@ -170,4 +204,22 @@ ItemSlot* ItemContainer::GetItemSlot(ItemName name)
 	}
 
 	return nullptr;
+}
+
+XMFLOAT2 ItemContainer::GetPosition()
+{
+	return mPosition;
+}
+
+int	ItemContainer::GetHeightInSlots()
+{
+	return mItemSlots.size() / mNumColums;
+}
+
+void ItemContainer::OnResolutionChange()
+{
+	// GetHeightInSlots()*1.2 is probably wrong, should use some kind of spacing instead.
+	UiCoordinate coord(UiAlignmentX::LEFT, BOTTOM, GetPosition().x, GetPosition().y, mSlotSize, mSlotSize*GetHeightInSlots()+GetHeightInSlots()*1.2, false, false);
+	mPosition = XMFLOAT2(coord.x, coord.y);
+	PerformLayout();
 }
