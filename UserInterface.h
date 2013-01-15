@@ -1,6 +1,7 @@
 #pragma once
 #include "BitStream.h"
 #include "d3dUtil.h"
+#include "StatusEffect.h"
 #include <string>
 
 namespace GLib {
@@ -18,6 +19,7 @@ class Client;
 class SkillInventory;
 class Chat;
 class PlayerModule;
+class StatusArea;
 
 /*
 	--Item and Skill system breakdown--
@@ -49,6 +51,9 @@ public:
 	void SetStatusText(string text, float time, float size = 30, UINT32 color = GLib::ColorRGBA(0, 0, 0, 255));
 	void OnMessageSent(string message);
 
+	void OnStatusEffectAdded(StatusEffectType type);
+	void OnStatusEffectRemoved(StatusEffectType type);
+
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 
 	Chat* GetChat();
@@ -60,5 +65,6 @@ private:
 	Shop*						mSkillShop;
 	GLib::Texture2D*			mBkgdTexture;
 	GLib::StatusText*			mStatusText;
+	StatusArea*					mStatusArea;
 	Chat*						mChat;
 };

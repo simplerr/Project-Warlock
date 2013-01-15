@@ -3,28 +3,36 @@
 #include "Skills.h"
 #include "Items.h"
 
-namespace GLib
-{
+namespace GLib {
 	class Graphics;
 }
+
+class Player;
+class BaseArena;
+class ItemLoaderXML;
+class StatusEffect;
 
 class Projectile : public GLib::ParticleSystem
 {
 public:
 	Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript);
-	~Projectile();
+	virtual ~Projectile();
 
 	void Update(float dt);
-	void Draw(GLib::Graphics* pGraphics);
+	virtual void Draw(GLib::Graphics* pGraphics);
+
+	virtual void HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, ItemLoaderXML* pItemLoader) = 0;
 
 	void SetSkillType(ItemName type);
 	void SetSkillLevel(int level);
+	void SetPosition(XMFLOAT3 position);
 
 	int		 GetOwner();
 	XMFLOAT3 GetDirection();
 	ItemName GetSkillType();
 	int		 GetSkillLevel();
 	float	 GetDamage();
+	virtual StatusEffect* GetStatusEffect() {return nullptr;}
 private:
 	XMFLOAT3	mDirection;
 	int			mOwner;

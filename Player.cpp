@@ -7,6 +7,7 @@
 #include "SkillHandler.h"
 #include "StaticObject.h"
 #include "ModelImporter.h"
+#include "StatusEffect.h"
 
 Player::Player()
 	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x")
@@ -17,6 +18,7 @@ Player::Player()
 	SetLocalPlayer(false);
 	SetEliminated(false);
 	SetLastHitter(nullptr);
+	SetStunned(false);
 
 	mLocalBox = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/box.obj");
 	mLocalBox->SetMaterials(GLib::Colors::Green);
@@ -39,7 +41,13 @@ void Player::Update(float dt)
 		SetEliminated(true);
 
 	if(!GetEliminated())
-		Actor::Update(dt);
+	{
+		if(!GetStunned())
+			Actor::Update(dt);
+
+		for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++)
+			(*iter)->Update(dt);
+	}
 }
 
 void Player::Draw(GLib::Graphics* pGraphics)
@@ -52,6 +60,19 @@ void Player::Draw(GLib::Graphics* pGraphics)
 
 		if(mLocalPlayer)
 			mLocalBox->Draw(pGraphics);
+
+		for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
+			(*iter)->Draw(pGraphics);
+			if((*iter)->GetTimer() > (*iter)->GetDuration()) {
+				// Call the OnStatusEffectRemoved callback.
+				if(!OnStatusEffectRemoved.empty())
+					OnStatusEffectRemoved((*iter)->GetType());
+
+				(*iter)->Remove();
+				delete (*iter);
+				iter = mStatusEffects.erase(iter);
+			}
+		}
 	}
 }
 
@@ -113,6 +134,16 @@ void Player::RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
 multiset<ItemKey> Player::GetItemList()
 {
 	return mItemList;
+}
+
+void Player::AddStatusEffect(StatusEffect* pStatusEffect)
+{
+	if(!OnStatusEffectAdded.empty())
+		OnStatusEffectAdded(pStatusEffect->GetType());
+
+	mStatusEffects.push_back(pStatusEffect);
+	pStatusEffect->SetPlayer(this);
+	pStatusEffect->Apply();
 }
 
 void Player::SetHealth(float health)
@@ -208,4 +239,43 @@ void Player::SetLastHitter(Player* pPlayer)
 Player* Player::GetLastHitter()
 {
 	return mLastHitter;
+}
+
+AxisAlignedBox Player::GetBoundingBox()
+{
+	XNA::AxisAlignedBox box;
+	box.Center = GetPosition();
+	box.Extents = XMFLOAT3(2, 2, 2);
+	return box;
+}
+
+void Player::SetStunned(bool stunned)
+{
+	mStunned = stunned;
+
+	if(mStunned)
+		ClearTargetQueue();
+}
+
+bool Player::GetStunned()
+{
+	return mStunned;
+}
+
+list<StatusEffect*> Player::GetStatusEffectList()
+{
+	return mStatusEffects;
+}
+
+void Player::RemoveStatusEffects()
+{
+	for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
+		// Call the OnStatusEffectRemoved callback.
+		if(!OnStatusEffectRemoved.empty())
+			OnStatusEffectRemoved((*iter)->GetType());
+
+		(*iter)->Remove();
+		delete (*iter);
+		iter = mStatusEffects.erase(iter);
+	}
 }

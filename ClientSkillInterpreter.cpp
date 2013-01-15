@@ -1,8 +1,9 @@
 #include "ClientSkillInterpreter.h"
 #include "Client.h"
 #include "World.h"
-#include "Projectile.h"
+#include "FireProjectile.h"
 #include "Skills.h"
+#include "FrostProjectile.h"
 
 ClientSkillInterpreter::ClientSkillInterpreter()
 {
@@ -18,24 +19,30 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 {
 	GLib::World* world = pClient->GetWorld();
 
+	XMFLOAT3 start, end, dir;
+	int projectileId, owner, skillLevel;
+	ItemName skillType;
+
+	bitstream.Read(owner);
+	bitstream.Read(projectileId);
+	bitstream.Read(skillType);
+	bitstream.Read(skillLevel);
+	bitstream.Read(start);
+	bitstream.Read(end);
+
+	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&start) - XMLoadFloat3(&start)));
+
+	Projectile* projectile = nullptr;
 	if(id == NMSG_ADD_FIREBALL)
-	{
-		XMFLOAT3 start, end, dir;
-		int id, owner, skillLevel;
-		ItemName skillType;
+		projectile = new FireProjectile(owner, start, dir);
+	else if(id == NMSG_ADD_FROSTNOVA)
+		projectile = new FrostProjectile(owner, start);
 
-		bitstream.Read(owner);
-		bitstream.Read(id);
-		bitstream.Read(skillType);
-		bitstream.Read(skillLevel);
-		bitstream.Read(start);
-		bitstream.Read(end);
+	projectile->SetSkillLevel(skillLevel);
+	projectile->SetSkillLevel(skillType);
+	projectile->SetOriginObject(world->GetObjectById(owner));
+	world->AddObject(projectile);
 
-		XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&start) - XMLoadFloat3(&start)));
-		Projectile* projectile = new Projectile(owner, start, dir, "FireParticle.lua");
-		projectile->SetSkillLevel(skillLevel);
-		projectile->SetSkillLevel(skillType);
-		world->AddObject(projectile);
-		projectile->SetId(id);
-	}
+	// Use the servers Id!
+	projectile->SetId(projectileId);
 }

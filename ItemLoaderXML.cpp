@@ -2,6 +2,7 @@
 #include "Items.h"
 #include "tinyxml\tinystr.h";
 #include "tinyxml\tinyxml.h"
+#include "StatusEffect.h"
 
 bool operator<(const ItemKey &l, const ItemKey &r) 
 { 
@@ -27,6 +28,8 @@ ItemLoaderXML::ItemLoaderXML(string filename)
 	mStringKeyMap["IRON_ARMOR"] = IRON_ARMOR;
 	mStringKeyMap["REGEN_CAP"] = REGEN_CAP;
 	mStringKeyMap["FIREBALL"] = SKILL_FIREBALL;
+	mStringKeyMap["FROSTNOVA"] = SKILL_FROSTNOVA;
+	mStringKeyMap["FREEZE_EFFECT"] = FREEZE_STATUS;	
 
 	// Load all models from the XML file.
 	TiXmlDocument doc(filename.c_str());

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <map>
+#include "BaseArena.h"
 using namespace std;
 
 namespace GLib {
@@ -16,7 +17,7 @@ class Player;
 class BloodPSystem;
 class PlayerModule;
 
-class ClientArena
+class ClientArena : public BaseArena
 {
 public:
 	ClientArena(Client* pClient);
@@ -43,10 +44,7 @@ public:
 	bool			IsLocalPlayerSelected();
 private:
 	Client*				mClient;	
-	GLib::World*		mWorld;
 	Player*				mSelectedPlayer;
 	PlayerModule*		mPlayer;
-	vector<Player*>		mPlayerList;
-
 	map<int, PlayerModule*> mModuleList;
 };

@@ -223,3 +223,8 @@ void ItemContainer::OnResolutionChange()
 	mPosition = XMFLOAT2(coord.x, coord.y);
 	PerformLayout();
 }
+
+vector<ItemSlot> ItemContainer::GetItemSlots()
+{
+	return mItemSlots;
+}

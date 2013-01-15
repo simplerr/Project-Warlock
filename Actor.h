@@ -30,6 +30,7 @@ public:
 	virtual void Draw(GLib::Graphics* pGraphics);
 
 	void AddTarget(XMFLOAT3 targetPos, bool clear);
+	void ClearTargetQueue();
 	void SetMovementSpeed(float movementSpeed);
 	void SetSelected(bool selected);
 	void SetVelocity(XMFLOAT3 velocity);

@@ -24,6 +24,7 @@ protected:
 	float		mCooldownCounter;
 };
 
+// Remake this, this isnt the actual skill....
 class FireBall : public Skill
 {
 public:
@@ -31,5 +32,14 @@ public:
 	~FireBall();
 
 	void Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end);
-private:
 };
+
+class FrostNova : public Skill
+{
+public:
+	FrostNova(string icon);
+	~FrostNova();
+
+	void Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end);
+};
+

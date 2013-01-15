@@ -6,6 +6,8 @@
 #include "NetworkMessages.h"
 #include "ClientSkillInterpreter.h"
 #include "RoundHandler.h"
+#include "Projectile.h"
+#include "FreezeEffect.h"
 
 ClientMessageHandler::ClientMessageHandler(Client* pClient)
 {
@@ -145,8 +147,10 @@ void ClientMessageHandler::HandleAddPlayer(RakNet::BitStream& bitstream)
 	// Add to score map.
 	mClient->GetRoundHandler()->AddScore(name, 0);
 
-	if(mClient->GetName() == name && mClient->GetLocalPlayer() == nullptr) 
+	if(mClient->GetName() == name) {// && mClient->GetLocalPlayer() == nullptr) {
 		mClient->AddChatText("Successfully connected to the server!\n", RGB(0, 200, 0));
+		mClient->SetSelectedPlayer(player);
+	}
 	else
 		mClient->AddChatText(name + " has connected!\n", RGB(0, 200, 0));
 }
@@ -191,6 +195,12 @@ void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bi
 	bitstream.Read(playerId);
 
 	Player* player = (Player*)mClient->GetWorld()->GetObjectById(playerId);
+	Projectile* projectile = (Projectile*)mClient->GetWorld()->GetObjectById(projectileId);
+
+	// Add status effect if there is any.
+	StatusEffect* statusEffect = projectile->GetStatusEffect();
+	if(statusEffect != nullptr)
+		player->AddStatusEffect(statusEffect);
 
 	char buffer[244];
 	sprintf(buffer, "projectile %i collided with player %i health: %.2f\n", projectileId, playerId, player->GetHealth());

@@ -99,7 +99,7 @@ void Game::Draw(GLib::Graphics* pGraphics)
 	mCurrentState->Draw(pGraphics);
 
 	char buffer[244];
-	sprintf(buffer, "x: %f\ny: %f", mx, my);
+	sprintf(buffer, "x: %f\ny: %f\nFPS:%f", mx, my, GetCurrentFps());
 	pGraphics->DrawText(buffer, 10, 10, 20);
 
 	// Present the backbuffer.

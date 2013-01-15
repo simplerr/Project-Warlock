@@ -4,6 +4,7 @@
 
 namespace GLib {
 	class StaticObject;
+	class Graphics;
 }
 
 class Player;

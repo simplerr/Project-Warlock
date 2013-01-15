@@ -5,7 +5,7 @@
 Actor::Actor(GLib::ModelImporter* pImporter, string filename)
 	: AnimatedObject(pImporter, filename)
 {
-	SetMovementSpeed(0.1f);
+	SetMovementSpeed(0.05f);
 	SetSelected(false);
 	SetVelocity(XMFLOAT3(0, 0, 0));
 	SetFriction(0.99f);
@@ -88,6 +88,11 @@ void Actor::AddTarget(XMFLOAT3 targetPos, bool clear)
 	target.pos = targetPos;
 
 	mTargetQueue.push_back(target);
+}
+
+void Actor::ClearTargetQueue()
+{
+	mTargetQueue.clear();
 }
 
 void Actor::SetMovementSpeed(float movementSpeed)

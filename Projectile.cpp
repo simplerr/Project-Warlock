@@ -13,7 +13,7 @@ Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 	mDirection = dir;
 	mMaxDistance = 40.0f;
 	mOwner = owner;
-	mSpeed = 0.2f;
+	mSpeed = 0.1f;
 	mTravelled = 0.0f;
 }
 
@@ -37,6 +37,11 @@ void Projectile::Update(float dt)
 void Projectile::Draw(GLib::Graphics* pGraphics)
 {
 	ParticleSystem::Draw(pGraphics);
+}
+
+void Projectile::SetPosition(XMFLOAT3 position)
+{
+	Object3D::SetPosition(position);
 }
 
 int Projectile::GetOwner()

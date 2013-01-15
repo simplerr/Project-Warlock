@@ -86,3 +86,33 @@ void FireBall::Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end)
 
 	pClient->SendServerMessage(bitstream);
 }
+
+//
+// Frost nova.
+//
+
+FrostNova::FrostNova(string icon) : Skill(icon)
+{
+	SetName(SKILL_FROSTNOVA);
+}
+
+FrostNova::~FrostNova()
+{
+
+}
+
+void FrostNova::Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end)
+{
+	// Tell the server to add a fireball.
+	RakNet::BitStream bitstream;
+
+	bitstream.Write((unsigned char)NMSG_SKILL_CAST);
+	bitstream.Write((unsigned char)NMSG_ADD_FROSTNOVA);
+	bitstream.Write(pClient->GetLocalPlayer()->GetId());
+	bitstream.Write(GetName());
+	bitstream.Write(GetLevel());
+	bitstream.Write(start);
+	bitstream.Write(end);
+
+	pClient->SendServerMessage(bitstream);
+}

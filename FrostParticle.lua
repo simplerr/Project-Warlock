@@ -15,9 +15,9 @@ function InitParticle(pos_x, pos_y, pos_z, time, counter)
 	particle:SetInitialColor(1, 0, 0, 1);			-- Initial color
 
 	-- Velocity
-	vel_x = math.random(-1000, 1000) / 1000.0 * ParticleData.speed;		-- X velocity
-	vel_y = math.random(-900, 1000) / 1000.0 * ParticleData.speed;		-- Y velocity
-	vel_z = math.random(-1000, 1000) / 1000.0 * ParticleData.speed;		-- Z velocity
+	vel_x = math.cos(-counter/5.0) * ParticleData.speed;		-- X velocity
+	vel_y = 0;		-- Y velocity
+	vel_z = math.sin(counter/5.0) * ParticleData.speed;		-- Z velocity
 	particle:SetInitialVelocity(vel_x, vel_y, vel_z);
 
 	--particle:Debug();
@@ -30,18 +30,18 @@ ParticleSystemData = {
 	accel_x = 0;
 	accel_y = 0;
 	accel_z = 0;
-	spawn_frequency = 0.02;
-	lifetime = 5;
-	max_particles = 100;
-	radius = 2;
+	spawn_frequency = 0.00002;
+	lifetime = 0.3;
+	max_particles = 32;
+	radius = 5;
 }
 
 ParticleData = {
-	texture = "textures/torch.png",
+	texture = "textures/blue.png",
 	size = 5,
-	lifetime = 2.2,
+	lifetime = 0.5,
 	mass = 0.1,
-	speed = 1,
+	speed = 50,
 }
 
 -- Updates the particle with a custom function.
@@ -59,5 +59,5 @@ function UpdateParticle(particle, time)
 	particle:SetPosition(pos_x, pos_y, pos_z);
 
 	-- Set new size.
-	particle:SetSize(particle:GetInitialSize() * math.sin(age * 12.0));
+	particle:SetSize(particle:GetInitialSize());-- * math.sin(age * 12.0));
 end

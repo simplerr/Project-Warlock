@@ -37,8 +37,6 @@ void PlayingState::Update(GLib::Input* pInput, double dt)
 
 void PlayingState::Draw(GLib::Graphics* pGraphics)
 {
-	pGraphics->DrawText("PlayingState", 600, 400, 60);
-
 	mClient->Draw(pGraphics);
 	mControlManager->Draw(pGraphics);
 }

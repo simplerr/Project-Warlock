@@ -33,7 +33,7 @@ void PlayerModule::Update(float dt)
 
 void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 {
-	if(!mPlayer->GetEliminated())
+	if(!mPlayer->GetEliminated() && !mPlayer->GetStunned())
 	{
 		// [TODO] Add mSkillHandler->PollAction().
 		mSkillHandler->PollAction(pClient, pInput, mPlayer->GetPosition(), mPlayer->GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay()));

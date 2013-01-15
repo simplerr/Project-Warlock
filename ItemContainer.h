@@ -61,6 +61,7 @@ public:
 	ItemSlot*		GetItemSlot(ItemName name);
 	XMFLOAT2		GetPosition();
 	int				GetHeightInSlots();
+	vector<ItemSlot> GetItemSlots();
 private:
 	vector<ItemSlot>	mItemSlots;
 	ItemLoaderXML*		mItemLoaderXML;

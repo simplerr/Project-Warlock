@@ -1,4 +1,5 @@
 #include "Chat.h"
+#include "StatusArea.h"
 #include "UserInterface.h"
 #include "ItemLoaderXML.h"
 #include "Inventory.h"
@@ -18,6 +19,9 @@
 UserInterface::UserInterface(Client* pClient)
 {
 	mItemLoader = new ItemLoaderXML("items.xml");
+
+	mStatusArea = new StatusArea(750, 150);
+	mStatusArea->SetItemLoader(mItemLoader);
 
 	mChat = new Chat(20, 740, 300, 200);
 	mChat->SetClient(pClient);
@@ -46,6 +50,7 @@ UserInterface::UserInterface(Client* pClient)
 	mSkillShop->SetItemLoader(mItemLoader);
 	mSkillShop->SetInspectingInventory(mSkillInventory);
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_FIREBALL, 1));
+	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_FROSTNOVA, 1));
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/ui_bkgd.png");
 
@@ -60,6 +65,7 @@ UserInterface::~UserInterface()
 	delete mShop;
 	delete mInventory;
 	delete mItemLoader;
+	delete mStatusArea;
 }
 
 void UserInterface::Update(GLib::Input* pInput, float dt)
@@ -69,6 +75,7 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 	mShop->Update(pInput, dt);
 	mSkillShop->Update(pInput, dt);
 	mStatusText->Update(dt);
+	mStatusArea->Update(pInput, dt);
 }
 
 void UserInterface::Draw(GLib::Graphics* pGraphics)
@@ -80,6 +87,7 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	mShop->Draw(pGraphics);
 	mSkillShop->Draw(pGraphics);
 	mStatusText->Draw(pGraphics);
+	mStatusArea->Draw(pGraphics);
 }
 
 void UserInterface::HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream)
@@ -189,9 +197,22 @@ void UserInterface::OnResize(float width, float height)
 	mSkillShop->OnResolutionChange();
 	mInventory->OnResolutionChange();
 	mSkillInventory->OnResolutionChange();
+	mStatusArea->OnResolutionChange();
 }
 
 void UserInterface::UpdateChatPosition()
 {
 	mChat->SetDimensions(10, GLib::GetClientHeight()-460, 300, 200);
+}
+
+void UserInterface::OnStatusEffectAdded(StatusEffectType type)
+{
+	if(type == StatusEffectType::FREEZE_EFFECT)
+		mStatusArea->PlaceInFreeSlot(ItemKey(FREEZE_STATUS, 1));
+}
+
+void UserInterface::OnStatusEffectRemoved(StatusEffectType type)
+{
+	if(type == StatusEffectType::FREEZE_EFFECT)
+		mStatusArea->RemoveStatusEffect(ItemKey(FREEZE_STATUS, 1));
 }

@@ -13,26 +13,19 @@
 #include "PlayerModule.h"
 
 ClientArena::ClientArena(Client* pClient)
+	: BaseArena()
 {
 	mClient = pClient;
 
 	mSelectedPlayer = nullptr;
 	mPlayer			= new PlayerModule();
 
-	// Create the world.
-	mWorld = new GLib::World();
-	mWorld->Init(GLib::GetGraphics());
-
 	mWorld->AddObjectAddedListener(&ClientArena::OnObjectAdded, this);
 	mWorld->AddObjectRemovedListener(&ClientArena::OnObjectRemoved, this);
-
-	// Connect the graphics light list.
-	GLib::GetGraphics()->SetLightList(mWorld->GetLights());
 }
 
 ClientArena::~ClientArena()
 {
-	delete mWorld;
 	delete mPlayer;
 }
 
@@ -55,12 +48,12 @@ void ClientArena::Draw(GLib::Graphics* pGraphics)
 	// Draw the world.
 	mWorld->Draw(pGraphics);
 
-	if(mSelectedPlayer != nullptr) {
+	/*if(mSelectedPlayer != nullptr) {
 		char buffer[244];
 		sprintf(buffer, "Health: %.2f\nRegen: %.2f\nMs: %.2f\nKnockbak res: %.2f\nLava Immunity: %.2f\nDamage: %.2f\nLifesteal: %.2f\n\nGold: %i\n\n", mSelectedPlayer->GetHealth(), mSelectedPlayer->GetRegen(), mSelectedPlayer->GetMovementSpeed(),
 			mSelectedPlayer->GetKnockBackResistance(), mSelectedPlayer->GetLavaImmunity(), mSelectedPlayer->GetDamage(), mSelectedPlayer->GetLifeSteal(), mSelectedPlayer->GetGold());
 		pGraphics->DrawText(buffer, 10, 100, 16, 0xff000000);
-	}
+	}*/
 }
 
 void ClientArena::PollSelection(GLib::Input* pInput)
@@ -69,7 +62,10 @@ void ClientArena::PollSelection(GLib::Input* pInput)
 	if(pInput->KeyPressed(VK_LBUTTON) && !mPlayer->IsCastingSkill() && !mClient->GetUi()->PointInsideUi(pInput->MousePosition()))
 	{
 		Player* selected = (Player*)mWorld->GetSelectedObject(pInput->GetWorldPickingRay(), GLib::PLAYER);
-		SetSelectedPlayer(selected);
+
+		if(selected != nullptr)
+			mClient->GetUi()->SetSelectedPlayer(GetPlayerModule(selected->GetId()));
+		//SetSelectedPlayer(selected);
 	}
 }
 
@@ -140,6 +136,8 @@ void ClientArena::ResetPlayers()
 	{
 		mPlayerList[i]->SetEliminated(false);
 		mPlayerList[i]->SetHealth(100);	// [NOTE][HACK]
+		mPlayerList[i]->RemoveStatusEffects();
+		mPlayerList[i]->ClearTargetQueue();
 	}
 }
 
@@ -157,6 +155,11 @@ void ClientArena::SetLocalModule(PlayerModule* pModule)
 {
 	pModule->GetPlayer()->SetLocalPlayer(true);
 	mPlayer = pModule;
+
+	// Setup the StatusEffect callbacks.
+	Player* player = pModule->GetPlayer();
+	player->AddOnStatusEffectAdded(&UserInterface::OnStatusEffectAdded, mClient->GetUi());
+	player->AddOnStatusEffectRemoved(&UserInterface::OnStatusEffectRemoved, mClient->GetUi());
 }
 
 bool ClientArena::IsLocalPlayerSelected()

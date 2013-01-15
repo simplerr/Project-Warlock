@@ -34,6 +34,7 @@ enum MessageId
 	//
 	NMSG_SKILL_CAST,				// Sent when the server has processed the cast skill command.
 	NMSG_ADD_FIREBALL,				// Fireball skill.
+	NMSG_ADD_FROSTNOVA,
 
 	//
 	// State events.

@@ -23,6 +23,8 @@ void SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 sta
 {
 	if(pInput->KeyPressed('Q') && mSkillMap.find('Q') != mSkillMap.end()) 
 		mActiveSkill = 'Q';
+	else if(pInput->KeyPressed('W') && mSkillMap.find('W') != mSkillMap.end()) 
+		mActiveSkill = 'W';
 
 	// LBUTTON pressed, skill selected and inside the terrain.
 	if(pInput->KeyPressed(VK_LBUTTON) && mActiveSkill != -1 && end.x != numeric_limits<float>::infinity())
@@ -48,6 +50,11 @@ Skill* SkillHandler::AddSkill(ItemName skillName)
 	{
 		mSkillMap['Q'] = new FireBall("textures/icons/fireball.png");
 		return mSkillMap['Q'];
+	}
+	else if(skillName == SKILL_FROSTNOVA)
+	{
+		mSkillMap['W'] = new FrostNova("textures/icons/frost_nova.png");
+		return mSkillMap['W'];
 	}
 
 	return nullptr;

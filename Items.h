@@ -23,7 +23,12 @@ enum ItemName
 	// Skills
 	//
 	SKILL_FIREBALL,	// Fireball
-
+	SKILL_FROSTNOVA,
+	
+	//
+	// Status Effects
+	//
+	FREEZE_STATUS
 };
 
 struct Attributes
