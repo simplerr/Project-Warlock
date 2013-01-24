@@ -24,6 +24,9 @@ struct ItemSlot
 	bool		taken;
 };
 
+/************************************************************************
+ItemName is used because it has to be sent over the network to other clients
+/************************************************************************/
 class HudItemContainer
 {
 public:

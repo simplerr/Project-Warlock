@@ -1,5 +1,7 @@
 #pragma once
 #include <map>
+#include "tinyxml\tinystr.h";
+#include "tinyxml\tinyxml.h"
 #include "Items.h"
 
 using namespace std;
@@ -24,6 +26,10 @@ public:
 	ItemLoaderXML(string filename);
 	~ItemLoaderXML();
 
+	void LoadItems(TiXmlElement* pRoot);
+	void LoadSkills(TiXmlElement* pRoot);
+	void LoadStatusEffects(TiXmlElement* pRoot);
+	void SetupKeyMap();
 	Item* GetItem(ItemKey key);
 	ItemName StringToName(string name);
 private:
