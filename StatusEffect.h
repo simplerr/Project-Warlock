@@ -1,4 +1,5 @@
 #pragma once
+#include "Items.h"
 
 class Player;
 
@@ -13,7 +14,7 @@ enum StatusEffectType {
 class StatusEffect
 {
 public:
-	StatusEffect(StatusEffectType type) {
+	StatusEffect(ItemName type) {
 		mTimer = 0.0f;
 		mType = type;
 		mDuration = 3.0f;
@@ -44,7 +45,7 @@ public:
 		return mTimer;
 	}
 
-	StatusEffectType GetType() {
+	ItemName GetType() {
 		return mType;
 	}
 
@@ -53,7 +54,7 @@ public:
 	}
 private:
 	Player* mPlayer;
-	StatusEffectType mType;
+	ItemName mType;
 	float mDuration;
 	float mTimer;
 };

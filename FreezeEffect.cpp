@@ -3,7 +3,7 @@
 #include "Graphics.h"
 
 FreezeEffect::FreezeEffect()
-	: StatusEffect(FREEZE_EFFECT)
+	: StatusEffect(FREEZE_STATUS)
 {
 
 }
@@ -28,10 +28,13 @@ void FreezeEffect::Draw(GLib::Graphics* pGraphics)
 
 void FreezeEffect::Apply()
 {
-	GetPlayer()->SetStunned(true);
+	mOriginalMovementSpeed = GetPlayer()->GetMovementSpeed();
+	//GetPlayer()->SetStunned(true);
+	GetPlayer()->SetMovementSpeed(mOriginalMovementSpeed / 2.0f);
 }
 
 void FreezeEffect::Remove()
 {
-	GetPlayer()->SetStunned(false);
+	//GetPlayer()->SetStunned(false);
+	GetPlayer()->SetMovementSpeed(mOriginalMovementSpeed);
 }

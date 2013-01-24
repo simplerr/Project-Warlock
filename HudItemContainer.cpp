@@ -1,4 +1,4 @@
-#include "ItemContainer.h"
+#include "HudItemContainer.h"
 #include "Client.h"
 #include "Input.h"
 #include "Graphics.h"
@@ -7,7 +7,7 @@
 #include "D3DCore.h"
 #include "UiCoordinate.h"
 
-ItemContainer::ItemContainer(int x, int y, int colums, float slotSize)
+HudItemContainer::HudItemContainer(int x, int y, int colums, float slotSize)
 {
 	mPosition = XMFLOAT2(x, y);
 	mNumColums = colums;
@@ -17,12 +17,12 @@ ItemContainer::ItemContainer(int x, int y, int colums, float slotSize)
 	mEmptySlotTexture = GLib::GetGraphics()->LoadTexture("textures/icons/empty_slot.bmp");
 }
 
-ItemContainer::~ItemContainer()
+HudItemContainer::~HudItemContainer()
 {
 
 }
 
-void ItemContainer::Update(GLib::Input* pInput, float dt)
+void HudItemContainer::Update(GLib::Input* pInput, float dt)
 {
 	mHooveringSlotId = -1;
 	for(int i = 0; i < mItemSlots.size(); i++)
@@ -44,7 +44,7 @@ void ItemContainer::Update(GLib::Input* pInput, float dt)
 	}
 }
 
-void ItemContainer::Draw(GLib::Graphics* pGraphics)
+void HudItemContainer::Draw(GLib::Graphics* pGraphics)
 {
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
@@ -66,7 +66,7 @@ void ItemContainer::Draw(GLib::Graphics* pGraphics)
 	pGraphics->DrawScreenQuad(mEmptySlotTexture, mPosition.x, mPosition.y, 20, 20);
 }
 
-void ItemContainer::AddSlot()
+void HudItemContainer::AddSlot()
 {
 	ItemSlot newSlot;
 	newSlot.position = mPosition;
@@ -76,7 +76,7 @@ void ItemContainer::AddSlot()
 	PerformLayout();
 }
 
-void ItemContainer::PerformLayout()
+void HudItemContainer::PerformLayout()
 {
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
@@ -90,12 +90,12 @@ void ItemContainer::PerformLayout()
 	}
 }
 
-void ItemContainer::PlaceInFreeSlot(ItemKey itemKey)
+void HudItemContainer::PlaceInFreeSlot(ItemKey itemKey)
 {
 	PlaceInFreeSlot(mItemLoaderXML->GetItem(itemKey));
 }
 
-void ItemContainer::PlaceInFreeSlot(BaseItem* pItem)
+void HudItemContainer::PlaceInFreeSlot(HudItem* pItem)
 {
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
@@ -108,7 +108,7 @@ void ItemContainer::PlaceInFreeSlot(BaseItem* pItem)
 	}
 }
 
-bool ItemContainer::InsideSlot(const ItemSlot& slot, XMFLOAT3 pos)
+bool HudItemContainer::InsideSlot(const ItemSlot& slot, XMFLOAT3 pos)
 {
 	RECT rect;
 	rect.left = slot.position.x - mSlotSize/2;
@@ -119,13 +119,13 @@ bool ItemContainer::InsideSlot(const ItemSlot& slot, XMFLOAT3 pos)
 	return pos.x > rect.left && pos.x < rect.right && pos.y > rect.top && pos.y < rect.bottom;
 }
 
-void ItemContainer::FreeAllSlots()
+void HudItemContainer::FreeAllSlots()
 {
 	for(int i = 0; i < mItemSlots.size(); i++)
 		mItemSlots[i].taken = false;
 }
 
-bool ItemContainer::HasFreeSlots()
+bool HudItemContainer::HasFreeSlots()
 {
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
@@ -136,7 +136,7 @@ bool ItemContainer::HasFreeSlots()
 	return false;
 }
 
-void ItemContainer::SendItemAdded(int playerId, ItemName itemName, int itemLevel)
+void HudItemContainer::SendItemAdded(int playerId, ItemName itemName, int itemLevel)
 {
 	// Send to server.
 	RakNet::BitStream bitstream;
@@ -147,8 +147,7 @@ void ItemContainer::SendItemAdded(int playerId, ItemName itemName, int itemLevel
 	mClient->SendServerMessage(bitstream);
 }
 
-
-void ItemContainer::SendItemRemoved(int playerId, ItemName itemName, int itemLevel)
+void HudItemContainer::SendItemRemoved(int playerId, ItemName itemName, int itemLevel)
 {
 	// Send to server.
 	RakNet::BitStream bitstream;
@@ -159,7 +158,7 @@ void ItemContainer::SendItemRemoved(int playerId, ItemName itemName, int itemLev
 	mClient->SendServerMessage(bitstream);
 }
 
-void ItemContainer::SendGoldChange(int playerId, int newGold)
+void HudItemContainer::SendGoldChange(int playerId, int newGold)
 {
 	// Send to server.
 	RakNet::BitStream bitstream;
@@ -169,33 +168,33 @@ void ItemContainer::SendGoldChange(int playerId, int newGold)
 	GetClient()->SendServerMessage(bitstream);
 }
 
-void ItemContainer::SetItemLoader(ItemLoaderXML* pLoader)
+void HudItemContainer::SetItemLoader(ItemLoaderXML* pLoader)
 {
 	mItemLoaderXML = pLoader;
 }
 
-void ItemContainer::SetPosition(float x, float y)
+void HudItemContainer::SetPosition(float x, float y)
 {
 	mPosition = XMFLOAT2(x, y);
 	PerformLayout();
 }
 
-ItemLoaderXML* ItemContainer::GetItemLoader()
+ItemLoaderXML* HudItemContainer::GetItemLoader()
 {
 	return mItemLoaderXML;
 }
 
-void ItemContainer::SetClient(Client* pClient)
+void HudItemContainer::SetClient(Client* pClient)
 {
 	mClient = pClient;
 }
 
-Client*	ItemContainer::GetClient()
+Client*	HudItemContainer::GetClient()
 {
 	return mClient;
 }
 
-ItemSlot* ItemContainer::GetItemSlot(ItemName name)
+ItemSlot* HudItemContainer::GetItemSlot(ItemName name)
 {
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
@@ -206,17 +205,17 @@ ItemSlot* ItemContainer::GetItemSlot(ItemName name)
 	return nullptr;
 }
 
-XMFLOAT2 ItemContainer::GetPosition()
+XMFLOAT2 HudItemContainer::GetPosition()
 {
 	return mPosition;
 }
 
-int	ItemContainer::GetHeightInSlots()
+int	HudItemContainer::GetHeightInSlots()
 {
 	return mItemSlots.size() / mNumColums;
 }
 
-void ItemContainer::OnResolutionChange()
+void HudItemContainer::OnResolutionChange()
 {
 	// GetHeightInSlots()*1.2 is probably wrong, should use some kind of spacing instead.
 	UiCoordinate coord(UiAlignmentX::LEFT, BOTTOM, GetPosition().x, GetPosition().y, mSlotSize, mSlotSize*GetHeightInSlots()+GetHeightInSlots()*1.2, false, false);
@@ -224,7 +223,7 @@ void ItemContainer::OnResolutionChange()
 	PerformLayout();
 }
 
-vector<ItemSlot> ItemContainer::GetItemSlots()
+vector<ItemSlot> HudItemContainer::GetItemSlots()
 {
 	return mItemSlots;
 }

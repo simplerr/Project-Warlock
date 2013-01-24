@@ -13,7 +13,7 @@
 #include "PlayerModule.h"
 
 SkillInventory::SkillInventory(int x, int y, int colums, float slotSize)
-	: ItemContainer(x, y, colums, slotSize)
+	: HudItemContainer(x, y, colums, slotSize)
 {
 	mPlayer = nullptr;
 	mShop = nullptr;
@@ -29,12 +29,12 @@ SkillInventory::~SkillInventory()
 
 void SkillInventory::Update(GLib::Input* pInput, float dt)
 {
-	ItemContainer::Update(pInput, dt);
+	HudItemContainer::Update(pInput, dt);
 }
 
 void SkillInventory::Draw(GLib::Graphics* pGraphics)
 {
-	ItemContainer::Draw(pGraphics);
+	HudItemContainer::Draw(pGraphics);
 
 	if(GetClient()->IsLocalPlayerSelected())
 		pGraphics->DrawScreenQuad(nullptr, 760, 770, 20, 20);
@@ -45,7 +45,7 @@ void SkillInventory::AddItem(ItemName name, int level)
 	AddItem(GetItemLoader()->GetItem(ItemKey(name, level)));
 }
 
-void SkillInventory::AddItem(BaseItem* pItem)
+void SkillInventory::AddItem(HudItem* pItem)
 {
 	// Any free slots?
 	if(!HasFreeSlots())
@@ -66,7 +66,7 @@ void SkillInventory::AddItem(BaseItem* pItem)
 	UpdateItems();
 }
 
-void SkillInventory::RemoveSkill(BaseItem* pItem)
+void SkillInventory::RemoveSkill(HudItem* pItem)
 {
 	// Sell item.
 	mPlayer->RemoveSkill(pItem->GetName());
@@ -83,7 +83,7 @@ void SkillInventory::RemoveSkill(BaseItem* pItem)
 
 void SkillInventory::UpdateItems()
 {
-	// Get the players items.
+	// Get the players skills.
 	std::map<int, Skill*> skillMap = mPlayer->GetSkillMap();
 
 	FreeAllSlots();
@@ -117,7 +117,7 @@ void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 	SendGoldChange(player->GetId(), player->GetGold());
 }
 
-string SkillInventory::GetHooverText(BaseItem* pItem)
+string SkillInventory::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
 	sprintf(buffer, "Sell value: %i gold\nLevel: %i", pItem->GetCost() - 3, pItem->GetLevel());	// [NOTE][TODO] Maybe enough?

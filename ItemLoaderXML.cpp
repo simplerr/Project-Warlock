@@ -29,8 +29,10 @@ ItemLoaderXML::ItemLoaderXML(string filename)
 	mStringKeyMap["REGEN_CAP"] = REGEN_CAP;
 	mStringKeyMap["FIREBALL"] = SKILL_FIREBALL;
 	mStringKeyMap["FROSTNOVA"] = SKILL_FROSTNOVA;
+	mStringKeyMap["TELEPORT"] = SKILL_TELEPORT;	
 	mStringKeyMap["FREEZE_EFFECT"] = FREEZE_STATUS;	
-
+	mStringKeyMap["TELEPORT_EFFECT"] = TELEPORT_STATUS;
+	
 	// Load all models from the XML file.
 	TiXmlDocument doc(filename.c_str());
 	doc.LoadFile();

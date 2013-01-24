@@ -32,9 +32,9 @@ public:
 	void Update(float dt);
 	void Draw(GLib::Graphics* pGraphics);
 	
-	void AddItem(BaseItem* pItem);
+	void AddItem(HudItem* pItem);
 	void AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
-	void RemoveItem(BaseItem* pItem);
+	void RemoveItem(HudItem* pItem);
 	void RemoveItem(ItemLoaderXML* pItemLoader, ItemKey itemKey);
 	void RemoveStatusEffects();
 
@@ -71,17 +71,17 @@ public:
 	void AddStatusEffect(StatusEffect* pStatusEffect);
 
 	template <class T>
-	void AddOnStatusEffectAdded(void(T::*_callback)(StatusEffectType), T* _object)	{
+	void AddOnStatusEffectAdded(void(T::*_callback)(ItemName), T* _object)	{
 		OnStatusEffectAdded = boost::bind(_callback, _object, _1);
 	}
 
 	template <class T>
-	void AddOnStatusEffectRemoved(void(T::*_callback)(StatusEffectType), T* _object)	{
+	void AddOnStatusEffectRemoved(void(T::*_callback)(ItemName), T* _object)	{
 		OnStatusEffectRemoved = boost::bind(_callback, _object, _1);
 	}
 
-	boost::function<void(StatusEffectType)> OnStatusEffectAdded;
-	boost::function<void(StatusEffectType)> OnStatusEffectRemoved;
+	boost::function<void(ItemName)> OnStatusEffectAdded;
+	boost::function<void(ItemName)> OnStatusEffectRemoved;
 private:
 	RakNet::SystemAddress mSystemAdress;
 	multiset<ItemKey>	  mItemList;

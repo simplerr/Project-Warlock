@@ -32,7 +32,8 @@ Player::~Player()
 
 void Player::Init()
 {
-
+	SetMovementSpeed(0.025f);
+	SetHealth(100.0f);
 }
 
 void Player::Update(float dt)
@@ -69,7 +70,7 @@ void Player::Draw(GLib::Graphics* pGraphics)
 					OnStatusEffectRemoved((*iter)->GetType());
 
 				(*iter)->Remove();
-				delete (*iter);
+				//delete (*iter);	// [NOTE][HACK] Memory leak!!
 				iter = mStatusEffects.erase(iter);
 			}
 		}
@@ -91,7 +92,7 @@ void Player::AddItem(ItemLoaderXML* pItemLoader, ItemKey itemKey)
 	AddItem(pItemLoader->GetItem(itemKey));
 }
 
-void Player::AddItem(BaseItem* pItem)
+void Player::AddItem(HudItem* pItem)
 {
 	mItemList.insert(ItemKey(pItem->GetName(), pItem->GetLevel()));
 
@@ -105,7 +106,7 @@ void Player::AddItem(BaseItem* pItem)
 	SetMovementSpeed(GetMovementSpeed() + attributes.movementSpeed);
 }
 
-void Player::RemoveItem(BaseItem* pItem)
+void Player::RemoveItem(HudItem* pItem)
 {
 	ItemKey key = ItemKey(pItem->GetName(), pItem->GetLevel());
 	auto iter = mItemList.find(key);
@@ -138,6 +139,12 @@ multiset<ItemKey> Player::GetItemList()
 
 void Player::AddStatusEffect(StatusEffect* pStatusEffect)
 {
+	// Status effects can't stack!
+	for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
+		if((*iter)->GetType() == pStatusEffect->GetType())
+			return;
+	}
+
 	if(!OnStatusEffectAdded.empty())
 		OnStatusEffectAdded(pStatusEffect->GetType());
 
@@ -275,7 +282,7 @@ void Player::RemoveStatusEffects()
 			OnStatusEffectRemoved((*iter)->GetType());
 
 		(*iter)->Remove();
-		delete (*iter);
+		//delete (*iter); // [NOTE][HACK] Memory leak!!
 		iter = mStatusEffects.erase(iter);
 	}
 }

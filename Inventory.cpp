@@ -10,7 +10,7 @@
 #include "Shop.h"
 
 Inventory::Inventory(int x, int y, int colums, float slotSize)
-	: ItemContainer(x, y, colums, slotSize)
+	: HudItemContainer(x, y, colums, slotSize)
 {
 	mPlayer = nullptr;
 	mShop = nullptr;
@@ -27,12 +27,12 @@ Inventory::~Inventory()
 
 void Inventory::Update(GLib::Input* pInput, float dt)
 {
-	ItemContainer::Update(pInput, dt);
+	HudItemContainer::Update(pInput, dt);
 }
 
 void Inventory::Draw(GLib::Graphics* pGraphics)
 {
-	ItemContainer::Draw(pGraphics);
+	HudItemContainer::Draw(pGraphics);
 }
 
 void Inventory::AddItem(ItemName name, int level)
@@ -40,7 +40,7 @@ void Inventory::AddItem(ItemName name, int level)
 	AddItem(GetItemLoader()->GetItem(ItemKey(name, level)));
 }
 
-void Inventory::AddItem(BaseItem* pItem)
+void Inventory::AddItem(HudItem* pItem)
 {
 	// Any free slots?
 	if(!HasFreeSlots())
@@ -60,7 +60,7 @@ void Inventory::AddItem(BaseItem* pItem)
 	UpdateItems();
 }
 
-void Inventory::RemoveItem(BaseItem* pItem)
+void Inventory::RemoveItem(HudItem* pItem)
 {
 	// Remove item from player.
 	mPlayer->RemoveItem(pItem);
@@ -113,7 +113,7 @@ void Inventory::OnRightPress(ItemSlot& itemSlot)
 	SendGoldChange(player->GetId(), player->GetGold());
 }
 
-string Inventory::GetHooverText(BaseItem* pItem)
+string Inventory::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
 	sprintf(buffer, "Sell value: %i gold\nLevel: %i", pItem->GetCost() - 3, pItem->GetLevel());

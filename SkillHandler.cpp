@@ -1,6 +1,11 @@
 #include "SkillHandler.h"
 #include "Input.h"
 #include "Skills.h"
+#include "RakPeerInterface.h"
+#include "BitStream.h"
+#include "NetworkMessages.h"
+#include "Client.h"
+#include "Player.h"
 
 SkillHandler::SkillHandler()
 {
@@ -21,20 +26,25 @@ void SkillHandler::Update(float dt)
 
 void SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 start, XMFLOAT3 end)
 {
-	if(pInput->KeyPressed('Q') && mSkillMap.find('Q') != mSkillMap.end()) 
-		mActiveSkill = 'Q';
-	else if(pInput->KeyPressed('W') && mSkillMap.find('W') != mSkillMap.end()) 
-		mActiveSkill = 'W';
-
-	// LBUTTON pressed, skill selected and inside the terrain.
-	if(pInput->KeyPressed(VK_LBUTTON) && mActiveSkill != -1 && end.x != numeric_limits<float>::infinity())
-	{
-		// Use the skill.
-		if(mSkillMap.find(mActiveSkill) != mSkillMap.end() && mSkillMap[mActiveSkill]->IsReady())
+	for(auto iter = mSkillMap.begin(); iter != mSkillMap.end(); iter++) {
+		Skill* skill = (*iter).second;
+		char key = (*iter).first;
+		if(pInput->KeyPressed(key) && skill->IsReady())
 		{
-			mSkillMap[mActiveSkill]->Cast(pClient, start, end);
-			mSkillMap[mActiveSkill]->ResetCooldown();
-			mActiveSkill = -1;
+			// Send a skill casted event to the server.
+			RakNet::BitStream bitstream;
+
+			bitstream.Write((unsigned char)NMSG_SKILL_CAST);
+			bitstream.Write((unsigned char)skill->GetName());
+			bitstream.Write(pClient->GetLocalPlayer()->GetId());
+			bitstream.Write(skill->GetName());
+			bitstream.Write(skill->GetLevel());
+			bitstream.Write(start);
+			bitstream.Write(end);
+
+			pClient->SendServerMessage(bitstream);
+
+			skill->ResetCooldown();
 		}
 	}
 }
@@ -46,18 +56,27 @@ bool SkillHandler::IsCastingSkill()
 
 Skill* SkillHandler::AddSkill(ItemName skillName)
 {
-	if(skillName == SKILL_FIREBALL)
-	{
-		mSkillMap['Q'] = new FireBall("textures/icons/fireball.png");
-		return mSkillMap['Q'];
-	}
-	else if(skillName == SKILL_FROSTNOVA)
-	{
-		mSkillMap['W'] = new FrostNova("textures/icons/frost_nova.png");
-		return mSkillMap['W'];
-	}
+	Skill* skill = 0;
+	char key;
 
-	return nullptr;
+	// Create the specific skill at the right key.
+	if(skillName == SKILL_FIREBALL) {
+		skill = new FireBall("textures/icons/fireball.png");
+		key = 'Q';
+	}
+	else if(skillName == SKILL_FROSTNOVA) {
+		skill = new FrostNova("textures/icons/frost_nova.png");
+		key = 'W';
+	}
+	else if(skillName == SKILL_TELEPORT) {
+		skill = new Teleport("textures/icons/leap.png");
+		key = 'E';
+	}
+	else
+		return nullptr;
+
+	mSkillMap[key] = skill;
+	return skill;
 }
 
 void SkillHandler::RemoveSkill(ItemName name)

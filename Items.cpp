@@ -4,7 +4,7 @@
 // BaseItem
 //
 
-BaseItem::BaseItem(string iconName) 
+HudItem::HudItem(string iconName) 
 {
 	SetCost(4);
 	SetSkill(false);
@@ -12,72 +12,72 @@ BaseItem::BaseItem(string iconName)
 	mIconTexture = GLib::GetGraphics()->LoadTexture(iconName);
 }
 
-BaseItem::~BaseItem() 
+HudItem::~HudItem() 
 {
 
 }
 
-GLib::Texture2D* BaseItem::GetIconTexture() 
+GLib::Texture2D* HudItem::GetIconTexture() 
 {
 	return mIconTexture;
 }
 
-void BaseItem::SetCost(int cost) 
+void HudItem::SetCost(int cost) 
 {
 	mCost = cost;
 }
 
-int BaseItem::GetCost() 
+int HudItem::GetCost() 
 {
 	return mCost;
 }
 
-void BaseItem::SetSkill(bool skill)
+void HudItem::SetSkill(bool skill)
 {
 	mSkill = skill;
 }
 
-void BaseItem::SetAttributes(Attributes attributes)
+void HudItem::SetAttributes(Attributes attributes)
 {
 	mAttributes = attributes;
 }
 
-bool BaseItem::IsSkill()
+bool HudItem::IsSkill()
 {
 	return mSkill;
 }
 
-void BaseItem::SetName(ItemName name)
+void HudItem::SetName(ItemName name)
 {
 	mName = name;
 }
 
-void BaseItem::SetDescription(string description)
+void HudItem::SetDescription(string description)
 {
 	mDescription = description;
 }
 
-Attributes	BaseItem::GetAttributes()
+Attributes	HudItem::GetAttributes()
 {
 	return mAttributes;
 }
 
-string BaseItem::GetDescription()
+string HudItem::GetDescription()
 {
 	return mDescription;
 }
 
-ItemName BaseItem::GetName()
+ItemName HudItem::GetName()
 {
 	return mName;
 }
 
-void BaseItem::SetLevel(int level)
+void HudItem::SetLevel(int level)
 {
 	mLevel = level;
 }
 
-int BaseItem::GetLevel()
+int HudItem::GetLevel()
 {
 	return mLevel;
 }
@@ -87,7 +87,7 @@ int BaseItem::GetLevel()
 //
 
 Item::Item(string iconName) 
-	: BaseItem(iconName)
+	: HudItem(iconName)
 {
 	
 }

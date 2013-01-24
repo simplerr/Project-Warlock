@@ -4,6 +4,8 @@
 #include "FireProjectile.h"
 #include "Skills.h"
 #include "FrostProjectile.h"
+#include "Player.h"
+#include "TeleportEffect.h"
 
 ClientSkillInterpreter::ClientSkillInterpreter()
 {
@@ -24,7 +26,6 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 	ItemName skillType;
 
 	bitstream.Read(owner);
-	bitstream.Read(projectileId);
 	bitstream.Read(skillType);
 	bitstream.Read(skillLevel);
 	bitstream.Read(start);
@@ -37,12 +38,24 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 		projectile = new FireProjectile(owner, start, dir);
 	else if(id == NMSG_ADD_FROSTNOVA)
 		projectile = new FrostProjectile(owner, start);
+	else if(id == SKILL_TELEPORT) 
+	{
+		Player* player = ((Player*)world->GetObjectById(owner));
+		player->ClearTargetQueue();
 
-	projectile->SetSkillLevel(skillLevel);
-	projectile->SetSkillLevel(skillType);
-	projectile->SetOriginObject(world->GetObjectById(owner));
-	world->AddObject(projectile);
+		// Add a teleport status effect (just for visuals).
+		player->AddStatusEffect(new TeleportEffect());
+	}
 
-	// Use the servers Id!
-	projectile->SetId(projectileId);
+	if(id == NMSG_ADD_FIREBALL || id == NMSG_ADD_FROSTNOVA) 
+	{
+		bitstream.Read(projectileId);
+		projectile->SetSkillLevel(skillLevel);
+		projectile->SetSkillLevel(skillType);
+		projectile->SetOriginObject(world->GetObjectById(owner));
+		world->AddObject(projectile);
+
+		// Use the servers Id!
+		projectile->SetId(projectileId);
+	}
 }

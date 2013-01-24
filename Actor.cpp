@@ -5,10 +5,10 @@
 Actor::Actor(GLib::ModelImporter* pImporter, string filename)
 	: AnimatedObject(pImporter, filename)
 {
-	SetMovementSpeed(0.05f);
 	SetSelected(false);
 	SetVelocity(XMFLOAT3(0, 0, 0));
 	SetFriction(0.99f);
+	Init();
 }
 
 Actor::~Actor()

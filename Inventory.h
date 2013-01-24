@@ -1,6 +1,6 @@
 #pragma once
 #include "Items.h"
-#include "ItemContainer.h"
+#include "HudItemContainer.h"
 #include "ItemLoaderXML.h"
 #include "d3dUtil.h"
 #include <vector>
@@ -17,7 +17,7 @@ class Player;
 class Client;
 class Shop;
 
-class Inventory : public ItemContainer
+class Inventory : public HudItemContainer
 {
 public:
 	Inventory(int x, int y, int colums, float slotSize);
@@ -27,14 +27,14 @@ public:
 	void Draw(GLib::Graphics* pGraphics);
 
 	void AddItem(ItemName name, int level);
-	void AddItem(BaseItem* pItem);
-	void RemoveItem(BaseItem* pItem);
+	void AddItem(HudItem* pItem);
+	void RemoveItem(HudItem* pItem);
 	void UpdateItems();
 
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(ItemSlot& itemSlot);
-	string GetHooverText(BaseItem* pItem);
+	string GetHooverText(HudItem* pItem);
 
 	void SetPlayer(Player* pPlayer);
 	void SetShop(Shop* pShop);

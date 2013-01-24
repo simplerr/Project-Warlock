@@ -24,7 +24,7 @@ class StatusArea;
 /*
 	--Item and Skill system breakdown--
 
-	- Skill inherits from BaseItem
+	- Skill inherits from HudItem
 	- ItemLoadeXML has a map of all Items, the skills are stored as Items in it as well
 	- When an item is added to the skill inventory a Skill* is returned from Player::AddSkill() and used instead 
 	  of the passed BaseItem*
@@ -51,8 +51,8 @@ public:
 	void SetStatusText(string text, float time, float size = 30, UINT32 color = GLib::ColorRGBA(0, 0, 0, 255));
 	void OnMessageSent(string message);
 
-	void OnStatusEffectAdded(StatusEffectType type);
-	void OnStatusEffectRemoved(StatusEffectType type);
+	void OnStatusEffectAdded(ItemName type);
+	void OnStatusEffectRemoved(ItemName type);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "ItemContainer.h"
+#include "HudItemContainer.h"
 #include "Skills.h"
 
 namespace GLib {
@@ -12,7 +12,7 @@ class Player;
 class PlayerModule;
 class Shop;
 
-class SkillInventory : public ItemContainer
+class SkillInventory : public HudItemContainer
 {
 public:
 	SkillInventory(int x, int y, int colums, float slotSize);
@@ -22,14 +22,14 @@ public:
 	void Draw(GLib::Graphics* pGraphics);
 
 	void AddItem(ItemName name, int level);
-	void AddItem(BaseItem* pItem);
-	void RemoveSkill(BaseItem* pItem);
+	void AddItem(HudItem* pItem);
+	void RemoveSkill(HudItem* pItem);
 	void UpdateItems();
 
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(ItemSlot& itemSlot);
-	string GetHooverText(BaseItem* pItem);
+	string GetHooverText(HudItem* pItem);
 
 	void SetPlayer(PlayerModule* pPlayer);
 	void SetShop(Shop* pShop);

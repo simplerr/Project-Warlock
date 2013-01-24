@@ -1,7 +1,7 @@
 #include "StatusArea.h"
 
 StatusArea::StatusArea(float x, float y)
-	: ItemContainer(x, y, 5, 42)
+	: HudItemContainer(x, y, 5, 42)
 {
 	for(int i = 0; i < 6; i++)
 		AddSlot();
@@ -27,12 +27,12 @@ void StatusArea::OnRightPress(ItemSlot& itemSlot)
 
 }
 
-string StatusArea::GetHooverText(BaseItem* pItem)
+string StatusArea::GetHooverText(HudItem* pItem)
 {
 	return "Test string lolololo";
 }
 
-void StatusArea::AddItem(BaseItem* pItem)
+void StatusArea::AddItem(HudItem* pItem)
 {
 	PlaceInFreeSlot(pItem);
 }

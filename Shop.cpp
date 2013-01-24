@@ -7,7 +7,7 @@
 #include "BitStream.h"
 
 Shop::Shop(int x, int y, int colums, float slotSize)
-	: ItemContainer(x, y, colums, slotSize)
+	: HudItemContainer(x, y, colums, slotSize)
 {
 	SetInspectingInventory(nullptr);
 
@@ -23,13 +23,13 @@ Shop::~Shop()
 void Shop::Update(GLib::Input* pInput, float dt)
 {
 	if(GetClient()->GetArenaState() == SHOPPING_STATE)
-		ItemContainer::Update(pInput, dt);
+		HudItemContainer::Update(pInput, dt);
 }
 
 void Shop::Draw(GLib::Graphics* pGraphics)
 {
 	if(GetClient()->GetArenaState() == SHOPPING_STATE)
-		ItemContainer::Draw(pGraphics);
+		HudItemContainer::Draw(pGraphics);
 
 	if(GetClient()->IsLocalPlayerSelected())
 		pGraphics->DrawScreenQuad(nullptr, 700, 770, 20, 20);
@@ -78,14 +78,14 @@ void Shop::OnRightPress(ItemSlot& itemSlot)
 	}
 }
 
-string Shop::GetHooverText(BaseItem* pItem)
+string Shop::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
 	sprintf(buffer, "Cost: %i gold\nLevel: %i", pItem->GetCost(), pItem->GetLevel());
 	return string(buffer + pItem->GetDescription());
 }
 
-void Shop::SetInspectingInventory(ItemContainer* pIventory)
+void Shop::SetInspectingInventory(HudItemContainer* pIventory)
 {
 	mInspectingInventory = pIventory;
 }
@@ -96,7 +96,7 @@ void Shop::SetClientsPlayerI(int id)
 }
 
 // Called from Inventory when a player sells an item.
-void Shop::InventoryItemRemoved(BaseItem* pItem)
+void Shop::InventoryItemRemoved(HudItem* pItem)
 {
 	ItemSlot* slot = GetItemSlot(pItem->GetName());
 

@@ -19,27 +19,27 @@ struct ItemSlot
 		taken = false;
 	}
 
-	BaseItem*	item;
+	HudItem*	item;
 	XMFLOAT2	position;
 	bool		taken;
 };
 
-class ItemContainer
+class HudItemContainer
 {
 public:
-	ItemContainer(int x, int y, int colums, float slotSize);
-	~ItemContainer();
+	HudItemContainer(int x, int y, int colums, float slotSize);
+	~HudItemContainer();
 
 	virtual void Update(GLib::Input* pInput, float dt);
 	virtual void Draw(GLib::Graphics* pGraphics);
 	virtual void OnHoover(const ItemSlot& itemSlot) = 0;
 	virtual void OnLeftPress(const ItemSlot& itemSlot) = 0;
 	virtual void OnRightPress(ItemSlot& itemSlot) = 0;
-	virtual string GetHooverText(BaseItem* pItem) = 0;
-	virtual void AddItem(BaseItem* pItem) = 0;
+	virtual string GetHooverText(HudItem* pItem) = 0;
+	virtual void AddItem(HudItem* pItem) = 0;
 
 	void AddSlot();
-	void PlaceInFreeSlot(BaseItem* pItem);
+	void PlaceInFreeSlot(HudItem* pItem);
 	void PlaceInFreeSlot(ItemKey itemKey);
 	void FreeAllSlots();
 	void PerformLayout();

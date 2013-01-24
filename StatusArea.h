@@ -1,7 +1,7 @@
 #pragma once
-#include "ItemContainer.h"
+#include "HudItemContainer.h"
 
-class StatusArea : public ItemContainer
+class StatusArea : public HudItemContainer
 {
 public:
 	StatusArea(float x, float y);
@@ -10,8 +10,8 @@ public:
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(ItemSlot& itemSlot);
-	string GetHooverText(BaseItem* pItem);
-	void AddItem(BaseItem* pItem);
+	string GetHooverText(HudItem* pItem);
+	void AddItem(HudItem* pItem);
 
 	void RemoveStatusEffect(ItemKey itemKey);
 private:

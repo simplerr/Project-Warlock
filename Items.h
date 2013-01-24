@@ -24,11 +24,13 @@ enum ItemName
 	//
 	SKILL_FIREBALL,	// Fireball
 	SKILL_FROSTNOVA,
+	SKILL_TELEPORT,
 	
 	//
 	// Status Effects
 	//
-	FREEZE_STATUS
+	FREEZE_STATUS,
+	TELEPORT_STATUS
 };
 
 struct Attributes
@@ -47,11 +49,37 @@ struct Attributes
 	float cooldown;
 };
 
-class BaseItem
+/************************************************************************
+ This is the steps required for adding new items
+
+ 1.) Add a new node to items.xml
+ 2.) Add new item name to mStringKeyMap in ItemLoaderXML
+		mStringKeyMap["FREEZE_EFFECT"] = FREEZE_STATUS
+ 
+ And for skills you also have to do this
+
+ 3.) Add a new skill class connected with the skill name
+ 4.) Let SkillHandler::AddSkill(ItemName skillName) handle the new skill type
+		if(skillName == SKILL_FIREBALL) 
+		{
+			skill = new FireBall("textures/icons/fireball.png");
+			key = 'Q';
+		}
+ 5.) Let ServerSkillInterpreter::Interpret handle the new skill type as well
+ 6.) Let ClientSkillInterpreter::Interpret handle the new skill type as well
+ 7.) ???
+ 8.) Profit!
+
+/************************************************************************/
+
+/**
+	Base class for all items, skills and powerups
+*/
+class HudItem
 {
 public:
-	BaseItem(string iconName);
-	~BaseItem();
+	HudItem(string iconName);
+	~HudItem();
 
 	// Draw the icon.
 	virtual void DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size) = 0;
@@ -80,7 +108,7 @@ private:
 	bool	 mSkill;
 };
 
-class Item : public BaseItem
+class Item : public HudItem
 {
 public:
 	Item(string iconName);

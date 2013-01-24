@@ -3,8 +3,13 @@
 #include "Items.h"
 
 class Client;
+class Player;
 
-class Skill : public BaseItem
+namespace GLib {
+	class World;
+}
+
+class Skill : public HudItem
 {
 public:
 	Skill(string icon);
@@ -12,16 +17,19 @@ public:
 
 	void Update(float dt);
 	void DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size);
-	virtual void Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end) = 0;
+	virtual void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end) = 0;
 
 	void ResetCooldown();
 	void SetOwner(int owner);
+	void SetCastDelay(float delay);
+	float GetCastDelay();
 
 	int GetOwner();
 	bool IsReady();
 protected:
 	int			mOwner;
 	float		mCooldownCounter;
+	float		mCastDelay;
 };
 
 // Remake this, this isnt the actual skill....
@@ -31,7 +39,7 @@ public:
 	FireBall(string icon);
 	~FireBall();
 
-	void Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end);
+	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
 };
 
 class FrostNova : public Skill
@@ -40,6 +48,15 @@ public:
 	FrostNova(string icon);
 	~FrostNova();
 
-	void Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end);
+	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
 };
 
+class Teleport : public Skill
+{
+public:
+	Teleport(string icon);
+	Teleport();
+	~Teleport();
+
+	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
+};

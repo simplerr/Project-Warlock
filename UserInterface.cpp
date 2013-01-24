@@ -51,6 +51,7 @@ UserInterface::UserInterface(Client* pClient)
 	mSkillShop->SetInspectingInventory(mSkillInventory);
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_FIREBALL, 1));
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_FROSTNOVA, 1));
+	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_TELEPORT, 1));
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/ui_bkgd.png");
 
@@ -97,7 +98,7 @@ void UserInterface::HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bi
 	bitstream.Read(name);
 	bitstream.Read(level);
 	
-	BaseItem* item = mItemLoader->GetItem(ItemKey(name, level));
+	HudItem* item = mItemLoader->GetItem(ItemKey(name, level));
 
 	if(!item->IsSkill()) {
 		pPlayer->GetPlayer()->AddItem(mItemLoader, ItemKey(name, level));
@@ -121,7 +122,7 @@ void UserInterface::HandleItemRemoved(PlayerModule* pPlayer, RakNet::BitStream& 
 	bitstream.Read(name);
 	bitstream.Read(level);
 
-	BaseItem* item = mItemLoader->GetItem(ItemKey(name, level));
+	HudItem* item = mItemLoader->GetItem(ItemKey(name, level));
 
 	if(!item->IsSkill()) {
 		pPlayer->GetPlayer()->RemoveItem(item);
@@ -205,14 +206,12 @@ void UserInterface::UpdateChatPosition()
 	mChat->SetDimensions(10, GLib::GetClientHeight()-460, 300, 200);
 }
 
-void UserInterface::OnStatusEffectAdded(StatusEffectType type)
+void UserInterface::OnStatusEffectAdded(ItemName type)
 {
-	if(type == StatusEffectType::FREEZE_EFFECT)
-		mStatusArea->PlaceInFreeSlot(ItemKey(FREEZE_STATUS, 1));
+	mStatusArea->PlaceInFreeSlot(ItemKey(type, 1));
 }
 
-void UserInterface::OnStatusEffectRemoved(StatusEffectType type)
+void UserInterface::OnStatusEffectRemoved(ItemName type)
 {
-	if(type == StatusEffectType::FREEZE_EFFECT)
-		mStatusArea->RemoveStatusEffect(ItemKey(FREEZE_STATUS, 1));
+	mStatusArea->RemoveStatusEffect(ItemKey(type, 1));
 }

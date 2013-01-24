@@ -1,10 +1,10 @@
 #pragma once
-#include "ItemContainer.h"
+#include "HudItemContainer.h"
 
 class Inventory;
-class BaseItem;
+class HudItem;
 
-class Shop : public ItemContainer
+class Shop : public HudItemContainer
 {
 public:
 	Shop(int x, int y, int colums, float slotSize);
@@ -15,15 +15,15 @@ public:
 	void OnHoover(const ItemSlot& itemSlot);
 	void OnLeftPress(const ItemSlot& itemSlot);
 	void OnRightPress(ItemSlot& itemSlot);
-	string GetHooverText(BaseItem* pItem);
+	string GetHooverText(HudItem* pItem);
 
-	void SetInspectingInventory(ItemContainer* pIventory);
+	void SetInspectingInventory(HudItemContainer* pIventory);
 	void SetClientsPlayerI(int id);
 
-	void AddItem(BaseItem* pItem) {}
+	void AddItem(HudItem* pItem) {}
 
-	void InventoryItemRemoved(BaseItem* pItem);
+	void InventoryItemRemoved(HudItem* pItem);
 private:
-	ItemContainer* mInspectingInventory;
+	HudItemContainer* mInspectingInventory;
 	int			   mClientPlayerId;
 };

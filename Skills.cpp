@@ -11,9 +11,10 @@
 //
 
 Skill::Skill(string icon) 
-	: BaseItem(icon), mCooldownCounter(0.0f)
+	: HudItem(icon), mCooldownCounter(0.0f)
 {
 	SetName(SKILL_FIREBALL);
+	SetCastDelay(0.0f);
 }
 
 Skill::~Skill()
@@ -57,6 +58,16 @@ bool Skill::IsReady()
 	return (mCooldownCounter <= 0.0f);
 }
 
+void Skill::SetCastDelay(float delay)
+{
+	mCastDelay = delay;
+}
+
+float Skill::GetCastDelay()
+{
+	return mCastDelay;
+}
+
 //
 // Fireball
 //
@@ -71,20 +82,9 @@ FireBall::~FireBall()
 
 }
 
-void FireBall::Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end)
+void FireBall::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
 {
-	// Tell the server to add a fireball.
-	RakNet::BitStream bitstream;
-
-	bitstream.Write((unsigned char)NMSG_SKILL_CAST);
-	bitstream.Write((unsigned char)NMSG_ADD_FIREBALL);
-	bitstream.Write(pClient->GetLocalPlayer()->GetId());
-	bitstream.Write(GetName());
-	bitstream.Write(GetLevel());
-	bitstream.Write(start);
-	bitstream.Write(end);
-
-	pClient->SendServerMessage(bitstream);
+	
 }
 
 //
@@ -101,18 +101,44 @@ FrostNova::~FrostNova()
 
 }
 
-void FrostNova::Cast(Client* pClient, XMFLOAT3 start, XMFLOAT3 end)
+void FrostNova::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
 {
-	// Tell the server to add a fireball.
-	RakNet::BitStream bitstream;
+	
+}
 
-	bitstream.Write((unsigned char)NMSG_SKILL_CAST);
-	bitstream.Write((unsigned char)NMSG_ADD_FROSTNOVA);
-	bitstream.Write(pClient->GetLocalPlayer()->GetId());
-	bitstream.Write(GetName());
-	bitstream.Write(GetLevel());
-	bitstream.Write(start);
-	bitstream.Write(end);
+//
+// Teleport.
+//
 
-	pClient->SendServerMessage(bitstream);
+Teleport::Teleport(string icon) : Skill(icon)
+{
+	SetName(SKILL_TELEPORT);
+	SetCastDelay(0.5f);
+}
+
+Teleport::Teleport()
+	: Skill("#none")
+{
+
+}
+
+Teleport::~Teleport()
+{
+
+}
+
+void Teleport::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
+{
+	XMFLOAT3 diff = end - pCaster->GetPosition();
+	XMFLOAT3 dir;
+	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&diff)));
+	float dist = sqrt(diff.x * diff.x + diff.z * diff.z);
+	float range = 20.0f;
+
+	if(dist < range)
+		pCaster->SetPosition(end);
+	else
+		pCaster->SetPosition(start + dir * range);
+
+	pCaster->ClearTargetQueue();
 }
