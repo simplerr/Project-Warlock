@@ -35,9 +35,6 @@ void SkillInventory::Update(GLib::Input* pInput, float dt)
 void SkillInventory::Draw(GLib::Graphics* pGraphics)
 {
 	HudItemContainer::Draw(pGraphics);
-
-	if(GetClient()->IsLocalPlayerSelected())
-		pGraphics->DrawScreenQuad(nullptr, 760, 770, 20, 20);
 }
 
 void SkillInventory::AddItem(ItemName name, int level)

@@ -35,5 +35,6 @@ private:
 	static BrowsingState mBrowsingState;
 	Database*			 mDatabase;
 	ControlManager*		 mControlManager;
+	GLib::Texture2D*	 mBkgdTexture;
 	map<string, ServerData>  mServerMap;
 };

@@ -30,9 +30,6 @@ void Shop::Draw(GLib::Graphics* pGraphics)
 {
 	if(GetClient()->GetArenaState() == SHOPPING_STATE)
 		HudItemContainer::Draw(pGraphics);
-
-	if(GetClient()->IsLocalPlayerSelected())
-		pGraphics->DrawScreenQuad(nullptr, 700, 770, 20, 20);
 }
 
 void Shop::OnHoover(const ItemSlot& itemSlot)

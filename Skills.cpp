@@ -142,3 +142,40 @@ void Teleport::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOA
 
 	pCaster->ClearTargetQueue();
 }
+
+//
+// Meteor.
+//
+
+Meteor::Meteor(string icon) : Skill(icon)
+{
+	SetName(SKILL_METEOR);
+	SetCastDelay(0.5f);
+}
+
+Meteor::Meteor()
+	: Skill("#none")
+{
+
+}
+
+Meteor::~Meteor()
+{
+
+}
+
+void Meteor::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
+{
+	XMFLOAT3 diff = end - pCaster->GetPosition();
+	XMFLOAT3 dir;
+	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&diff)));
+	float dist = sqrt(diff.x * diff.x + diff.z * diff.z);
+	float range = 20.0f;
+
+	if(dist < range)
+		pCaster->SetPosition(end);
+	else
+		pCaster->SetPosition(start + dir * range);
+
+	pCaster->ClearTargetQueue();
+}

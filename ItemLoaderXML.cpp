@@ -51,6 +51,7 @@ void ItemLoaderXML::SetupKeyMap()
 	mStringKeyMap["FIREBALL"] = SKILL_FIREBALL;
 	mStringKeyMap["FROSTNOVA"] = SKILL_FROSTNOVA;
 	mStringKeyMap["TELEPORT"] = SKILL_TELEPORT;	
+	mStringKeyMap["METEOR"] = SKILL_METEOR;
 	mStringKeyMap["FREEZE_EFFECT"] = FREEZE_STATUS;	
 	mStringKeyMap["TELEPORT_EFFECT"] = TELEPORT_STATUS;
 }

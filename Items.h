@@ -25,6 +25,7 @@ enum ItemName
 	SKILL_FIREBALL,	// Fireball
 	SKILL_FROSTNOVA,
 	SKILL_TELEPORT,
+	SKILL_METEOR,
 	
 	//
 	// Status Effects
@@ -53,7 +54,7 @@ struct Attributes
  This is the steps required for adding new items
 
  1.) Add a new node to items.xml
- 2.) Add new item name to mStringKeyMap in ItemLoaderXML
+ 2.) Add new item name to ItemLoaderXML::SetupKeyMap()
 		mStringKeyMap["FREEZE_EFFECT"] = FREEZE_STATUS
  
  And for skills you also have to do this

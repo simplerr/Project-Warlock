@@ -62,8 +62,6 @@ void HudItemContainer::Draw(GLib::Graphics* pGraphics)
 			//pGraphics->DrawScreenQuad(mEmptySlotTexture, coord.x, coord.y, coord.width, coord.height);
 		}
 	}
-
-	pGraphics->DrawScreenQuad(mEmptySlotTexture, mPosition.x, mPosition.y, 20, 20);
 }
 
 void HudItemContainer::AddSlot()

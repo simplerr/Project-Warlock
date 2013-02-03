@@ -26,10 +26,11 @@ public:
 	ItemLoaderXML(string filename);
 	~ItemLoaderXML();
 
+	void SetupKeyMap();
 	void LoadItems(TiXmlElement* pRoot);
 	void LoadSkills(TiXmlElement* pRoot);
 	void LoadStatusEffects(TiXmlElement* pRoot);
-	void SetupKeyMap();
+	
 	Item* GetItem(ItemKey key);
 	ItemName StringToName(string name);
 private:

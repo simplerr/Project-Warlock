@@ -72,6 +72,10 @@ Skill* SkillHandler::AddSkill(ItemName skillName)
 		skill = new Teleport("textures/icons/leap.png");
 		key = 'E';
 	}
+	else if(skillName == SKILL_METEOR) {
+		skill = new Meteor("textures/icons/meteor.png");
+		key = 'R';
+	}
 	else
 		return nullptr;
 

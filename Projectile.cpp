@@ -73,3 +73,13 @@ int Projectile::GetSkillLevel()
 {
 	return mSkillLevel;
 }
+
+void Projectile::SetSpeed(float speed)
+{
+	mSpeed = speed;
+}
+
+void Projectile::SetMaxDistance(float distance)
+{
+	mMaxDistance = distance;
+}

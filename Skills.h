@@ -60,3 +60,13 @@ public:
 
 	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
 };
+
+class Meteor : public Skill
+{
+public:
+	Meteor(string icon);
+	Meteor();
+	~Meteor();
+
+	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
+};

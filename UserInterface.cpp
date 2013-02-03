@@ -20,7 +20,7 @@ UserInterface::UserInterface(Client* pClient)
 {
 	mItemLoader = new ItemLoaderXML("items.xml");
 
-	mStatusArea = new StatusArea(750, 150);
+	mStatusArea = new StatusArea(70, 70);
 	mStatusArea->SetItemLoader(mItemLoader);
 
 	mChat = new Chat(20, 740, 300, 200);
@@ -52,8 +52,9 @@ UserInterface::UserInterface(Client* pClient)
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_FIREBALL, 1));
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_FROSTNOVA, 1));
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_TELEPORT, 1));
+	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_METEOR, 1));
 
-	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/ui_bkgd.png");
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/inventory_bkgd.png");
 
 	mStatusText = new GLib::StatusText("nothing", 400, 200, 6);
 
@@ -81,8 +82,10 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 
 void UserInterface::Draw(GLib::Graphics* pGraphics)
 {
+	// Background.
 	UiCoordinate coords(UiAlignmentX::CENTER, BOTTOM, 800, 800, 1600, 200, false, true);
 	pGraphics->DrawScreenQuad(mBkgdTexture, coords.x, coords.y, coords.width, coords.height);
+
 	mInventory->Draw(pGraphics);
 	mSkillInventory->Draw(pGraphics);
 	mShop->Draw(pGraphics);

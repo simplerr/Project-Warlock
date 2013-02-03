@@ -26,6 +26,8 @@ public:
 	void SetSkillType(ItemName type);
 	void SetSkillLevel(int level);
 	void SetPosition(XMFLOAT3 position);
+	void SetSpeed(float speed);
+	void SetMaxDistance(float distance);
 
 	int		 GetOwner();
 	XMFLOAT3 GetDirection();

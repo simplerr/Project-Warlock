@@ -94,13 +94,13 @@ void Game::Draw(GLib::Graphics* pGraphics)
 {
 	// Clear the render target and depth/stencil.
 	pGraphics->ClearScene();
-	pGraphics->DrawBillboards();
 
 	mCurrentState->Draw(pGraphics);
+	pGraphics->DrawBillboards();
 
 	char buffer[244];
 	sprintf(buffer, "x: %f\ny: %f\nFPS:%f", mx, my, GetCurrentFps());
-	pGraphics->DrawText(buffer, 10, 10, 20);
+	pGraphics->DrawText(buffer, 1600, 10, 20);
 
 	// Present the backbuffer.
 	pGraphics->Present();

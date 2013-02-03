@@ -6,6 +6,7 @@
 #include "FrostProjectile.h"
 #include "Player.h"
 #include "TeleportEffect.h"
+#include "MeteorProjectile.h"
 
 ClientSkillInterpreter::ClientSkillInterpreter()
 {
@@ -34,10 +35,12 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&start) - XMLoadFloat3(&start)));
 
 	Projectile* projectile = nullptr;
-	if(id == NMSG_ADD_FIREBALL)
+	if(id == SKILL_FIREBALL)
 		projectile = new FireProjectile(owner, start, dir);
-	else if(id == NMSG_ADD_FROSTNOVA)
+	else if(id == SKILL_FROSTNOVA)
 		projectile = new FrostProjectile(owner, start);
+	else if(id == SKILL_METEOR)
+		projectile = new MeteorProjectile(owner, end);
 	else if(id == SKILL_TELEPORT) 
 	{
 		Player* player = ((Player*)world->GetObjectById(owner));
@@ -47,7 +50,7 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 		player->AddStatusEffect(new TeleportEffect());
 	}
 
-	if(id == NMSG_ADD_FIREBALL || id == NMSG_ADD_FROSTNOVA) 
+	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR) 
 	{
 		bitstream.Read(projectileId);
 		projectile->SetSkillLevel(skillLevel);

@@ -20,6 +20,8 @@ void BrowsingState::Init(Game* pGame)
 	mControlManager = new ControlManager("ui_layout.lua");
 
 	BuildUi();
+
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
 }
 
 void BrowsingState::Cleanup(void)
@@ -49,6 +51,7 @@ void BrowsingState::Update(GLib::Input* pInput, double dt)
 
 void BrowsingState::Draw(GLib::Graphics* pGraphics)
 {
+	pGraphics->DrawScreenQuad(mBkgdTexture, GLib::GetClientWidth()/2, GLib::GetClientHeight()/2, GLib::GetClientWidth(), GLib::GetClientHeight());
 	mControlManager->Draw(pGraphics);
 }
 

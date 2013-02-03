@@ -38,5 +38,7 @@ private:
 	Client*			mClient;
 	ServerData		mServerData;
 	Database*		mDatabase;
+	GLib::Texture2D* mBkgdTexture;
+	GLib::Texture2D* mPlayerListBkgd;
 	bool			mIsHost;
 };

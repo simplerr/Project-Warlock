@@ -23,6 +23,9 @@ void LobbyState::Init(Game* pGame)
 
 	mControlManager = new ControlManager("ui_layout.lua");
 	mClient = new Client();
+
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
+	mPlayerListBkgd = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
 }
 
 void LobbyState::Cleanup(void)
@@ -54,6 +57,9 @@ void LobbyState::Update(GLib::Input* pInput, double dt)
 
 void LobbyState::Draw(GLib::Graphics* pGraphics)
 {
+	pGraphics->DrawScreenQuad(mBkgdTexture, GLib::GetClientWidth()/2, GLib::GetClientHeight()/2, GLib::GetClientWidth(), GLib::GetClientHeight());
+	pGraphics->DrawScreenQuad(mPlayerListBkgd, GLib::GetClientWidth()/2, 300, 300, 400);
+
 	if(mClient->GetName() == mServerData.host)
 		pGraphics->DrawText("HOST!", 100, 100, 20, GLib::ColorRGBA(255, 0, 0, 255));
 
@@ -61,7 +67,7 @@ void LobbyState::Draw(GLib::Graphics* pGraphics)
 
 	for(int i = 0; i < playerList.size(); i++) {
 		GLib::Rect textSize = pGraphics->MeasureText(playerList[i]->GetName(), 40, "Arial");
-		pGraphics->DrawText(playerList[i]->GetName(), GLib::GetClientWidth()/2-textSize.right/2, 100 + i*30, 40);
+		pGraphics->DrawText(playerList[i]->GetName(), GLib::GetClientWidth()/2-textSize.right/2, 100 + i*40, 40);
 	}
 
 	mControlManager->Draw(pGraphics);

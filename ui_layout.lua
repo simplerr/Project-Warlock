@@ -14,13 +14,14 @@ TextMenu = {
 }
 
 ServerMenu = {
-	menu_bkgd = "textures/black_transparent.png";
+	menu_bkgd = "textures/white_transparent.png";
 	item_bkgd = "textures/menu_item_bkgd.png";
 	font_family = "Consolas";
-	font_color = "255 0 50 255";
-	draw_bkgd = 0;
+	font_color = "0 0 0 255";
+	draw_bkgd = 1;
+	draw_item_bkgd = 0;
 	centered_items = 0;
-	bkgd_scale = 1.0;
+	bkgd_scale = 1.1;
 	item_bkgd_scale = 1.0;
 	pos_x = 800;
 	pos_y = 200;
@@ -35,7 +36,7 @@ StateHeader = {
 	pos_y = 50;
 	font_size = 60;
 	font_family = "Arial";
-	font_color = "255 255 50 255";
+	font_color = "0 0 0 255";
 }
 
 -- Buttons
