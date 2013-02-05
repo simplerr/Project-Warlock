@@ -19,6 +19,8 @@
 #include "GameState.h"
 #include "BrowsingState.h"
 #include "D3DCore.h"
+#include "MainMenuState.h"
+#include "OptionsState.h"
 
 using namespace GLib;
 
@@ -72,7 +74,7 @@ void Game::Init()
 	// Set the fog color.
 	GetGraphics()->SetFogColor(XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f));
 
-	ChangeState(BrowsingState::Instance());
+	ChangeState(MainMenuState::Instance());
 }
 
 void Game::Update(GLib::Input* pInput, float dt)
@@ -100,7 +102,7 @@ void Game::Draw(GLib::Graphics* pGraphics)
 
 	char buffer[244];
 	sprintf(buffer, "x: %f\ny: %f\nFPS:%f", mx, my, GetCurrentFps());
-	pGraphics->DrawText(buffer, 1600, 10, 20);
+	pGraphics->DrawText(buffer, 1400, 10, 20);
 
 	// Present the backbuffer.
 	pGraphics->Present();
