@@ -26,6 +26,7 @@ enum ItemName
 	SKILL_FROSTNOVA,
 	SKILL_TELEPORT,
 	SKILL_METEOR,
+	SKILL_HOOK,
 	
 	//
 	// Status Effects

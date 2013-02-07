@@ -49,6 +49,7 @@ void ItemLoaderXML::SetupKeyMap()
 	mStringKeyMap["Iron Armor"] = IRON_ARMOR;
 	mStringKeyMap["Regen Cap"] = REGEN_CAP;
 	mStringKeyMap["Fireball"] = SKILL_FIREBALL;
+	mStringKeyMap["Hook"] = SKILL_HOOK;
 	mStringKeyMap["Frostnova"] = SKILL_FROSTNOVA;
 	mStringKeyMap["Teleport"] = SKILL_TELEPORT;	
 	mStringKeyMap["Meteor"] = SKILL_METEOR;

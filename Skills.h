@@ -70,3 +70,12 @@ public:
 
 	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
 };
+
+class Hook : public Skill
+{
+public:
+	Hook(string icon);
+	~Hook();
+
+	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
+};

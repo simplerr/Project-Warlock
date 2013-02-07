@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "TeleportEffect.h"
 #include "MeteorProjectile.h"
+#include "HookProjectile.h"
 
 ClientSkillInterpreter::ClientSkillInterpreter()
 {
@@ -37,6 +38,8 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 	Projectile* projectile = nullptr;
 	if(id == SKILL_FIREBALL)
 		projectile = new FireProjectile(owner, start, dir);
+	else if(id == SKILL_HOOK)
+		projectile = new HookProjectile(owner, start, dir);
 	else if(id == SKILL_FROSTNOVA)
 		projectile = new FrostProjectile(owner, start);
 	else if(id == SKILL_METEOR)
@@ -50,7 +53,7 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 		player->AddStatusEffect(new TeleportEffect());
 	}
 
-	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR) 
+	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR || id == SKILL_HOOK) 
 	{
 		bitstream.Read(projectileId);
 		projectile->SetSkillLevel(skillLevel);

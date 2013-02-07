@@ -76,6 +76,10 @@ Skill* SkillHandler::AddSkill(ItemName skillName)
 		skill = new Meteor("textures/icons/meteor.png");
 		key = 'R';
 	}
+	else if(skillName == SKILL_HOOK) {
+		skill = new Hook("textures/icons/hook.png");
+		key = 'A';
+	}
 	else
 		return nullptr;
 

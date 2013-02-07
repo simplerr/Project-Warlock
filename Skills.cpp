@@ -179,3 +179,18 @@ void Meteor::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3
 
 	pCaster->ClearTargetQueue();
 }
+
+Hook::Hook(string icon) : Skill(icon)
+{
+	SetName(SKILL_HOOK);
+}
+
+Hook::~Hook()
+{
+
+}
+
+void Hook::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
+{
+
+}
