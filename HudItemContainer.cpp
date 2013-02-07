@@ -9,7 +9,10 @@
 
 HudItemContainer::HudItemContainer(int x, int y, int colums, float slotSize)
 {
-	mPosition = XMFLOAT2(x, y);
+	SetHooverInfoPos(XMFLOAT2(0, 0));
+	SetPosition(x, y);
+	SetHooverInfoBelow(false);
+	mHooverBkgd = nullptr;
 	mNumColums = colums;
 	mSlotSize = slotSize;
 	mHooveringSlotId = -1;
@@ -53,7 +56,31 @@ void HudItemContainer::Draw(GLib::Graphics* pGraphics)
 			mItemSlots[i].item->DrawIcon(pGraphics, XMFLOAT2(pos.x, pos.y), mSlotSize);
 			
 			if(mHooveringSlotId == i) 
-				pGraphics->DrawText(GetHooverText(mItemSlots[i].item), mPosition.x - mSlotSize/2, mPosition.y - mSlotSize * 1.2 * (mItemSlots.size() / mNumColums) / 2 - mSlotSize/2 - 49, 18);
+			{
+				string name = mItemSlots[i].item->GetAttributes().name;
+				string description = GetHooverText(mItemSlots[i].item);
+
+				// * represents newline(\n).
+				std::replace(description.begin(), description.end(), '*', '\n');
+
+				GLib::Rect nameRect = pGraphics->MeasureText(name, 25, "Arial");
+				GLib::Rect descRect = pGraphics->MeasureText(description, 18, "Arial");
+				float scale = 1.1f;
+
+				float rectHeight = (nameRect.bottom/2 + descRect.bottom/2) * scale;
+
+				// mHooverInfoPos is the origin for the hoover box, probably top left or bottom left.
+				float y = GetPosition().y + mHooverInfoPos.y + (mHooverInfoBelow ? 1 : -1) * rectHeight;
+
+				if(mHooverBkgd != nullptr) {
+					
+					pGraphics->DrawScreenQuad(mHooverBkgd, GetPosition().x + mHooverInfoPos.x + descRect.right/2, y, descRect.right * scale, (descRect.bottom + nameRect.bottom)* scale);
+				}
+
+				float text_y = y - rectHeight/scale*(((scale-1.0f)/2)+1);
+				pGraphics->DrawText(name, mPosition.x + mHooverInfoPos.x, text_y, 25, GLib::ColorRGBA(204, 102, 34, 255));
+				pGraphics->DrawText(description, mPosition.x + mHooverInfoPos.x, text_y + nameRect.bottom, 18);
+			}
 		}	
 		else {
 			pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mSlotSize, mSlotSize);
@@ -224,4 +251,19 @@ void HudItemContainer::OnResolutionChange()
 vector<ItemSlot> HudItemContainer::GetItemSlots()
 {
 	return mItemSlots;
+}
+
+void HudItemContainer::SetHooverInfoPos(XMFLOAT2 pos)
+{
+	mHooverInfoPos = pos;
+}
+
+void HudItemContainer::SetHooverBkgd(string texture)
+{
+	mHooverBkgd = GLib::GetGraphics()->LoadTexture(texture);
+}
+
+void HudItemContainer::SetHooverInfoBelow(bool below)
+{
+	mHooverInfoBelow = below;
 }

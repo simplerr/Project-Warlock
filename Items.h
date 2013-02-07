@@ -48,6 +48,7 @@ struct Attributes
 	float damage;
 	float lifesteal;
 	float cooldown;
+	string name;
 };
 
 /************************************************************************

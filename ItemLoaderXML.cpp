@@ -46,14 +46,14 @@ ItemLoaderXML::~ItemLoaderXML()
 void ItemLoaderXML::SetupKeyMap()
 {
 	// Setup the string to ItemKey map.
-	mStringKeyMap["IRON_ARMOR"] = IRON_ARMOR;
-	mStringKeyMap["REGEN_CAP"] = REGEN_CAP;
-	mStringKeyMap["FIREBALL"] = SKILL_FIREBALL;
-	mStringKeyMap["FROSTNOVA"] = SKILL_FROSTNOVA;
-	mStringKeyMap["TELEPORT"] = SKILL_TELEPORT;	
-	mStringKeyMap["METEOR"] = SKILL_METEOR;
-	mStringKeyMap["FREEZE_EFFECT"] = FREEZE_STATUS;	
-	mStringKeyMap["TELEPORT_EFFECT"] = TELEPORT_STATUS;
+	mStringKeyMap["Iron Armor"] = IRON_ARMOR;
+	mStringKeyMap["Regen Cap"] = REGEN_CAP;
+	mStringKeyMap["Fireball"] = SKILL_FIREBALL;
+	mStringKeyMap["Frostnova"] = SKILL_FROSTNOVA;
+	mStringKeyMap["Teleport"] = SKILL_TELEPORT;	
+	mStringKeyMap["Meteor"] = SKILL_METEOR;
+	mStringKeyMap["Freeze Effect"] = FREEZE_STATUS;	
+	mStringKeyMap["Teleport Effect"] = TELEPORT_STATUS;
 }
 
 void ItemLoaderXML::LoadItems(TiXmlElement* pRoot)
@@ -78,6 +78,7 @@ void ItemLoaderXML::LoadItems(TiXmlElement* pRoot)
 			attributes.damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
 			attributes.lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
 			attributes.cooldown = level->Attribute("cooldown") == NULL ? 0.0f : atof(level->Attribute("cooldown"));
+			attributes.name = name;
 
 			// Set the attributes and the other data.
 			Item* loadedItem = new Item(icon);
@@ -121,6 +122,7 @@ void ItemLoaderXML::LoadSkills(TiXmlElement* pRoot)
 			attributes.damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
 			attributes.lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
 			attributes.cooldown = level->Attribute("cooldown") == NULL ? 0.0f : atof(level->Attribute("cooldown"));
+			attributes.name = name;
 
 			// Set the attributes and the other data.
 			Item* loadedItem = new Item(icon);
@@ -155,6 +157,9 @@ void ItemLoaderXML::LoadStatusEffects(TiXmlElement* pRoot)
 		Item* loadedItem = new Item(icon);
 		loadedItem->SetName(StringToName(name));
 		loadedItem->SetDescription(desc);
+		Attributes attributes;
+		attributes.name = name;
+		loadedItem->SetAttributes(attributes);
 
 		// Create map key.
 		ItemKey key;

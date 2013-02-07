@@ -1,8 +1,12 @@
 #include "StatusArea.h"
 
 StatusArea::StatusArea(float x, float y)
-	: HudItemContainer(x, y, 5, 42)
+	: HudItemContainer(x, y, 5, 35)
 {
+	SetHooverInfoPos(XMFLOAT2(-30, 45));
+	SetHooverBkgd("textures/white_transparent.png");
+	SetHooverInfoBelow(true);
+
 	for(int i = 0; i < 6; i++)
 		AddSlot();
 }
@@ -29,7 +33,7 @@ void StatusArea::OnRightPress(ItemSlot& itemSlot)
 
 string StatusArea::GetHooverText(HudItem* pItem)
 {
-	return "Test string lolololo";
+	return pItem->GetDescription();
 }
 
 void StatusArea::AddItem(HudItem* pItem)

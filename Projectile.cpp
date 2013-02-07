@@ -2,6 +2,7 @@
 #include "d3dUtil.h"
 #include "Graphics.h"
 #include "Skills.h"
+#include "LuaWrapper.h"
 
 Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 	: ParticleSystem(pos, luaScript)
@@ -11,10 +12,12 @@ Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 	SetSkillType(SKILL_FIREBALL);
 	SetSkillLevel(1);
 	mDirection = dir;
-	mMaxDistance = 40.0f;
-	mOwner = owner;
-	mSpeed = 0.1f;
 	mTravelled = 0.0f;
+	mOwner = owner;
+
+	mSpeed = GetLuaWrapper()->GetTableNumber("Projectile", "speed");
+	mMaxDistance = GetLuaWrapper()->GetTableNumber("Projectile", "max_distance");
+	mImpactImpulse = GetLuaWrapper()->GetTableNumber("Projectile", "impact_impulse");
 }
 
 Projectile::~Projectile()
@@ -82,4 +85,9 @@ void Projectile::SetSpeed(float speed)
 void Projectile::SetMaxDistance(float distance)
 {
 	mMaxDistance = distance;
+}
+
+float Projectile::GetImpactImpulse()
+{
+	return mImpactImpulse;
 }

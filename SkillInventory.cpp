@@ -15,6 +15,9 @@
 SkillInventory::SkillInventory(int x, int y, int colums, float slotSize)
 	: HudItemContainer(x, y, colums, slotSize)
 {
+	SetHooverInfoPos(XMFLOAT2(-slotSize/2, -80));
+	SetHooverBkgd("textures/white_transparent.png");
+
 	mPlayer = nullptr;
 	mShop = nullptr;
 
@@ -117,7 +120,7 @@ void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 string SkillInventory::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\nLevel: %i", pItem->GetCost() - 3, pItem->GetLevel());	// [NOTE][TODO] Maybe enough?
+	sprintf(buffer, "Sell value: %i gold\nLevel: %i\n", pItem->GetCost() - 3, pItem->GetLevel());	// [NOTE][TODO] Maybe enough?
 	return string(buffer + pItem->GetDescription());
 }
 

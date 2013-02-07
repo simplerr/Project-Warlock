@@ -26,6 +26,12 @@ function InitParticle(pos_x, pos_y, pos_z, time, counter)
 	return particle;
 end
 
+Projectile = {
+	speed = 0.05;
+	max_distance = 40.0;
+	impact_impulse = 0.2;
+}
+
 ParticleSystemData = {
 	accel_x = 0;
 	accel_y = 0;

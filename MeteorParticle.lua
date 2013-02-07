@@ -26,22 +26,28 @@ function InitParticle(pos_x, pos_y, pos_z, time, counter)
 	return particle;
 end
 
+Projectile = {
+	speed = 0.05;
+	max_distance = 40.0;
+	impact_impulse = 0.2;
+}
+
 ParticleSystemData = {
 	accel_x = 0;
 	accel_y = 0;
 	accel_z = 0;
 	spawn_frequency = 0.02;
-	lifetime = 10;
+	lifetime = 5;
 	max_particles = 100;
 	radius = 2;
 }
 
 ParticleData = {
 	texture = "textures/torch.png",
-	size = 15,
+	size = 5,
 	lifetime = 2.2,
 	mass = 0.1,
-	speed = 4,
+	speed = 1,
 }
 
 -- Updates the particle with a custom function.
@@ -59,5 +65,5 @@ function UpdateParticle(particle, time)
 	particle:SetPosition(pos_x, pos_y, pos_z);
 
 	-- Set new size.
-	particle:SetSize(particle:GetInitialSize() * math.sin(age * 6.0));
+	particle:SetSize(particle:GetInitialSize() * math.sin(age * 12.0));
 end

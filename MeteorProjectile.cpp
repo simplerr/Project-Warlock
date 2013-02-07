@@ -8,11 +8,9 @@
 #include "FreezeEffect.h"
 
 MeteorProjectile::MeteorProjectile(int owner, XMFLOAT3 target)
-	: Projectile(owner, target + XMFLOAT3(0, 40, 0), XMFLOAT3(0, -1, 0), "MeteorParticle.lua")
+	: Projectile(owner, target + XMFLOAT3(0, 40, 0), XMFLOAT3(0, -1, 0), "F:\\Users\\Axel\\Documents\\Visual Studio 11\\Projects\\Project Warlock Server\\Project Warlock Server\\MeteorParticle.lua")
 {
-	SetRadius(5.0f);
-	SetSpeed(0.2f);
-	SetMaxDistance(100);
+
 }
 
 MeteorProjectile::~MeteorProjectile()
@@ -33,8 +31,7 @@ void MeteorProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena,
 	XMFLOAT3 dir = pPlayer->GetPosition() - GetPosition();
 	dir.y = 0.0f;
 	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&dir)));
-	float impulse = 0.2f;
-	pPlayer->SetVelocity(dir * impulse);
+	pPlayer->SetVelocity(dir * GetImpactImpulse());
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));

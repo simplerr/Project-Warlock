@@ -12,6 +12,9 @@
 Inventory::Inventory(int x, int y, int colums, float slotSize)
 	: HudItemContainer(x, y, colums, slotSize)
 {
+	SetHooverInfoPos(XMFLOAT2(-slotSize/2, -110));
+	SetHooverBkgd("textures/white_transparent.png");
+
 	mPlayer = nullptr;
 	mShop = nullptr;
 
@@ -116,7 +119,7 @@ void Inventory::OnRightPress(ItemSlot& itemSlot)
 string Inventory::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\nLevel: %i", pItem->GetCost() - 3, pItem->GetLevel());
+	sprintf(buffer, "Sell value: %i gold\nLevel: %i\n", pItem->GetCost() - 3, pItem->GetLevel());
 	return string(buffer + pItem->GetDescription());
 }
 

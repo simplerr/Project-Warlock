@@ -26,13 +26,19 @@ function InitParticle(pos_x, pos_y, pos_z, time, counter)
 	return particle;
 end
 
+Projectile = {
+	speed = 0.05;
+	max_distance = 40.0;
+	impact_impulse = -0.2;
+}
+
 ParticleSystemData = {
 	accel_x = 0;
 	accel_y = 0;
 	accel_z = 0;
 	spawn_frequency = 0.02;
 	lifetime = 5;
-	max_particles = 100;
+	max_particles = 1;
 	radius = 2;
 }
 
@@ -52,12 +58,12 @@ function UpdateParticle(particle, time)
 
 	-- Calculate position.
 	pos_x = particle:GetInitPosX() + particle:GetInitVelX() * age + 0.5 * GetAccelX() * age * age;
-	pos_y = particle:GetInitPosY() + particle:GetInitVelY() * age + 0.5 * GetAccelY() * age * age;
+	pos_y = 2;--particle:GetInitPosY() + particle:GetInitVelY() * age + 0.5 * GetAccelY() * age * age;
 	pos_z = particle:GetInitPosZ() + particle:GetInitVelZ() * age + 0.5 * GetAccelZ() * age * age;
 
 	-- Set new position.
 	particle:SetPosition(pos_x, pos_y, pos_z);
 
 	-- Set new size.
-	particle:SetSize(particle:GetInitialSize() * math.sin(age * 12.0));
+	particle:SetSize(particle:GetInitialSize() * math.sin(age * 6.0));
 end

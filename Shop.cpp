@@ -10,6 +10,8 @@ Shop::Shop(int x, int y, int colums, float slotSize)
 	: HudItemContainer(x, y, colums, slotSize)
 {
 	SetInspectingInventory(nullptr);
+	SetHooverInfoPos(XMFLOAT2(-slotSize/2, -110));
+	SetHooverBkgd("textures/white_transparent.png");
 
 	for(int i = 0; i < 6; i++)
 		AddSlot();
@@ -78,7 +80,7 @@ void Shop::OnRightPress(ItemSlot& itemSlot)
 string Shop::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
-	sprintf(buffer, "Cost: %i gold\nLevel: %i", pItem->GetCost(), pItem->GetLevel());
+	sprintf(buffer, "Cost: %i gold\nLevel: %i\n", pItem->GetCost(), pItem->GetLevel());
 	return string(buffer + pItem->GetDescription());
 }
 

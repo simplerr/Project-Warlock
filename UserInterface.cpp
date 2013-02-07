@@ -20,8 +20,11 @@ UserInterface::UserInterface(Client* pClient)
 {
 	mItemLoader = new ItemLoaderXML("items.xml");
 
-	mStatusArea = new StatusArea(70, 70);
+	mStatusArea = new StatusArea(50, 50);
 	mStatusArea->SetItemLoader(mItemLoader);
+	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_FIREBALL, 1));
+	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_FROSTNOVA, 1));
+	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_METEOR, 1));
 
 	mChat = new Chat(20, 740, 300, 200);
 	mChat->SetClient(pClient);

@@ -55,6 +55,9 @@ public:
 	void SetItemLoader(ItemLoaderXML* pLoader);
 	void SetClient(Client* pClient);
 	void SetPosition(float x, float y);
+	void SetHooverInfoPos(XMFLOAT2 pos);
+	void SetHooverBkgd(string texture);
+	void SetHooverInfoBelow(bool below);
 	
 	bool HasFreeSlots();
 	bool InsideSlot(const ItemSlot& slot, XMFLOAT3 pos);
@@ -69,8 +72,11 @@ private:
 	vector<ItemSlot>	mItemSlots;
 	ItemLoaderXML*		mItemLoaderXML;
 	GLib::Texture2D*	mEmptySlotTexture;
+	GLib::Texture2D*	mHooverBkgd;
 	Client*				mClient;
 	XMFLOAT2			mPosition;
+	XMFLOAT2			mHooverInfoPos;
+	bool				mHooverInfoBelow;
 	float				mSlotSize;
 	int					mNumColums;
 	int					mHooveringSlotId;

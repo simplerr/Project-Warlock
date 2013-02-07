@@ -8,7 +8,7 @@
 #include "FreezeEffect.h"
 
 FrostProjectile::FrostProjectile(int owner, XMFLOAT3 position)
-	: Projectile(owner, position, XMFLOAT3(0, 0, 0), "FrostParticle.lua")
+	: Projectile(owner, position, XMFLOAT3(0, 0, 0), "F:\\Users\\Axel\\Documents\\Visual Studio 11\\Projects\\Project Warlock Server\\Project Warlock Server\\FrostParticle.lua")
 {
 
 }
@@ -30,18 +30,17 @@ void FrostProjectile::Draw(GLib::Graphics* pGraphics)
 	XMFLOAT3 diff = pos - GetPosition();
 	float dist = sqrt(diff.x*diff.x + diff.z*diff.z);
 
-	XNA::AxisAlignedBox box;
+	/*XNA::AxisAlignedBox box;
 	box.Center = GetPosition();
 	box.Extents = XMFLOAT3(dist, 10, dist);
-	pGraphics->DrawBoundingBox(&box, XMMatrixIdentity(), GLib::Material(GLib::Colors::Red));
+	pGraphics->DrawBoundingBox(&box, XMMatrixIdentity(), GLib::Material(GLib::Colors::Red));*/
 }
 
 void FrostProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, ItemLoaderXML* pItemLoader)
 {
 	// Add a "impulse" to the player.
 	XMFLOAT3 dir = GetDirection();
-	float impulse = 0.3f;
-	pPlayer->SetVelocity(dir * impulse);
+	pPlayer->SetVelocity(dir * GetImpactImpulse());
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));

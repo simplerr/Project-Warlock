@@ -34,6 +34,7 @@ public:
 	ItemName GetSkillType();
 	int		 GetSkillLevel();
 	float	 GetDamage();
+	float	 GetImpactImpulse();
 	virtual StatusEffect* GetStatusEffect() {return nullptr;}
 private:
 	XMFLOAT3	mDirection;
@@ -42,6 +43,7 @@ private:
 	float		mMaxDistance;
 	float		mTravelled;
 	float		mDamage;
+	float		mImpactImpulse;
 
 	// Skill data.
 	ItemName	mSkillType;
