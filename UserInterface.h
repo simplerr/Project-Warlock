@@ -20,6 +20,7 @@ class SkillInventory;
 class Chat;
 class PlayerModule;
 class StatusArea;
+class HealthBar;
 
 /*
 	--Item and Skill system breakdown--
@@ -67,4 +68,5 @@ private:
 	GLib::StatusText*			mStatusText;
 	StatusArea*					mStatusArea;
 	Chat*						mChat;
+	HealthBar*					mHealthBar;
 };

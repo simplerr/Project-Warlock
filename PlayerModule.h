@@ -11,6 +11,7 @@ class Player;
 class SkillHandler;
 class Skill;
 class Client;
+class UserInterface;
 
 class PlayerModule
 {
@@ -29,8 +30,10 @@ public:
 
 	bool IsCastingSkill();
 	void SetPlayer(Player* pPlayer);
+	void SetUserInterface(UserInterface* pInterface);
 	Player* GetPlayer();
 private:
 	Player*				  mPlayer;
 	SkillHandler*		  mSkillHandler;	// Should it really be here?
+	UserInterface*		  mUserInterface;
 };

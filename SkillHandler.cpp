@@ -24,7 +24,7 @@ void SkillHandler::Update(float dt)
 		(*iter).second->Update(dt);
 }
 
-void SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 start, XMFLOAT3 end)
+bool SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 start, XMFLOAT3 end)
 {
 	for(auto iter = mSkillMap.begin(); iter != mSkillMap.end(); iter++) {
 		Skill* skill = (*iter).second;
@@ -45,8 +45,12 @@ void SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 sta
 			pClient->SendServerMessage(bitstream);
 
 			skill->ResetCooldown();
+
+			return true;
 		}
 	}
+
+	return false;
 }
 
 bool SkillHandler::IsCastingSkill()

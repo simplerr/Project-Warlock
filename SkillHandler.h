@@ -10,6 +10,7 @@ namespace GLib {
 
 class Skill;
 class Client;
+class UserInterface;
 
 class SkillHandler
 {
@@ -18,7 +19,7 @@ public:
 	~SkillHandler();
 
 	void Update(float dt);
-	void PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 position, XMFLOAT3 end);
+	bool PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 position, XMFLOAT3 end);
 	bool IsCastingSkill();
 	Skill* AddSkill(ItemName skillName);
 	void RemoveSkill(ItemName name);

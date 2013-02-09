@@ -53,7 +53,7 @@ void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
 			if(object->GetType() == GLib::PLAYER) 
 			{
 				Player* player = (Player*)object;
-				player->SetHealth(health);
+				player->SetCurrentHealth(health);
 				player->SetGold(gold);
 			}
 		}
@@ -203,7 +203,7 @@ void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bi
 		player->AddStatusEffect(statusEffect);
 
 	char buffer[244];
-	sprintf(buffer, "projectile %i collided with player %i health: %.2f\n", projectileId, playerId, player->GetHealth());
+	sprintf(buffer, "projectile %i collided with player %i health: %.2f\n", projectileId, playerId, player->GetCurrentHealth());
 	OutputDebugString(buffer);
 }
 

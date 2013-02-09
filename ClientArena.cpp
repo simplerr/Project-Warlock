@@ -65,7 +65,6 @@ void ClientArena::PollSelection(GLib::Input* pInput)
 
 		if(selected != nullptr)
 			mClient->GetUi()->SetSelectedPlayer(GetPlayerModule(selected->GetId()));
-		//SetSelectedPlayer(selected);
 	}
 }
 
@@ -135,7 +134,7 @@ void ClientArena::ResetPlayers()
 	for(int i = 0; i < mPlayerList.size(); i++) 
 	{
 		mPlayerList[i]->SetEliminated(false);
-		mPlayerList[i]->SetHealth(100);	// [NOTE][HACK]
+		mPlayerList[i]->SetCurrentHealth(mPlayerList[i]->GetMaxHealth());	// [NOTE][HACK]
 		mPlayerList[i]->RemoveStatusEffects();
 		mPlayerList[i]->ClearTargetQueue();
 	}

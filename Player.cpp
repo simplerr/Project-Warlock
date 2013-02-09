@@ -13,7 +13,7 @@ Player::Player()
 	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x")
 {
 	SetType(GLib::PLAYER);
-	SetHealth(100.0f);
+	SetMaxHealth(100.0f);
 	SetGold(100);
 	SetLocalPlayer(false);
 	SetEliminated(false);
@@ -32,13 +32,13 @@ Player::~Player()
 
 void Player::Init()
 {
-	SetMovementSpeed(0.025f);
-	SetHealth(100.0f);
+	SetMovementSpeed(0.020f);
+	SetCurrentHealth(GetMaxHealth());
 }
 
 void Player::Update(float dt)
 {
-	if(GetHealth() <= 0) 
+	if(GetCurrentHealth() <= 0) 
 		SetEliminated(true);
 
 	if(!GetEliminated())
@@ -97,7 +97,7 @@ void Player::AddItem(HudItem* pItem)
 	mItemList.insert(ItemKey(pItem->GetName(), pItem->GetLevel()));
 
 	Attributes attributes = pItem->GetAttributes();
-	SetHealth(GetHealth() + attributes.health);
+	SetMaxHealth(GetCurrentHealth() + attributes.health);
 	SetRegen(GetRegen() + attributes.regen);
 	SetKnockBackResistance(GetKnockBackResistance() + attributes.knockbackResistance);
 	SetLavaImmunity(GetLavaImmunity() + attributes.lavaImmunity);
@@ -117,7 +117,7 @@ void Player::RemoveItem(HudItem* pItem)
 
 		// Remove item attributes.
 		Attributes attributes = pItem->GetAttributes();
-		SetHealth(GetHealth() - attributes.health);
+		SetMaxHealth(GetCurrentHealth() - attributes.health);
 		SetRegen(GetRegen() - attributes.regen);
 		SetKnockBackResistance(GetKnockBackResistance() - attributes.knockbackResistance);
 		SetLavaImmunity(GetLavaImmunity() - attributes.lavaImmunity);
@@ -153,9 +153,9 @@ void Player::AddStatusEffect(StatusEffect* pStatusEffect)
 	pStatusEffect->Apply();
 }
 
-void Player::SetHealth(float health)
+void Player::SetCurrentHealth(float health)
 {
-	mAttributes.health = health;
+	mCurrentHealth = health;
 }
 
 void Player::SetRegen(float regen)
@@ -193,9 +193,9 @@ void Player::SetLocalPlayer(bool local)
 	mLocalPlayer = local;
 }
 
-float Player::GetHealth()
+float Player::GetCurrentHealth()
 {
-	return mAttributes.health;
+	return mCurrentHealth;
 }
 
 float Player::GetRegen()
@@ -285,4 +285,20 @@ void Player::RemoveStatusEffects()
 		//delete (*iter); // [NOTE][HACK] Memory leak!!
 		iter = mStatusEffects.erase(iter);
 	}
+}
+
+float Player::GetMaxHealth()
+{
+	return mAttributes.health;
+}
+
+void Player::TakeDamage(float damage)
+{
+	mCurrentHealth -= damage;
+}
+
+void Player::SetMaxHealth(float maxHealth)
+{
+	mAttributes.health = maxHealth;
+	mCurrentHealth = maxHealth;
 }

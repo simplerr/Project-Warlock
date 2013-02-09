@@ -9,6 +9,7 @@
 #include "StaticObject.h"
 #include "ModelImporter.h"
 #include "NetworkMessages.h"
+#include "UserInterface.h"
 
 PlayerModule::PlayerModule()
 {
@@ -36,7 +37,8 @@ void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 	if(!mPlayer->GetEliminated() && !mPlayer->GetStunned())
 	{
 		// [TODO] Add mSkillHandler->PollAction().
-		mSkillHandler->PollAction(pClient, pInput, mPlayer->GetPosition(), mPlayer->GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay()));
+		if(mSkillHandler->PollAction(pClient, pInput, mPlayer->GetPosition(), mPlayer->GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay())))
+			mUserInterface->SetSelectedPlayer(this);
 
 		// Add movement target for the selected object.
 		if(pInput->KeyPressed(VK_RBUTTON))
@@ -47,6 +49,9 @@ void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 			// The server then informs all the clients, including the callee.
 			if(pos.x != numeric_limits<float>::infinity())
 				SendAddTarget(pClient, mPlayer->GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
+
+			// Inform the UI to set the local player as selected. [TODO]
+			mUserInterface->SetSelectedPlayer(this);
 		}
 	}
 }
@@ -94,4 +99,9 @@ void PlayerModule::SetPlayer(Player* pPlayer)
 Player* PlayerModule::GetPlayer()
 {
 	return mPlayer;
+}
+
+void PlayerModule::SetUserInterface(UserInterface* pInterface)
+{
+	mUserInterface = pInterface;
 }

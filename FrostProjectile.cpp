@@ -46,11 +46,11 @@ void FrostProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, 
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));
 
 	// Damage the player.
-	pPlayer->SetHealth(pPlayer->GetHealth() - item->GetAttributes().damage);
+	pPlayer->TakeDamage(item->GetAttributes().damage);
 	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
 
 	// Dead? [NOTE] A bit of a hack.
-	if(pPlayer->GetHealth() <= 0) 
+	if(pPlayer->GetCurrentHealth() <= 0) 
 		pArena->PlayerEliminated(pPlayer, (Player*)GetWorld()->GetObjectById(GetOwner()));
 }
 

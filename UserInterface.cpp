@@ -15,6 +15,7 @@
 #include "d3dUtil.h"
 #include "D3DCore.h"
 #include "UiCoordinate.h"
+#include "HealthBar.h"
 
 UserInterface::UserInterface(Client* pClient)
 {
@@ -61,6 +62,7 @@ UserInterface::UserInterface(Client* pClient)
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/inventory_bkgd.png");
 
 	mStatusText = new GLib::StatusText("nothing", 400, 200, 6);
+	mHealthBar = new HealthBar(840, 800);
 
 	OnResize(GLib::GetClientWidth(), GLib::GetClientHeight());
 }
@@ -72,6 +74,7 @@ UserInterface::~UserInterface()
 	delete mInventory;
 	delete mItemLoader;
 	delete mStatusArea;
+	delete mHealthBar;
 }
 
 void UserInterface::Update(GLib::Input* pInput, float dt)
@@ -96,6 +99,7 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	mSkillShop->Draw(pGraphics);
 	mStatusText->Draw(pGraphics);
 	mStatusArea->Draw(pGraphics);
+	mHealthBar->Draw(pGraphics);
 }
 
 void UserInterface::HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream)
@@ -177,8 +181,10 @@ void UserInterface::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 
 void UserInterface::SetSelectedPlayer(PlayerModule* pPlayer)
 {
+	pPlayer->SetUserInterface(this);
 	mInventory->SetPlayer(pPlayer->GetPlayer());
 	mSkillInventory->SetPlayer(pPlayer);
+	mHealthBar->SetSelectedPlayer(pPlayer->GetPlayer());
 }
 
 bool UserInterface::PointInsideUi(XMFLOAT3 position)
@@ -206,6 +212,7 @@ void UserInterface::OnResize(float width, float height)
 	mInventory->OnResolutionChange();
 	mSkillInventory->OnResolutionChange();
 	mStatusArea->OnResolutionChange();
+	mHealthBar->OnResolutionChange();
 }
 
 void UserInterface::UpdateChatPosition()

@@ -42,7 +42,9 @@ public:
 	RakNet::SystemAddress GetSystemAdress();
 
 	void SetLocalPlayer(bool local);
-	void SetHealth(float health);
+	void SetCurrentHealth(float health);
+	void SetMaxHealth(float maxHealth);
+	void TakeDamage(float damage);
 	void SetRegen(float regen);
 	void SetKnockBackResistance(float resistance);
 	void SetLavaImmunity(float immunity);
@@ -53,7 +55,8 @@ public:
 	void SetLastHitter(Player* pPlayer);
 	void SetStunned(bool stunned);
 
-	float GetHealth();
+	float GetCurrentHealth();
+	float GetMaxHealth();
 	float GetRegen();
 	float GetKnockBackResistance();
 	float GetLavaImmunity();
@@ -92,5 +95,6 @@ private:
 	bool				  mEliminated;
 	bool				  mLocalPlayer;
 	bool				  mStunned;
+	float				  mCurrentHealth;
 	int mGold;
 };
