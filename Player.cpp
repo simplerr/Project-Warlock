@@ -8,6 +8,7 @@
 #include "StaticObject.h"
 #include "ModelImporter.h"
 #include "StatusEffect.h"
+#include "Camera.h"
 
 Player::Player()
 	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x")
@@ -20,9 +21,8 @@ Player::Player()
 	SetLastHitter(nullptr);
 	SetStunned(false);
 
-	mLocalBox = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/box.obj");
-	mLocalBox->SetMaterials(GLib::Colors::Green);
-	mLocalBox->SetScale(XMFLOAT3(0.6, 0.6, 0.6));
+	mRedHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/bar.bmp");
+	mGreenHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/green_bar.bmp");
 }
 
 Player::~Player()
@@ -57,11 +57,6 @@ void Player::Draw(GLib::Graphics* pGraphics)
 	{
 		Actor::Draw(pGraphics);
 
-		mLocalBox->SetPosition(GetPosition() + XMFLOAT3(0, 6, 0));
-
-		if(mLocalPlayer)
-			mLocalBox->Draw(pGraphics);
-
 		for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
 			(*iter)->Draw(pGraphics);
 			if((*iter)->GetTimer() > (*iter)->GetDuration()) {
@@ -74,6 +69,21 @@ void Player::Draw(GLib::Graphics* pGraphics)
 				iter = mStatusEffects.erase(iter);
 			}
 		}
+
+		// Draw the health in 2D coordinates.
+		XMFLOAT2 pos = pGraphics->TransformToScreenSpace(GetPosition());
+
+		float maxWidth = 60;
+		float barWidth = maxWidth * (GetCurrentHealth() / GetMaxHealth());
+		float barPosX = pos.x - maxWidth/2 + barWidth/2;
+
+		if(!mLocalPlayer)
+			pGraphics->DrawScreenQuad(mRedHealthBarTexture, barPosX, pos.y-20, barWidth, 10);
+		else
+			pGraphics->DrawScreenQuad(mGreenHealthBarTexture, barPosX, pos.y-20, barWidth, 10);
+
+		float nameWidth = pGraphics->MeasureText(GetName(), 20, "Arial").Width();
+		pGraphics->DrawText(GetName(), pos.x - nameWidth/2, pos.y-50, 20);
 	}
 }
 

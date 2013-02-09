@@ -43,5 +43,5 @@ void HealthBar::Draw(GLib::Graphics* pGrahics)
 void HealthBar::OnResolutionChange()
 {
 	UiCoordinate coord(UiAlignmentX::LEFT, BOTTOM, mPos.x, mPos.y, mWidth, mHeight, false, false);
-	mPos = XMFLOAT2(coord.x, coord.y);
+	SetPos(coord.x, GLib::GetClientHeight() - 100);
 }

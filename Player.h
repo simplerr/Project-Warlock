@@ -89,9 +89,10 @@ private:
 	RakNet::SystemAddress mSystemAdress;
 	multiset<ItemKey>	  mItemList;
 	Attributes			  mAttributes;
-	GLib::StaticObject*	  mLocalBox;	//[HACK]
 	Player*				  mLastHitter;
 	list<StatusEffect*>	  mStatusEffects;
+	GLib::Texture2D*	  mRedHealthBarTexture;
+	GLib::Texture2D*	  mGreenHealthBarTexture;
 	bool				  mEliminated;
 	bool				  mLocalPlayer;
 	bool				  mStunned;
