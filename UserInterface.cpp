@@ -16,6 +16,8 @@
 #include "D3DCore.h"
 #include "UiCoordinate.h"
 #include "HealthBar.h"
+#include "RoundHandler.h"
+#include "GameOverOverlay.h"
 
 UserInterface::UserInterface(Client* pClient)
 {
@@ -64,6 +66,8 @@ UserInterface::UserInterface(Client* pClient)
 	mStatusText = new GLib::StatusText("nothing", 400, 200, 6);
 	mHealthBar = new HealthBar(840, 800);
 
+	mGameOverOverlay = nullptr;
+
 	OnResize(GLib::GetClientWidth(), GLib::GetClientHeight());
 }
 
@@ -85,6 +89,9 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 	mSkillShop->Update(pInput, dt);
 	mStatusText->Update(dt);
 	mStatusArea->Update(pInput, dt);
+
+	if(mGameOverOverlay != nullptr)
+		mGameOverOverlay->Update(pInput, dt);
 }
 
 void UserInterface::Draw(GLib::Graphics* pGraphics)
@@ -100,6 +107,9 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	mStatusText->Draw(pGraphics);
 	mStatusArea->Draw(pGraphics);
 	mHealthBar->Draw(pGraphics);
+
+	if(mGameOverOverlay != nullptr)
+		mGameOverOverlay->Draw(pGraphics);
 }
 
 void UserInterface::HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream)
@@ -213,6 +223,9 @@ void UserInterface::OnResize(float width, float height)
 	mSkillInventory->OnResolutionChange();
 	mStatusArea->OnResolutionChange();
 	mHealthBar->OnResolutionChange();
+
+	if(mGameOverOverlay != nullptr)
+		mGameOverOverlay->OnResize(width, height);
 }
 
 void UserInterface::UpdateChatPosition()
@@ -228,4 +241,12 @@ void UserInterface::OnStatusEffectAdded(ItemName type)
 void UserInterface::OnStatusEffectRemoved(ItemName type)
 {
 	mStatusArea->RemoveStatusEffect(ItemKey(type, 1));
+}
+
+void UserInterface::DisplayGameOver(Client* pClient)
+{
+	auto scoreMap = pClient->GetRoundHandler()->GetScoreMap();
+
+	mGameOverOverlay = new GameOverOverlay(500, 500);
+	mGameOverOverlay->SetScoreMap(scoreMap);
 }

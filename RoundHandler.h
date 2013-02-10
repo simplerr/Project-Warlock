@@ -23,6 +23,7 @@ public:
 
 	ArenaState& GetArenaState();
 	string GetWinner();
+	map<string, int> GetScoreMap();
 private:
 	// These relate to each other, RoundHandler or similar
 	ArenaState			mArenaState;

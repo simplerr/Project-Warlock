@@ -61,3 +61,8 @@ void RoundHandler::SetCurrentState(CurrentState state)
 {
 	mArenaState.state = state;
 }
+
+map<string, int> RoundHandler::GetScoreMap()
+{
+	return mScoreMap;
+}

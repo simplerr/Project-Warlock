@@ -41,6 +41,7 @@ public:
 
 	void EndRound(string winner);
 	void StartRound();
+	bool IsGameOver();
 
 	void SetSelectedPlayer(Player* pPlayer);
 	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));
@@ -66,4 +67,5 @@ private:
 	UserInterface*				mUserInterface;
 	RoundHandler*				mRoundHandler;
 	string						mName;
+	bool						mGameOver;
 };

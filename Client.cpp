@@ -58,11 +58,11 @@ Client::~Client()
 
 void Client::Update(GLib::Input* pInput, float dt)
 {
-	mArena->Update(pInput, dt);
-	mUserInterface->Update(pInput, dt);
-
 	// Listen for incoming packets.
 	ListenForPackets();
+
+	mArena->Update(pInput, dt);
+	mUserInterface->Update(pInput, dt);
 }
 
 void Client::Draw(GLib::Graphics* pGraphics)
@@ -125,6 +125,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			break;
 		case NMSG_ADD_PLAYER:
 			mMessageHandler->HandleAddPlayer(bitstream);
+			mUserInterface->DisplayGameOver(this);			//////////////////////////ASJDOHASJHDAKJSHDKJAHSKJDHKJAHSD
 			break;
 		case NMSG_PLAYER_DISCONNECTED:
 			mMessageHandler->HandlePlayerDisconnected(bitstream);
@@ -169,6 +170,15 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 		case NMSG_ROUND_ENDED:
 			mMessageHandler->HandleRoundEnded(bitstream);
 			break;
+		case NMSG_GAME_OVER: 
+			{
+				char winner[244];
+				bitstream.Read(winner);
+				mRoundHandler->AddScore(winner, 1);
+				mUserInterface->DisplayGameOver(this);
+				mGameOver = true;
+				break;
+			}
 		case NMSG_CHAT_MESSAGE_SENT:
 			mUserInterface->HandleChatMessage(bitstream);
 			break;
@@ -276,4 +286,9 @@ vector<Player*> Client::GetPlayerList()
 RoundHandler* Client::GetRoundHandler()
 {
 	return mRoundHandler;
+}
+
+bool Client::IsGameOver()
+{
+	return mGameOver;
 }

@@ -21,6 +21,7 @@ class Chat;
 class PlayerModule;
 class StatusArea;
 class HealthBar;
+class GameOverOverlay;
 
 /*
 	--Item and Skill system breakdown--
@@ -40,6 +41,7 @@ public:
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 	void OnResize(float width, float height);
+	void DisplayGameOver(Client* pClient);
 
 	void HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
 	void HandleItemRemoved(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
@@ -69,4 +71,6 @@ private:
 	StatusArea*					mStatusArea;
 	Chat*						mChat;
 	HealthBar*					mHealthBar;
+
+	GameOverOverlay*			mGameOverOverlay;
 };

@@ -46,6 +46,7 @@ enum MessageId
 
 	NMSG_ROUND_START,
 	NMSG_ROUND_ENDED,
+	NMSG_GAME_OVER,
 
 	//
 	// Chat events.

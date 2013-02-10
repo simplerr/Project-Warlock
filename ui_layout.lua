@@ -45,6 +45,22 @@ MainMenu = {
 	spacing = 0;
 }
 
+GameOverList = {
+	menu_bkgd = "textures/white_transparent.png";
+	item_bkgd = "textures/menu_item_bkgd.png";
+	font_family = "Consolas";
+	font_color = "0 0 0 255";
+	draw_bkgd = 1;
+	draw_item_bkgd = 0;
+	centered_items = 0;
+	bkgd_scale = 1.1;
+	item_bkgd_scale = 1.0;
+	pos_x = 800;
+	pos_y = 220;
+	font_size = 30;
+	spacing = 0;
+}
+
 -- Titles
 
 StateHeader = {
@@ -92,6 +108,17 @@ OptionsBackButton = {
 	pos_x = 905;
 	pos_y = 510;
 	font_size = 40;
+	font_family = DefaultButtonData.font_family;
+	font_color = DefaultButtonData.font_color;
+	default_texture = DefaultButtonData.default_texture;
+	disabled_texture = DefaultButtonData.disabled_texture;
+	hoover_texture = DefaultButtonData.hoover_texture;
+}
+
+GameOverButton = {
+	pos_x = 905;
+	pos_y = 510;
+	font_size = 35;
 	font_family = DefaultButtonData.font_family;
 	font_color = DefaultButtonData.font_color;
 	default_texture = DefaultButtonData.default_texture;

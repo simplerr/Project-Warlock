@@ -14,14 +14,11 @@ void PlayingState::Init(Game* pGame)
 {
 	// Important!!
 	SetGame(pGame);
-
-	mControlManager = new ControlManager("ui_layout.lua");
 }
 
 void PlayingState::Cleanup(void)
 {
 	delete mClient;
-	delete mControlManager;
 
 	mClient = nullptr;
 }
@@ -29,16 +26,11 @@ void PlayingState::Cleanup(void)
 void PlayingState::Update(GLib::Input* pInput, double dt)
 {
 	mClient->Update(pInput, dt);
-	mControlManager->Update(pInput, dt);
-
-	//if(pInput->KeyPressed(VK_SPACE))
-	//	ChangeState(BrowsingState::Instance());
 }
 
 void PlayingState::Draw(GLib::Graphics* pGraphics)
 {
 	mClient->Draw(pGraphics);
-	mControlManager->Draw(pGraphics);
 }
 
 void PlayingState::Pause()
