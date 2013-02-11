@@ -45,6 +45,22 @@ MainMenu = {
 	spacing = 0;
 }
 
+InGameMenu = {
+	menu_bkgd = "textures/white_transparent.png";
+	item_bkgd = "textures/menu_item_bkgd.png";
+	font_family = "Arial";
+	font_color = "0 0 0 255";
+	draw_bkgd = 0;
+	draw_item_bkgd = 0;
+	centered_items = 0;
+	bkgd_scale = 1.0;
+	item_bkgd_scale = 1.0;
+	pos_x = 800;
+	pos_y = 200;
+	font_size = 60;
+	spacing = 0;
+}
+
 GameOverList = {
 	menu_bkgd = "textures/white_transparent.png";
 	item_bkgd = "textures/menu_item_bkgd.png";

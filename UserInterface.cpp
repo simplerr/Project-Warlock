@@ -18,9 +18,14 @@
 #include "HealthBar.h"
 #include "RoundHandler.h"
 #include "GameOverOverlay.h"
+#include "InGameMenu.h"
+#include "MainMenuState.h"
+#include "PlayingState.h"
 
 UserInterface::UserInterface(Client* pClient)
 {
+	SetReady(false);
+
 	mItemLoader = new ItemLoaderXML("items.xml");
 
 	mStatusArea = new StatusArea(50, 50);
@@ -28,10 +33,6 @@ UserInterface::UserInterface(Client* pClient)
 	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_FIREBALL, 1));
 	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_FROSTNOVA, 1));
 	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_METEOR, 1));
-
-	mChat = new Chat(20, 740, 300, 200);
-	mChat->SetClient(pClient);
-	mChat->AddOnMessageSentListener(&UserInterface::OnMessageSent, this);
 
 	mShop = new Shop(60, 770+75, 3, 60);
 	mSkillShop = new Shop(360, 770+75, 3, 60);
@@ -68,6 +69,12 @@ UserInterface::UserInterface(Client* pClient)
 
 	mGameOverOverlay = nullptr;
 
+	mInGameMenu = new InGameMenu("ui_layout.lua");
+
+	mChat = new Chat(20, 740, 300, 200);
+	mChat->SetClient(pClient);
+	mChat->AddOnMessageSentListener(&UserInterface::OnMessageSent, this);
+
 	OnResize(GLib::GetClientWidth(), GLib::GetClientHeight());
 }
 
@@ -79,6 +86,7 @@ UserInterface::~UserInterface()
 	delete mItemLoader;
 	delete mStatusArea;
 	delete mHealthBar;
+	delete mInGameMenu;
 }
 
 void UserInterface::Update(GLib::Input* pInput, float dt)
@@ -92,6 +100,12 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 
 	if(mGameOverOverlay != nullptr)
 		mGameOverOverlay->Update(pInput, dt);
+
+	mInGameMenu->Update(pInput, dt);
+
+	// Change the state from the in-game menu and the game over display.
+	if((mGameOverOverlay != nullptr && mGameOverOverlay->GetChangeState()) || mInGameMenu->GetChangeState())
+		PlayingState::Instance()->ChangeState(MainMenuState::Instance());
 }
 
 void UserInterface::Draw(GLib::Graphics* pGraphics)
@@ -107,6 +121,7 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	mStatusText->Draw(pGraphics);
 	mStatusArea->Draw(pGraphics);
 	mHealthBar->Draw(pGraphics);
+	mInGameMenu->Draw(pGraphics);
 
 	if(mGameOverOverlay != nullptr)
 		mGameOverOverlay->Draw(pGraphics);
@@ -186,7 +201,8 @@ void UserInterface::OnMessageSent(string message)
 
 void UserInterface::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	mChat->MsgProc(msg, wParam, lParam);
+	if(mChat != nullptr)
+		mChat->MsgProc(msg, wParam, lParam);
 }
 
 void UserInterface::SetSelectedPlayer(PlayerModule* pPlayer)
@@ -223,6 +239,7 @@ void UserInterface::OnResize(float width, float height)
 	mSkillInventory->OnResolutionChange();
 	mStatusArea->OnResolutionChange();
 	mHealthBar->OnResolutionChange();
+	mInGameMenu->OnResize(width, height);
 
 	if(mGameOverOverlay != nullptr)
 		mGameOverOverlay->OnResize(width, height);
@@ -249,4 +266,14 @@ void UserInterface::DisplayGameOver(Client* pClient)
 
 	mGameOverOverlay = new GameOverOverlay(500, 500);
 	mGameOverOverlay->SetScoreMap(scoreMap);
+}
+
+void UserInterface::SetReady(bool ready)
+{
+	mIsReady = ready;
+}
+
+bool UserInterface::IsReady()
+{
+	return mIsReady;
 }

@@ -35,6 +35,8 @@ Client::Client()
 	mUserInterface    = new UserInterface(this);
 	mRoundHandler	  = new RoundHandler();
 
+	mUserInterface->SetReady(true);
+
 	//// Read the name and ip to connect to.
 	std::ifstream fin("config.txt");
 	string ip;
@@ -125,7 +127,6 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			break;
 		case NMSG_ADD_PLAYER:
 			mMessageHandler->HandleAddPlayer(bitstream);
-			mUserInterface->DisplayGameOver(this);			//////////////////////////ASJDOHASJHDAKJSHDKJAHSKJDHKJAHSD
 			break;
 		case NMSG_PLAYER_DISCONNECTED:
 			mMessageHandler->HandlePlayerDisconnected(bitstream);
@@ -230,7 +231,8 @@ void Client::EndRound(string winner)
 
 void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	mUserInterface->MsgProc(msg, wParam, lParam);
+	if(mUserInterface->IsReady())
+		mUserInterface->MsgProc(msg, wParam, lParam);
 }
 
 GLib::World* Client::GetWorld()

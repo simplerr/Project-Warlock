@@ -32,5 +32,4 @@ private:
 	static PlayingState mPlayingState;
 
 	Client*			mClient;
-	ControlManager* mControlManager;
 };

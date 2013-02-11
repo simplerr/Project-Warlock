@@ -22,6 +22,7 @@ class PlayerModule;
 class StatusArea;
 class HealthBar;
 class GameOverOverlay;
+class InGameMenu;
 
 /*
 	--Item and Skill system breakdown--
@@ -58,6 +59,8 @@ public:
 	void OnStatusEffectRemoved(ItemName type);
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
+	void SetReady(bool ready);
+	bool IsReady();
 
 	Chat* GetChat();
 private:
@@ -71,6 +74,8 @@ private:
 	StatusArea*					mStatusArea;
 	Chat*						mChat;
 	HealthBar*					mHealthBar;
+	InGameMenu*					mInGameMenu;
 
 	GameOverOverlay*			mGameOverOverlay;
+	bool						mIsReady;	// to prevent mChat->MsgProc() when not loaded fully.
 };

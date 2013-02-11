@@ -15,6 +15,7 @@
 #include "UserInterface.h"
 
 LobbyState LobbyState::mLobbyState;
+bool clientReady;
 
 void LobbyState::Init(Game* pGame)
 {
@@ -22,7 +23,10 @@ void LobbyState::Init(Game* pGame)
 	SetGame(pGame);
 
 	mControlManager = new ControlManager("ui_layout.lua");
+
+	clientReady = false;
 	mClient = new Client();
+	clientReady = true;
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
 	mPlayerListBkgd = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
@@ -45,7 +49,7 @@ void LobbyState::Resume()
 
 void LobbyState::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if(mClient != nullptr)
+	if(clientReady && mClient != nullptr)
 		mClient->MsgProc(msg, wParam, lParam);
 }
 

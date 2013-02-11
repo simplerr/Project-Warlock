@@ -3,8 +3,7 @@
 #include "TextMenu.h"
 #include "ControlManager.h"
 #include "Button.h"
-#include "MainMenuState.h"
-#include "PlayingState.h"
+#include "UserInterface.h"
 
 GameOverOverlay::GameOverOverlay(float x, float y)
 {
@@ -13,6 +12,8 @@ GameOverOverlay::GameOverOverlay(float x, float y)
 	mControlManager = new ControlManager("ui_layout.lua");
 	mControlManager->AddControl(mScoreList);
 	mControlManager->LoadLuaProperties();
+
+	mChangeState = false;
 }
 
 GameOverOverlay::~GameOverOverlay()
@@ -72,5 +73,16 @@ void GameOverOverlay::OnResize(float width, float height)
 
 void GameOverOverlay::ButtonPressed(Button* pButton)
 {
-	PlayingState::Instance()->ChangeState(MainMenuState::Instance());
+	mChangeState = true;
+	// Turn off the server is host. [NOTE][TODO]
+}
+
+void GameOverOverlay::SetUserInterface(UserInterface* pInterface)
+{
+	mUserInterface = pInterface;
+}
+
+bool GameOverOverlay::GetChangeState()
+{
+	return mChangeState;
 }

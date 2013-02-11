@@ -19,7 +19,6 @@ void PlayingState::Init(Game* pGame)
 void PlayingState::Cleanup(void)
 {
 	delete mClient;
-
 	mClient = nullptr;
 }
 
