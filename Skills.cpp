@@ -15,6 +15,7 @@ Skill::Skill(string icon)
 {
 	SetName(SKILL_FIREBALL);
 	SetCastDelay(0.0f);
+	mDarkOverlay = GLib::GetGraphics()->LoadTexture("textures/black_transparent.png");
 }
 
 Skill::~Skill()
@@ -34,7 +35,10 @@ void Skill::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
 	if(mCooldownCounter > 0.0f) {
 		char buffer[244];
 		sprintf(buffer, "%.2f", mCooldownCounter);
-		pGraphics->DrawText(buffer, pos.x-10, pos.y-10, 14);
+		float textSize = 28;
+		//GLib::Rect textRect = pGraphics->MeasureText(buffer, size, "Arial");
+		pGraphics->DrawScreenQuad(mDarkOverlay, pos.x, pos.y, size, size);
+		pGraphics->DrawText(buffer, pos.x-30, pos.y-textSize/2, textSize, GLib::ColorRGBA(255, 255, 255, 255));
 	}
 }
 
@@ -129,6 +133,7 @@ Teleport::~Teleport()
 
 void Teleport::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
 {
+	float playerY = pCaster->GetPosition().y;
 	XMFLOAT3 diff = end - pCaster->GetPosition();
 	XMFLOAT3 dir;
 	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&diff)));
@@ -140,6 +145,7 @@ void Teleport::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOA
 	else
 		pCaster->SetPosition(start + dir * range);
 
+	pCaster->SetPosition(XMFLOAT3(pCaster->GetPosition().x, playerY, pCaster->GetPosition().z));
 	pCaster->ClearTargetQueue();
 }
 

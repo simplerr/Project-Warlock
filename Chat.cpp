@@ -181,6 +181,10 @@ void Chat::SendChatMessage()
 	char* inputBuffer = new char[inputLen];
 	GetWindowText(mhInputBox, inputBuffer, inputLen);
 
+	// No empty messages.
+	if(string(inputBuffer) == "\r\n")
+		return;
+
 	SetWindowText(mhInputBox, "");
 	SetFocus(GLib::GetWindowHandler());
 

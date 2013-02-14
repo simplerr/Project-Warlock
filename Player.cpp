@@ -32,7 +32,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	SetMovementSpeed(0.020f);
+	SetMovementSpeed(0.025f);
 	SetCurrentHealth(GetMaxHealth());
 }
 

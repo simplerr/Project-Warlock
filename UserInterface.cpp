@@ -42,7 +42,7 @@ UserInterface::UserInterface(Client* pClient)
 	mInventory->SetClient(pClient);
 	mInventory->SetShop(mShop);
 
-	mSkillInventory = new SkillInventory(1450, 755+75, 4, 42);
+	mSkillInventory = new SkillInventory(1450, 755+75, 4, 60);
 	mSkillInventory->SetItemLoader(mItemLoader);
 	mSkillInventory->SetClient(pClient);
 	mSkillInventory->SetShop(mSkillShop);
@@ -64,7 +64,7 @@ UserInterface::UserInterface(Client* pClient)
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/inventory_bkgd.png");
 
-	mStatusText = new GLib::StatusText("nothing", 400, 200, 6);
+	mStatusText = new GLib::StatusText("nothing", 800, 200, 6);
 	mHealthBar = new HealthBar(840, 800);
 
 	mGameOverOverlay = nullptr;
@@ -240,6 +240,7 @@ void UserInterface::OnResize(float width, float height)
 	mStatusArea->OnResolutionChange();
 	mHealthBar->OnResolutionChange();
 	mInGameMenu->OnResize(width, height);
+	mStatusText->SetPosition(GLib::GetClientWidth()/2, mStatusText->GetPosition().y);
 
 	if(mGameOverOverlay != nullptr)
 		mGameOverOverlay->OnResize(width, height);

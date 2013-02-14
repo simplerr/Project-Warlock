@@ -27,6 +27,7 @@ public:
 	int GetOwner();
 	bool IsReady();
 protected:
+	GLib::Texture2D* mDarkOverlay;
 	int			mOwner;
 	float		mCooldownCounter;
 	float		mCastDelay;
