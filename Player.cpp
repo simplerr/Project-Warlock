@@ -20,6 +20,7 @@ Player::Player()
 	SetEliminated(false);
 	SetLastHitter(nullptr);
 	SetStunned(false);
+	SetMovementSpeed(0.025f);
 
 	mRedHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/bar.bmp");
 	mGreenHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/green_bar.bmp");
@@ -32,7 +33,6 @@ Player::~Player()
 
 void Player::Init()
 {
-	SetMovementSpeed(0.025f);
 	SetCurrentHealth(GetMaxHealth());
 }
 
@@ -238,6 +238,11 @@ int	Player::GetGold()
 	return mGold;
 }
 
+float Player::GetMovementSpeed()
+{
+	return mAttributes.movementSpeed;
+}
+
 void Player::SetEliminated(bool eliminated)
 {
 	mEliminated = eliminated;
@@ -311,4 +316,9 @@ void Player::SetMaxHealth(float maxHealth)
 {
 	mAttributes.health = maxHealth;
 	mCurrentHealth = maxHealth;
+}
+
+void Player::SetMovementSpeed(float movementSpeed)
+{
+	mAttributes.movementSpeed = movementSpeed;
 }

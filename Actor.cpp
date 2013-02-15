@@ -36,7 +36,7 @@ void Actor::Update(float dt)
 	if(mTargetQueue.size() != 0)
 	{
 		SetRotation(XMFLOAT3(0, atan2f(mTargetQueue.front().dir.x, mTargetQueue.front().dir.z), 0));
-		XMFLOAT3 newPos = GetPosition() + mTargetQueue.front().dir * mMovementSpeed;
+		XMFLOAT3 newPos = GetPosition() + mTargetQueue.front().dir * GetMovementSpeed();
 		SetPosition(XMFLOAT3(newPos.x, GetPosition().y, newPos.z));
 
 		// Reached the target?
@@ -95,11 +95,6 @@ void Actor::ClearTargetQueue()
 	mTargetQueue.clear();
 }
 
-void Actor::SetMovementSpeed(float movementSpeed)
-{
-	mMovementSpeed = movementSpeed;
-}
-
 void Actor::SetSelected(bool selected)
 {
 	mSelected = selected;
@@ -118,11 +113,6 @@ void Actor::SetVelocity(XMFLOAT3 velocity)
 void Actor::SetFriction(float friction)
 {
 	mFriction = friction;
-}
-
-float Actor::GetMovementSpeed()
-{
-	return mMovementSpeed;
 }
 
 float Actor::IsKnockedBack()

@@ -23,6 +23,7 @@ class StatusArea;
 class HealthBar;
 class GameOverOverlay;
 class InGameMenu;
+class AttributesUi;
 
 /*
 	--Item and Skill system breakdown--
@@ -75,6 +76,7 @@ private:
 	Chat*						mChat;
 	HealthBar*					mHealthBar;
 	InGameMenu*					mInGameMenu;
+	AttributesUi*				mAttributesUi;
 
 	GameOverOverlay*			mGameOverOverlay;
 	bool						mIsReady;	// to prevent mChat->MsgProc() when not loaded fully.

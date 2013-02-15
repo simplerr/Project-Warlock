@@ -54,6 +54,7 @@ public:
 	void SetEliminated(bool eliminated);
 	void SetLastHitter(Player* pPlayer);
 	void SetStunned(bool stunned);
+	void SetMovementSpeed(float movementSpeed);
 
 	float GetCurrentHealth();
 	float GetMaxHealth();
@@ -62,6 +63,7 @@ public:
 	float GetLavaImmunity();
 	float GetDamage();
 	float GetLifeSteal();
+	float GetMovementSpeed();
 	int	  GetGold();
 	bool  GetEliminated();
 	bool  GetStunned();
@@ -97,5 +99,5 @@ private:
 	bool				  mLocalPlayer;
 	bool				  mStunned;
 	float				  mCurrentHealth;
-	int mGold;
+	int					  mGold;
 };

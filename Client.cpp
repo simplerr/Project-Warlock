@@ -44,7 +44,7 @@ Client::Client()
 	fin >> ip;
 	fin.close();
 
-	InitShoppingState(mRoundHandler->GetArenaState());
+	InitShoppingState(mRoundHandler->GetArenaState(), false);
 }
 
 Client::~Client()
@@ -160,10 +160,10 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			bitstream.Read(mRoundHandler->GetArenaState().elapsed);
 			break;
 		case NMSG_CHANGETO_PLAYING:
-			InitPlayingState(mRoundHandler->GetArenaState());
+			InitPlayingState(mRoundHandler->GetArenaState(), false);
 			break;
 		case NMSG_CHANGETO_SHOPPING:
-			InitShoppingState(mRoundHandler->GetArenaState());
+			InitShoppingState(mRoundHandler->GetArenaState(), false);
 			break;
 		case NMSG_ROUND_START:
 			mMessageHandler->HandleRoundStarted(bitstream);
@@ -213,7 +213,7 @@ void Client::SendServerMessage(RakNet::BitStream& bitstream)
 void Client::StartRound()
 {
 	mArena->ResetPlayers();
-	InitShoppingState(mRoundHandler->GetArenaState());
+	InitShoppingState(mRoundHandler->GetArenaState(), false);
 	AddChatText("Round started! Shopping time!\n", RGB(0, 200, 0));
 
 	// Remove the "PlayerX won the round!" status text.

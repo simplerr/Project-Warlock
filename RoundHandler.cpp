@@ -1,9 +1,10 @@
 #include "RoundHandler.h"
 #include "Graphics.h"
+#include "Camera.h"
 
 RoundHandler::RoundHandler()
 {
-
+	mScoreBkgd = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
 }
 
 RoundHandler::~RoundHandler()
@@ -13,6 +14,11 @@ RoundHandler::~RoundHandler()
 
 void RoundHandler::Draw(GLib::Graphics* pGraphics)
 {
+	float width = 150;
+	float height = 200;
+	pGraphics->DrawScreenQuad(mScoreBkgd, GLib::GetClientWidth()-width/2, height/2, width, height);
+	pGraphics->DrawText("Scores:", GLib::GetClientWidth()-width+20, 20, 25);
+
 	// Draw the scores.
 	string scoreList;
 	for(auto iter = mScoreMap.begin(); iter != mScoreMap.end(); iter++)
@@ -22,11 +28,7 @@ void RoundHandler::Draw(GLib::Graphics* pGraphics)
 		scoreList += (*iter).first + ": " + score + "\n";
 	}
 
-	pGraphics->DrawText(scoreList, 900, 100, 14);
-
-	char buffer[128];
-	sprintf(buffer, "Timer: %.2f", mArenaState.elapsed);
-	pGraphics->DrawText(buffer, 900, 200, 14);
+	pGraphics->DrawText(scoreList, GLib::GetClientWidth()-width+20, 50, 20);
 }
 
 ArenaState& RoundHandler::GetArenaState()

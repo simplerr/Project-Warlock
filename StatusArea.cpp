@@ -6,6 +6,7 @@ StatusArea::StatusArea(float x, float y)
 	SetHooverInfoPos(XMFLOAT2(-30, 45));
 	SetHooverBkgd("textures/white_transparent.png");
 	SetHooverInfoBelow(true);
+	SetDrawEmptySlots(false);
 
 	for(int i = 0; i < 6; i++)
 		AddSlot();

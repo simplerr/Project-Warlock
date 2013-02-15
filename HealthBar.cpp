@@ -37,7 +37,7 @@ void HealthBar::Draw(GLib::Graphics* pGrahics)
 
 	char buffer[128];
 	sprintf(buffer, "%.1f/%.1f", current, max);
-	pGrahics->DrawText(buffer, mPos.x - mWidth/2, mPos.y - mHeight/2 - 20, 20, GLib::ColorRGBA(255, 255, 255, 255));
+	pGrahics->DrawText(buffer, mPos.x - 50, mPos.y - 10, 20, GLib::ColorRGBA(255, 255, 255, 255));
 }
 
 void HealthBar::OnResolutionChange()

@@ -16,5 +16,5 @@ struct ArenaState
 	float elapsed;
 };
 
-void InitShoppingState(ArenaState& state);
-void InitPlayingState(ArenaState& state);
+void InitShoppingState(ArenaState& state, bool server);
+void InitPlayingState(ArenaState& state, bool server);

@@ -31,17 +31,16 @@ public:
 
 	void AddTarget(XMFLOAT3 targetPos, bool clear);
 	void ClearTargetQueue();
-	void SetMovementSpeed(float movementSpeed);
+	virtual void SetMovementSpeed(float movementSpeed) = 0;
 	void SetSelected(bool selected);
 	void SetVelocity(XMFLOAT3 velocity);
 	void SetFriction(float friction);
 	bool IsSelected();
 
-	float GetMovementSpeed();
+	virtual float GetMovementSpeed() = 0;
 	float IsKnockedBack();
 private:
 	std::list<Target> mTargetQueue;
-	float			  mMovementSpeed;
 	bool			  mSelected;
 
 	float mFriction;

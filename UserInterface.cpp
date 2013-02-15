@@ -1,4 +1,5 @@
 #include "Chat.h"
+#include "AttributesUi.h"
 #include "StatusArea.h"
 #include "UserInterface.h"
 #include "ItemLoaderXML.h"
@@ -30,19 +31,16 @@ UserInterface::UserInterface(Client* pClient)
 
 	mStatusArea = new StatusArea(50, 50);
 	mStatusArea->SetItemLoader(mItemLoader);
-	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_FIREBALL, 1));
-	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_FROSTNOVA, 1));
-	mStatusArea->PlaceInFreeSlot(ItemKey(SKILL_METEOR, 1));
 
-	mShop = new Shop(60, 770+75, 3, 60);
-	mSkillShop = new Shop(360, 770+75, 3, 60);
+	mShop = new Shop(50, 200, 3, 60);
+	mSkillShop = new Shop(50, 380, 3, 60);
 
 	mInventory = new Inventory(1200, 770+75, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
 	mInventory->SetClient(pClient);
 	mInventory->SetShop(mShop);
 
-	mSkillInventory = new SkillInventory(1450, 755+75, 4, 60);
+	mSkillInventory = new SkillInventory(1450, 770+75, 4, 60);
 	mSkillInventory->SetItemLoader(mItemLoader);
 	mSkillInventory->SetClient(pClient);
 	mSkillInventory->SetShop(mSkillShop);
@@ -75,6 +73,8 @@ UserInterface::UserInterface(Client* pClient)
 	mChat->SetClient(pClient);
 	mChat->AddOnMessageSentListener(&UserInterface::OnMessageSent, this);
 
+	mAttributesUi = new AttributesUi(170, 800);
+
 	OnResize(GLib::GetClientWidth(), GLib::GetClientHeight());
 }
 
@@ -87,6 +87,7 @@ UserInterface::~UserInterface()
 	delete mStatusArea;
 	delete mHealthBar;
 	delete mInGameMenu;
+	delete mAttributesUi;
 }
 
 void UserInterface::Update(GLib::Input* pInput, float dt)
@@ -114,6 +115,7 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	UiCoordinate coords(UiAlignmentX::CENTER, BOTTOM, 800, 800, 1600, 200, false, true);
 	pGraphics->DrawScreenQuad(mBkgdTexture, coords.x, coords.y, coords.width, coords.height);
 
+	mAttributesUi->Draw(pGraphics);
 	mInventory->Draw(pGraphics);
 	mSkillInventory->Draw(pGraphics);
 	mShop->Draw(pGraphics);
@@ -211,6 +213,7 @@ void UserInterface::SetSelectedPlayer(PlayerModule* pPlayer)
 	mInventory->SetPlayer(pPlayer->GetPlayer());
 	mSkillInventory->SetPlayer(pPlayer);
 	mHealthBar->SetSelectedPlayer(pPlayer->GetPlayer());
+	mAttributesUi->SetSelectedPlayer(pPlayer->GetPlayer());
 }
 
 bool UserInterface::PointInsideUi(XMFLOAT3 position)

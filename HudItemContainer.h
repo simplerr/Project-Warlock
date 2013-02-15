@@ -58,6 +58,7 @@ public:
 	void SetHooverInfoPos(XMFLOAT2 pos);
 	void SetHooverBkgd(string texture);
 	void SetHooverInfoBelow(bool below);
+	void SetDrawEmptySlots(bool drawEmpty);
 	
 	bool HasFreeSlots();
 	bool InsideSlot(const ItemSlot& slot, XMFLOAT3 pos);
@@ -77,6 +78,7 @@ private:
 	XMFLOAT2			mPosition;
 	XMFLOAT2			mHooverInfoPos;
 	bool				mHooverInfoBelow;
+	bool				mDrawEmptySlots;
 	float				mSlotSize;
 	int					mNumColums;
 	int					mHooveringSlotId;

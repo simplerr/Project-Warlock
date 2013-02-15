@@ -101,8 +101,8 @@ void Game::Draw(GLib::Graphics* pGraphics)
 	pGraphics->DrawBillboards();
 
 	char buffer[244];
-	sprintf(buffer, "x: %f\ny: %f\nFPS:%f", mx, my, GetCurrentFps());
-	pGraphics->DrawText(buffer, 1400, 10, 20);
+	sprintf(buffer, "x: %.2f\ny: %.2f\nFPS:%.2f", mx, my, GetCurrentFps());
+	pGraphics->DrawText(buffer, GLib::GetClientWidth()-100, 400, 15);
 
 	// Present the backbuffer.
 	pGraphics->Present();

@@ -6,6 +6,7 @@ using namespace std;
 
 namespace GLib {
 	class Graphics;
+	class Texture2D;
 }
 
 class RoundHandler
@@ -29,4 +30,5 @@ private:
 	ArenaState			mArenaState;
 	map<string, int>	mScoreMap;
 	string				mWinner;
+	GLib::Texture2D* mScoreBkgd;
 };

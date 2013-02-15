@@ -12,6 +12,7 @@ HudItemContainer::HudItemContainer(int x, int y, int colums, float slotSize)
 	SetHooverInfoPos(XMFLOAT2(0, 0));
 	SetPosition(x, y);
 	SetHooverInfoBelow(false);
+	SetDrawEmptySlots(true);
 	mHooverBkgd = nullptr;
 	mNumColums = colums;
 	mSlotSize = slotSize;
@@ -83,7 +84,8 @@ void HudItemContainer::Draw(GLib::Graphics* pGraphics)
 			}
 		}	
 		else {
-			pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mSlotSize, mSlotSize);
+			if(mDrawEmptySlots)
+				pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mSlotSize, mSlotSize);
 
 			//UiCoordinate coord(UiAlignmentX::CENTER, BOTTOM, pos.x, pos.y, mSlotSize, mSlotSize, false, false);
 			//pGraphics->DrawScreenQuad(mEmptySlotTexture, coord.x, coord.y, coord.width, coord.height);
@@ -266,4 +268,9 @@ void HudItemContainer::SetHooverBkgd(string texture)
 void HudItemContainer::SetHooverInfoBelow(bool below)
 {
 	mHooverInfoBelow = below;
+}
+
+void HudItemContainer::SetDrawEmptySlots(bool drawEmpty)
+{
+	mDrawEmptySlots = drawEmpty;
 }
