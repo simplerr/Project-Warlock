@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "BrowsingState.h"
 #include "Chat.h"
+#include "Camera.h"
 #include "UserInterface.h"
 
 PlayingState PlayingState::mPlayingState;
@@ -25,6 +26,8 @@ void PlayingState::Cleanup(void)
 void PlayingState::Update(GLib::Input* pInput, double dt)
 {
 	mClient->Update(pInput, dt);
+
+	GLib::GetGraphics()->GetCamera()->Update(pInput, dt);
 }
 
 void PlayingState::Draw(GLib::Graphics* pGraphics)

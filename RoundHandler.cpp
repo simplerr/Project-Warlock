@@ -29,6 +29,14 @@ void RoundHandler::Draw(GLib::Graphics* pGraphics)
 	}
 
 	pGraphics->DrawText(scoreList, GLib::GetClientWidth()-width+20, 50, 20);
+
+	// Shopping timer.
+	/*if(mArenaState.state == SHOPPING_STATE)
+	{
+	char buffer[256];
+	sprintf(buffer, "Shopping time left: %.1f", mArenaState.length - mArenaState.elapsed);
+	pGraphics->DrawText(buffer, GLib::GetClientWidth()/2-80, 300, 30, GLib::ColorRGBA(255, 0, 0, 255));
+	}*/
 }
 
 ArenaState& RoundHandler::GetArenaState()

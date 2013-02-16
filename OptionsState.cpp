@@ -13,45 +13,18 @@
 #include <Windowsx.h>
 #include <Richedit.h>
 #include <Commctrl.h>
-#include "Button.h"
 #include <windows.h>
+#include "Button.h"
 #include "UiCoordinate.h"
 #include <fstream>
 #include <stdio.h>
+#include "Config.h"
 
 OptionsState OptionsState::mOptionsState;
 
-// The default edit control procedure.
-WNDPROC DefNameEditProc;
 #define ID_UPDATE_NAME 101
-#define IDC_INPUT_BOX  102
-
-//! Subclassed msg proc for the input box.
-LRESULT NameInputProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT result;
-	bool enter = false;
-	switch (uMsg)
-	{
-	case WM_CHAR:
-		// Enter was pressed.
-		if(wParam == VK_RETURN)
-			enter = true;
-	default:
-		// Handles all default actions.
-		result =  CallWindowProc(DefNameEditProc, hwnd, uMsg, wParam, lParam);
-	}
-
-	// Has to be here since case WM_CHAR is before the default procedure. 
-	// Otherwise the caret positions gets set but then changed when the ENTER msg is proccessed.
-	if(enter)
-	{
-		// Send the message so Chat can catch it.
-		SendMessage(GLib::GetWindowHandler(), ID_UPDATE_NAME, 0, 0);
-	}
-
-	return result;
-}
+#define IDC_NICKNAME_BOX  102
+#define IDC_SERVERNAME_BOX  103
 
 void OptionsState::Init(Game* pGame)
 {
@@ -68,6 +41,7 @@ void OptionsState::Init(Game* pGame)
 void OptionsState::Cleanup(void)
 {
 	DestroyWindow(mhNameBox);
+	DestroyWindow(mhServerNameBox);
 }
 
 void OptionsState::Pause()
@@ -96,6 +70,7 @@ void OptionsState::Draw(GLib::Graphics* pGraphics)
 	pGraphics->DrawScreenQuad(mWhiteTexture, GLib::GetClientWidth()/2, 330, 300, 300);
 
 	pGraphics->DrawText("Nickname", GLib::GetClientWidth()/2-100, 220, 20, GLib::ColorRGBA(0, 0, 0, 255));
+	pGraphics->DrawText("Server name", GLib::GetClientWidth()/2-100, 320, 20, GLib::ColorRGBA(0, 0, 0, 255));
 	mControlManager->Draw(pGraphics);
 }
 
@@ -104,17 +79,11 @@ void OptionsState::BuildUi()
 	Label* title = new Label(800, 50, "StateHeader", "Options");
 	mControlManager->AddControl(title);
 
-	/*TextMenu* serverMenu = new TextMenu(800, 400, "MainMenu");
-	serverMenu->AddItemPressedListener(&OptionsState::OnMenuItemPressed, this);
-	serverMenu->PerformLayout();
-	mControlManager->AddControl(serverMenu);*/
-
-	// Add the player name edit box.
 	mhNameBox = CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_OVERLAPPED,
-		700, 250, 200, 30, GLib::GetWindowHandler(), (HMENU)IDC_INPUT_BOX, GLib::GetAppInstance(), NULL);
+		GLib::GetClientWidth()/2-100, 250, 200, 30, GLib::GetWindowHandler(), (HMENU)IDC_NICKNAME_BOX, GLib::GetAppInstance(), NULL);
 
-	// Set the default edit control proc
-	DefNameEditProc = (WNDPROC)SetWindowLong(mhNameBox, GWL_WNDPROC, (DWORD)NameInputProc);
+	mhServerNameBox = CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_OVERLAPPED,
+		GLib::GetClientWidth()/2-100, 350, 200, 30, GLib::GetWindowHandler(), (HMENU)IDC_SERVERNAME_BOX, GLib::GetAppInstance(), NULL);
 
 	// Add a back button.
 	mBackButton = new Button(905, 510, "OptionsBackButton", "Back");
@@ -125,13 +94,10 @@ void OptionsState::BuildUi()
 	
 	mControlManager->LoadLuaProperties();
 
-	FILE* file = fopen("config.txt", "rt");
-	char name[256];
-	fgets(name, 255, file);
-	fclose(file);
-
 	// Load the nickname from the config file.
-	SetWindowText(mhNameBox, name);
+	Config config("config.txt");
+	SetWindowText(mhNameBox, config.nickName.c_str());
+	SetWindowText(mhServerNameBox, config.serverName.c_str());
 }
 
 void OptionsState::OnResize(float width, float height)
@@ -147,34 +113,15 @@ void OptionsState::OnButtonPressed(Button* pButton)
 {
 	if(pButton->GetName() == "OptionsBackButton")
 	{
-		// Load the ip so we can write it back.
-		/*std::ifstream fin("config.txt");
-		string ip;
-		fin >> ip >> ip;
-		fin.close();
-
-		std::ofstream fout("config.txt");
+		Config config("config.txt");
 		char buffer[256];
-		fout << GetWindowText(mhNameBox, buffer, 255) << endl;;
-		fout << ip;
-		fout.close();*/
+		GetWindowText(mhNameBox, buffer, 255);
+		config.nickName = buffer;
 
-		FILE* fin = fopen("config.txt", "rt");
-		char ip[256];
-		fgets(ip, 255, fin);
-		fgets(ip, 255, fin);
-		fclose(fin);
-
-		FILE* file = fopen("config.txt", "w");
-		char name[256];
-		GetWindowText(mhNameBox, name, 255);
-
-		if(string(name).find_first_of('\n') == string::npos)
-			fprintf(file, "%s\n%s", name, ip);
-		else
-			fprintf(file, "%s%s", name, ip);
-
-		fclose(file);
+		GetWindowText(mhServerNameBox, buffer, 255);
+		config.serverName = buffer;
+		
+		config.Save();
 
 		ChangeState(MainMenuState::Instance());
 	}

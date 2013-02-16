@@ -1,11 +1,11 @@
 #include <crtdbg.h> 
+#include "vld.h"
 #include <assert.h>
 #include <time.h>
 #include "Game.h"
 #include "Graphics.h"
 #include "Input.h"
 #include "World.h"
-#include "vld.h"
 #include "Primitive.h"
 #include "Camera.h"
 #include "Effects.h"
@@ -42,6 +42,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, in
 	game.Init();
 
 	//game.SwitchScreenMode();
+
+	float width = GetSystemMetrics(SM_CXSCREEN);
+	float height = GetSystemMetrics(SM_CYSCREEN);
+
+	game.ResizeWindow(width, height);
 
 	// Run the app.
 	return GLib::GlobalApp->Run();

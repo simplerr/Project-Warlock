@@ -13,6 +13,7 @@
 #include "Chat.h"
 #include <vector>
 #include "UserInterface.h"
+#include "Database.h"
 
 LobbyState LobbyState::mLobbyState;
 bool clientReady;
@@ -30,6 +31,8 @@ void LobbyState::Init(Game* pGame)
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
 	mPlayerListBkgd = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
+
+	mDatabase = new Database();
 }
 
 void LobbyState::Cleanup(void)
@@ -100,7 +103,12 @@ void LobbyState::BuildUi()
 void LobbyState::SetServerData(ServerData data)
 {
 	mServerData = data;
-	mClient->ConnectToServer(data.localIp);
+
+	if(mDatabase->GetPublicIp() == data.publicIp)
+		mClient->ConnectToServer(data.localIp);
+	else
+		mClient->ConnectToServer(data.publicIp);
+	
 	float chatWidth = 600;
 	float chatHeight = 250;
 	mClient->GetChat()->SetDimensions(GLib::GetClientWidth()/2-chatWidth/2, GLib::GetClientHeight() - chatHeight - 100, chatWidth, chatHeight);

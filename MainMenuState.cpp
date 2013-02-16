@@ -11,6 +11,7 @@
 #include "Game.h"
 #include "BrowsingState.h"
 #include "OptionsState.h"
+#include "HostState.h"
 
 MainMenuState MainMenuState::mMainMenuState;
 
@@ -62,15 +63,15 @@ void MainMenuState::BuildUi()
 	Label* title = new Label(800, 50, "StateHeader", "Project Warlock");
 	mControlManager->AddControl(title);
 
-	TextMenu* serverMenu = new TextMenu(800, 400, "MainMenu");
-	serverMenu->AddItemPressedListener(&MainMenuState::OnMenuItemPressed, this);
+	mMenu = new TextMenu(800, 400, "MainMenu");
+	mMenu->AddItemPressedListener(&MainMenuState::OnMenuItemPressed, this);
 
-	serverMenu->AddItem("Play", "Play");
-	serverMenu->AddItem("Options", "Options");
-	serverMenu->AddItem("About", "About");
+	mMenu->AddItem("Play", "Play");
+	mMenu->AddItem("Options", "Options");
+	mMenu->AddItem("About", "About");
 	
-	serverMenu->PerformLayout();
-	mControlManager->AddControl(serverMenu);
+	mMenu->PerformLayout();
+	mControlManager->AddControl(mMenu);
 	mControlManager->LoadLuaProperties();
 }
 
@@ -83,7 +84,11 @@ void MainMenuState::OnMenuItemPressed(Label* pLabel)
 {
 	if(pLabel->GetName() == "Play")
 	{
-		ChangeState(BrowsingState::Instance());
+		mMenu->ClearItems();
+
+		mMenu->AddItem("Host", "Host");
+		mMenu->AddItem("Browse", "Browse");
+		mMenu->PerformLayout();
 	}
 	else if(pLabel->GetName() == "Options")
 	{
@@ -91,6 +96,14 @@ void MainMenuState::OnMenuItemPressed(Label* pLabel)
 	}
 	else if(pLabel->GetName() == "About")
 	{
-
+		
+	}
+	else if(pLabel->GetName() == "Browse")
+	{
+		ChangeState(BrowsingState::Instance());
+	}
+	else if(pLabel->GetName() == "Host")
+	{
+		ChangeState(HostState::Instance());
 	}
 }

@@ -21,6 +21,7 @@ Player::Player()
 	SetLastHitter(nullptr);
 	SetStunned(false);
 	SetMovementSpeed(0.025f);
+	SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
 
 	mRedHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/bar.bmp");
 	mGreenHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/green_bar.bmp");

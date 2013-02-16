@@ -57,7 +57,7 @@ void Actor::Draw(GLib::Graphics* pGraphics)
 	AnimatedObject::Draw(pGraphics);
 
 	// Only draw target queue if selected.
-	if(mSelected)
+	/*if(mSelected)
 	{
 		for(auto iter = mTargetQueue.begin(); iter != mTargetQueue.end(); iter++) 
 		{
@@ -66,7 +66,7 @@ void Actor::Draw(GLib::Graphics* pGraphics)
 			box.Extents = XMFLOAT3(2, 2, 2);
 			pGraphics->DrawBoundingBox(&box, XMMatrixIdentity(), GLib::Material(GLib::Colors::White), 0.6f);
 		}
-	}
+	}*/
 }
 
 void Actor::AddTarget(XMFLOAT3 targetPos, bool clear)

@@ -101,7 +101,7 @@ string Database::GetPublicIp()
 	char buffer[32];
 
 	hInternet = InternetOpen(NULL, INTERNET_OPEN_TYPE_PRECONFIG, NULL, NULL, 0);
-	hFile = InternetOpenUrl(hInternet, "http://automation.whatismyip.com/n09230945.asp", NULL, 0, INTERNET_FLAG_RELOAD, 0);
+	hFile = InternetOpenUrl(hInternet, "http://auto.whatismyip.com/ip.php?user=simpler&password=automation_password", NULL, 0, INTERNET_FLAG_RELOAD, 0);
 	InternetReadFile(hFile, &buffer, sizeof(buffer), &rSize);
 	buffer[rSize] = '\0';
 

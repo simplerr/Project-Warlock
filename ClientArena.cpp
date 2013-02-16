@@ -79,7 +79,8 @@ void ClientArena::SetSelectedPlayer(Player* pPlayer)
 
 		mSelectedPlayer = pPlayer;
 		mSelectedPlayer->SetSelected(true);
-		mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
+		mSelectedPlayer->SetMaterials(GLib::Material(GLib::Colors::White));
+		//mSelectedPlayer->SetMaterials(GLib::Material(XMFLOAT4(1.0f, 127.0f/255.0f, 38/255.0f, 0.12f) * 4));
 		mClient->GetUi()->SetSelectedPlayer(GetPlayerModule(pPlayer->GetId()));
 	}
 }

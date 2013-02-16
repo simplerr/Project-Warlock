@@ -3,6 +3,7 @@
 
 class ControlManager;
 class Label;
+class TextMenu;
 
 class MainMenuState : public GameState
 {
@@ -30,4 +31,5 @@ private:
 	static MainMenuState mMainMenuState;
 	ControlManager*		 mControlManager;
 	GLib::Texture2D*	 mBkgdTexture;
+	TextMenu*			 mMenu;
 };

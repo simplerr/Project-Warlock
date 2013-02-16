@@ -34,4 +34,5 @@ private:
 	GLib::Texture2D*	 mWhiteTexture;
 	Button*				 mBackButton;
 	HWND				 mhNameBox;
+	HWND				 mhServerNameBox;
 };
