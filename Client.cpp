@@ -54,14 +54,15 @@ Client::~Client()
 	delete mArena;
 	delete mRoundHandler;
 
-	mRaknetPeer->Shutdown(300);
+	mRaknetPeer->Shutdown(0);
 	RakNet::RakPeerInterface::DestroyInstance(mRaknetPeer);
 }
 
 void Client::Update(GLib::Input* pInput, float dt)
 {
 	// Listen for incoming packets.
-	ListenForPackets();
+	if(!pInput->KeyDown(VK_SPACE))
+		ListenForPackets();
 
 	mArena->Update(pInput, dt);
 	mUserInterface->Update(pInput, dt);

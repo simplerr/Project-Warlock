@@ -46,12 +46,12 @@ void Database::RemoveServer(string host)
 	mConnection.query(q.c_str()).store();
 }
 
-void Database::IncrementPlayerCounter(string host, int num)
+void Database::IncrementPlayerCounter(string serverName, int num)
 {
 	// Get current wins.
 	char buffer[256];
-	int players = GetServerData(host).numPlayers;
-	string q = "UPDATE Warlock_Servers SET Players="+string(itoa(players+num, buffer, 10))+" WHERE Host='"+host+"'";
+	int players = GetServerData(serverName).numPlayers;
+	string q = "UPDATE Warlock_Servers SET Players="+string(itoa(players+num, buffer, 10))+" WHERE Name='"+serverName+"'";
 	mysqlpp::Query query(&mConnection, true, q.c_str());
 	query.exec();
 }

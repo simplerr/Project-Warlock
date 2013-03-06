@@ -29,7 +29,7 @@ void MainMenuState::Init(Game* pGame)
 
 void MainMenuState::Cleanup(void)
 {
-
+	//delete mControlManager;
 }
 
 void MainMenuState::Pause()

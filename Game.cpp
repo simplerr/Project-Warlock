@@ -22,10 +22,13 @@
 #include "MainMenuState.h"
 #include "OptionsState.h"
 #include "Sound.h"
+#include "C:\Users\Axel\Documents\Visual Studio 2010\Memory_and_Exception_Trace\Stackwalker.h"
 
 using namespace GLib;
 
 #define _HAS_ITERATOR_DEBUGGING 0
+#define _DEBUG
+#define VLD_FORCE_ENABLE 1
 
 float mx, my;
 
@@ -36,6 +39,8 @@ Sound*	gSound = nullptr;
 //! The program starts here.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
+	InitAllocCheck(ACOutput_XML);
+
 	// Create a Game instance.
 	Game game(hInstance, "Client", 1600, 900);
 	GLib::GlobalApp = &game;
@@ -66,7 +71,11 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 	
 Game::~Game()
 {
+	mCurrentState->Cleanup();
+
 	delete gSound;
+
+	DeInitAllocCheck();
 }
 
 void Game::Init()
