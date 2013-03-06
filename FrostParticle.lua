@@ -37,17 +37,17 @@ ParticleSystemData = {
 	accel_y = 0;
 	accel_z = 0;
 	spawn_frequency = 0.00002;
-	lifetime = 0.3;
+	lifetime = 0.4;
 	max_particles = 32;
 	radius = 5;
 }
 
 ParticleData = {
-	texture = "textures/blue.png",
+	texture = "textures/smoke.dds",
 	size = 5,
-	lifetime = 0.5,
+	lifetime = 0.4,
 	mass = 0.1,
-	speed = 50,
+	speed = 28,
 }
 
 -- Updates the particle with a custom function.

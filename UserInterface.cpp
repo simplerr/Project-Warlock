@@ -35,12 +35,12 @@ UserInterface::UserInterface(Client* pClient)
 	mShop = new Shop(50, 200, 3, 60);
 	mSkillShop = new Shop(50, 380, 3, 60);
 
-	mInventory = new Inventory(1200, 770+75, 3, 60);
+	mInventory = new Inventory(1100, 770+75, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
 	mInventory->SetClient(pClient);
 	mInventory->SetShop(mShop);
 
-	mSkillInventory = new SkillInventory(1450, 770+75, 4, 60);
+	mSkillInventory = new SkillInventory(1350, 770+75, 4, 60);
 	mSkillInventory->SetItemLoader(mItemLoader);
 	mSkillInventory->SetClient(pClient);
 	mSkillInventory->SetShop(mSkillShop);
@@ -247,6 +247,9 @@ void UserInterface::OnResize(float width, float height)
 
 	if(mGameOverOverlay != nullptr)
 		mGameOverOverlay->OnResize(width, height);
+
+	mSkillInventory->SetPosition(width - mSkillInventory->GetWidth(), mSkillInventory->GetPosition().y);
+	mInventory->SetPosition(width - mInventory->GetWidth() - mSkillInventory->GetWidth() - 30, mInventory->GetPosition().y);
 }
 
 void UserInterface::UpdateChatPosition()

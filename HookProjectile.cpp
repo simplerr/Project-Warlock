@@ -6,7 +6,7 @@
 #include "World.h"
 
 HookProjectile::HookProjectile(int owner, XMFLOAT3 position, XMFLOAT3 dir)
-	: Projectile(owner, position, dir, "F:\\Users\\Axel\\Documents\\Visual Studio 11\\Projects\\Project Warlock Server\\Project Warlock Server\\HookParticle.lua")
+	: Projectile(owner, position, dir, "HookParticle.lua")
 {
 	int a = 1;
 }

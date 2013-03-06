@@ -78,7 +78,7 @@ void BrowsingState::BuildUi()
 
 		serverItem.replace(0, serverList[i].host.length(), serverList[i].host);
 		serverItem.replace(20, serverList[i].name.length(), serverList[i].name);
-		serverItem.replace(30, serverList[i].publicIp.length(), serverList[i].publicIp);
+		//serverItem.replace(30, serverList[i].publicIp.length(), serverList[i].publicIp);
 		serverItem.replace(43, string(numPlayers).length(), numPlayers);
 
 		serverMenu->AddItem(serverList[i].host, serverItem);

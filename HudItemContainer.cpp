@@ -274,3 +274,8 @@ void HudItemContainer::SetDrawEmptySlots(bool drawEmpty)
 {
 	mDrawEmptySlots = drawEmpty;
 }
+
+float HudItemContainer::GetWidth()
+{
+	return mNumColums * mSlotSize * 1.2;
+}

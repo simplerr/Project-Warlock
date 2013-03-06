@@ -21,6 +21,7 @@
 #include "D3DCore.h"
 #include "MainMenuState.h"
 #include "OptionsState.h"
+#include "Sound.h"
 
 using namespace GLib;
 
@@ -30,6 +31,7 @@ float mx, my;
 
 // Set global to NULL.
 GLib::Runnable* GLib::GlobalApp = nullptr;
+Sound*	gSound = nullptr;
 
 //! The program starts here.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
@@ -46,7 +48,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, in
 	float width = GetSystemMetrics(SM_CXSCREEN);
 	float height = GetSystemMetrics(SM_CYSCREEN);
 
-	game.ResizeWindow(width, height);
+	//game.ResizeWindow(width, height);
 
 	// Run the app.
 	return GLib::GlobalApp->Run();
@@ -58,11 +60,13 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 	// Cap the fps to 100.
 	//SetFpsCap(100.0f);
 	mCurrentState = nullptr;
+
+	gSound = new Sound();
 }
 	
 Game::~Game()
 {
-	
+	delete gSound;
 }
 
 void Game::Init()

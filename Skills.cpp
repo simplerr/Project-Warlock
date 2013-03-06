@@ -5,6 +5,7 @@
 #include "NetworkMessages.h"
 #include "Graphics.h"
 #include "Player.h"
+#include "Sound.h"
 
 //
 //	Base skill

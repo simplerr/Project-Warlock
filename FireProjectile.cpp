@@ -4,11 +4,12 @@
 #include "ItemLoaderXML.h"
 #include "Player.h"
 #include "World.h"
+#include "Sound.h"
 
 FireProjectile::FireProjectile(int owner, XMFLOAT3 position, XMFLOAT3 dir)
-	: Projectile(owner, position, dir, "F:\\Users\\Axel\\Documents\\Visual Studio 11\\Projects\\Project Warlock Server\\Project Warlock Server\\FireParticle.lua")
+	: Projectile(owner, position, dir, "FireParticle.lua")
 {
-
+	
 }
 
 FireProjectile::~FireProjectile()
