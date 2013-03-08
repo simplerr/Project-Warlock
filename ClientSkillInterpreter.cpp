@@ -36,26 +36,19 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 
 	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&start) - XMLoadFloat3(&start)));
 
+	Player* player = ((Player*)world->GetObjectById(owner));
+
 	Projectile* projectile = nullptr;
-	if(id == SKILL_FIREBALL) {
+	if(id == SKILL_FIREBALL) 
 		projectile = new FireProjectile(owner, start, dir);
-		gSound->PlayEffect("sounds/fireball.wav");
-	}
-	else if(id == SKILL_HOOK) {
+	else if(id == SKILL_HOOK) 
 		projectile = new HookProjectile(owner, start, dir);
-		gSound->PlayEffect("sounds/blinkarrival.wav");
-	}
-	else if(id == SKILL_FROSTNOVA) {
+	else if(id == SKILL_FROSTNOVA) 
 		projectile = new FrostProjectile(owner, start);
-		gSound->PlayEffect("sounds/frostnova.wav");
-	}
-	else if(id == SKILL_METEOR) {
+	else if(id == SKILL_METEOR) 
 		projectile = new MeteorProjectile(owner, end);
-		gSound->PlayEffect("sounds/blinkarrival.wav");
-	}
 	else if(id == SKILL_TELEPORT) 
 	{
-		Player* player = ((Player*)world->GetObjectById(owner));
 		player->ClearTargetQueue();
 
 		// Add a teleport status effect (just for visuals).
@@ -63,6 +56,10 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 
 		gSound->PlayEffect("sounds/blinkarrival.wav");
 	}
+
+	// Play cast sound.
+	if(projectile != nullptr)
+		gSound->PlayEffect(projectile->GetCastSound());
 
 	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR || id == SKILL_HOOK) 
 	{

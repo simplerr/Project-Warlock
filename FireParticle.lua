@@ -27,6 +27,8 @@ function InitParticle(pos_x, pos_y, pos_z, time, counter)
 end
 
 Projectile = {
+	cast_sound = "sounds/fireball.wav";
+	impact_sound = "sounds/fireball_impact.wav";
 	speed = 0.07;
 	max_distance = 40.0;
 	impact_impulse = 0.2;

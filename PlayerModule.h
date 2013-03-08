@@ -36,4 +36,5 @@ private:
 	Player*				  mPlayer;
 	SkillHandler*		  mSkillHandler;	// Should it really be here?
 	UserInterface*		  mUserInterface;
+	float				  mSoundDelta;
 };

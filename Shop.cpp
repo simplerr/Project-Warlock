@@ -5,6 +5,7 @@
 #include "Graphics.h"
 #include "Player.h"
 #include "BitStream.h"
+#include "Sound.h"
 
 Shop::Shop(int x, int y, int colums, float slotSize)
 	: HudItemContainer(x, y, colums, slotSize)
@@ -55,6 +56,8 @@ void Shop::OnRightPress(ItemSlot& itemSlot)
 	Item* item = (Item*)itemSlot.item;
 
 	if(player->GetGold() >= item->GetCost() && mInspectingInventory != nullptr && itemSlot.taken) {
+		gSound->PlayEffect("sounds/buy.wav");
+
 		mInspectingInventory->AddItem(item);
 		player->SetGold(player->GetGold() - item->GetCost());
 

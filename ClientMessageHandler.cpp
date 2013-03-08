@@ -1,4 +1,5 @@
 #include "ClientMessageHandler.h"
+#include "Sound.h"
 #include "Client.h"
 #include "World.h"
 #include "Object3D.h"
@@ -24,18 +25,23 @@ void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
 {
 	GLib::ObjectType type;
 	unsigned char id;
-	XMFLOAT3 pos;
-	float health;
-	int gold;
+	XMFLOAT3 pos, rotation;
+	float health, deathTimer;
+	int animIndex, gold;
 
 	bitstream.Read(type);
 	bitstream.Read(id);
 	bitstream.Read(pos.x);
 	bitstream.Read(pos.y);
 	bitstream.Read(pos.z);
+	bitstream.Read(rotation.x);
+	bitstream.Read(rotation.y);
+	bitstream.Read(rotation.z);
 
 	if(type == GLib::PLAYER)
 	{
+		bitstream.Read(animIndex);
+		bitstream.Read(deathTimer);
 		bitstream.Read(health);
 		bitstream.Read(gold);
 	}
@@ -49,10 +55,13 @@ void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
 		if(object->GetId() == id)
 		{
 			object->SetPosition(pos);
+			object->SetRotation(rotation);
 
 			if(object->GetType() == GLib::PLAYER) 
 			{
 				Player* player = (Player*)object;
+				player->SetAnimation(animIndex);
+				player->SetDeathTimer(deathTimer);
 				player->SetCurrentHealth(health);
 				player->SetGold(gold);
 			}
@@ -195,6 +204,9 @@ void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bi
 
 	Player* player = (Player*)mClient->GetWorld()->GetObjectById(playerId);
 	Projectile* projectile = (Projectile*)mClient->GetWorld()->GetObjectById(projectileId);
+
+	// Play impact sound.
+	gSound->PlayEffect(projectile->GetImpactSound());
 
 	// Add status effect if there is any.
 	StatusEffect* statusEffect = projectile->GetStatusEffect();

@@ -10,11 +10,15 @@
 #include "ModelImporter.h"
 #include "NetworkMessages.h"
 #include "UserInterface.h"
+#include "Sound.h"
+#include <time.h>
 
 PlayerModule::PlayerModule()
 {
 	mSkillHandler = new SkillHandler();
 	mPlayer = nullptr;
+	srand(time(0));
+	mSoundDelta = -1;
 }
 
 PlayerModule::~PlayerModule()
@@ -30,6 +34,7 @@ void PlayerModule::Init()
 void PlayerModule::Update(float dt)
 {
 	mSkillHandler->Update(dt);
+	mSoundDelta -= dt;
 }
 
 void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
@@ -48,7 +53,20 @@ void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 			// Inform the server about what happened.
 			// The server then informs all the clients, including the callee.
 			if(pos.x != numeric_limits<float>::infinity())
+			{
 				SendAddTarget(pClient, mPlayer->GetId(), pos, pInput->KeyDown(VK_SHIFT) ? false : true);
+
+				if(mSoundDelta < 0)
+				{
+					// Play walking sound.
+					int soundIndex = rand() % 12 + 1;
+					char buffer[128];
+					sprintf(buffer, "sounds/talk/%i.wav", soundIndex);
+					gSound->PlayEffect(buffer);
+
+					mSoundDelta = 3.5f;
+				}
+			}
 
 			// Inform the UI to set the local player as selected. [TODO]
 			mUserInterface->SetSelectedPlayer(this);

@@ -35,7 +35,12 @@ void Actor::Update(float dt)
 	// but it's overwritten with the UPDATE_WORLD MSG!
 	if(mTargetQueue.size() != 0)
 	{
-		SetRotation(XMFLOAT3(0, atan2f(mTargetQueue.front().dir.x, mTargetQueue.front().dir.z), 0));
+		// Only rotate when walking.
+		if(GetCurrentAnimation() == 0)
+			SetRotation(XMFLOAT3(0, atan2f(-mTargetQueue.front().dir.x, -mTargetQueue.front().dir.z), 0));
+		else if(GetCurrentAnimation() == 5)
+			int a = 1;
+
 		XMFLOAT3 newPos = GetPosition() + mTargetQueue.front().dir * GetMovementSpeed();
 		SetPosition(XMFLOAT3(newPos.x, GetPosition().y, newPos.z));
 
@@ -46,10 +51,13 @@ void Actor::Update(float dt)
 	}
 
 	// Walk or idle animation?
-	if(mTargetQueue.size() != 0)
-		SetAnimation(1);
- 	else
- 		SetAnimation(0);
+	if(GetCurrentAnimation() == 0 || GetCurrentAnimation() == 1)
+	{
+		if(mTargetQueue.size() != 0)
+			SetAnimation(0);
+		else
+			SetAnimation(1);
+	}
 }
 
 void Actor::Draw(GLib::Graphics* pGraphics)

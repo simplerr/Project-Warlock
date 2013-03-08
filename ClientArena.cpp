@@ -134,6 +134,7 @@ void ClientArena::ResetPlayers()
 	// [NOTE] The position is set by the server. Then passed by NMSG_UPDATEW_WORLD.
 	for(int i = 0; i < mPlayerList.size(); i++) 
 	{
+		mPlayerList[i]->Init();
 		mPlayerList[i]->SetEliminated(false);
 		mPlayerList[i]->SetCurrentHealth(mPlayerList[i]->GetMaxHealth());	// [NOTE][HACK]
 		mPlayerList[i]->RemoveStatusEffects();

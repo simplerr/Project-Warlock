@@ -9,9 +9,12 @@
 #include "ModelImporter.h"
 #include "StatusEffect.h"
 #include "Camera.h"
+#include "SkinnedModel.h"
+
+#define NOT_DEAD 9999999999
 
 Player::Player()
-	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/smith/smith.x")
+	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/wizard/sorceress_anims_split.x")
 {
 	SetType(GLib::PLAYER);
 	SetMaxHealth(100.0f);
@@ -22,9 +25,12 @@ Player::Player()
 	SetStunned(false);
 	SetMovementSpeed(0.025f);
 	SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
+	//GetModel()->SetMeshMaterial(2, GLib::Material(GLib::Colors::Red));
 
 	mRedHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/bar.bmp");
 	mGreenHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/green_bar.bmp");
+
+	mDeathTimer = NOT_DEAD;
 }
 
 Player::~Player()
@@ -35,11 +41,15 @@ Player::~Player()
 void Player::Init()
 {
 	SetCurrentHealth(GetMaxHealth());
+	mDeathTimer = NOT_DEAD;
+	SetEliminated(false);
 }
 
 void Player::Update(float dt)
 {
-	if(GetCurrentHealth() <= 0) 
+	mDeathTimer -= dt;
+
+	if(mDeathTimer <= 0)
 		SetEliminated(true);
 
 	if(!GetEliminated())
@@ -72,10 +82,11 @@ void Player::Draw(GLib::Graphics* pGraphics)
 		}
 
 		// Draw the health in 2D coordinates.
-		XMFLOAT2 pos = pGraphics->TransformToScreenSpace(GetPosition());
+		XMFLOAT2 pos = pGraphics->TransformToScreenSpace(GetPosition() + XMFLOAT3(0, 6, 0));
 
 		float maxWidth = 60;
 		float barWidth = maxWidth * (GetCurrentHealth() / GetMaxHealth());
+		barWidth = max(barWidth, 0);
 		float barPosX = pos.x - maxWidth/2 + barWidth/2;
 
 		if(!mLocalPlayer)
@@ -322,4 +333,20 @@ void Player::SetMaxHealth(float maxHealth)
 void Player::SetMovementSpeed(float movementSpeed)
 {
 	mAttributes.movementSpeed = movementSpeed;
+}
+
+void Player::SetDeathAnimation()
+{
+	SetAnimation(7, 1.0f);
+	mDeathTimer = 1.0f;
+}
+
+float Player::GetDeathTimer()
+{
+	return mDeathTimer;
+}
+
+void Player::SetDeathTimer(float timer)
+{
+	mDeathTimer = timer;
 }

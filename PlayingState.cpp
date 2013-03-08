@@ -8,6 +8,7 @@
 #include "Chat.h"
 #include "Camera.h"
 #include "UserInterface.h"
+#include "Sound.h"
 
 PlayingState PlayingState::mPlayingState;
 
@@ -15,6 +16,7 @@ void PlayingState::Init(Game* pGame)
 {
 	// Important!!
 	SetGame(pGame);
+	gSound->PlayMusic("sounds/ambient.wav", true, 0);
 }
 
 void PlayingState::Cleanup(void)

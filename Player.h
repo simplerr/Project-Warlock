@@ -55,6 +55,8 @@ public:
 	void SetLastHitter(Player* pPlayer);
 	void SetStunned(bool stunned);
 	void SetMovementSpeed(float movementSpeed);
+	void SetDeathAnimation();
+	void SetDeathTimer(float timer);
 
 	float GetCurrentHealth();
 	float GetMaxHealth();
@@ -64,6 +66,7 @@ public:
 	float GetDamage();
 	float GetLifeSteal();
 	float GetMovementSpeed();
+	float GetDeathTimer();
 	int	  GetGold();
 	bool  GetEliminated();
 	bool  GetStunned();
@@ -100,4 +103,5 @@ private:
 	bool				  mStunned;
 	float				  mCurrentHealth;
 	int					  mGold;
+	float				  mDeathTimer;
 };

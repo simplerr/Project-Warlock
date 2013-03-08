@@ -31,6 +31,6 @@ void HookProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, I
 	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
 
 	// Dead? [NOTE] A bit of a hack.
-	if(pPlayer->GetCurrentHealth() <= 0) 
-		pArena->PlayerEliminated(pPlayer, (Player*)GetWorld()->GetObjectById(GetOwner()));
+	//if(pPlayer->GetCurrentHealth() <= 0) 
+	//	pArena->PlayerEliminated(pPlayer, (Player*)GetWorld()->GetObjectById(GetOwner()));
 }

@@ -18,6 +18,8 @@ Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 	mSpeed = GetLuaWrapper()->GetTableNumber("Projectile", "speed");
 	mMaxDistance = GetLuaWrapper()->GetTableNumber("Projectile", "max_distance");
 	mImpactImpulse = GetLuaWrapper()->GetTableNumber("Projectile", "impact_impulse");
+	mCastSound = GetLuaWrapper()->GetTableString("Projectile", "cast_sound");
+	mImpactSound = GetLuaWrapper()->GetTableString("Projectile", "impact_sound");
 }
 
 Projectile::~Projectile()
@@ -90,4 +92,14 @@ void Projectile::SetMaxDistance(float distance)
 float Projectile::GetImpactImpulse()
 {
 	return mImpactImpulse;
+}
+
+string Projectile::GetCastSound()
+{
+	return mCastSound;
+}
+
+string Projectile::GetImpactSound()
+{
+	return mImpactSound;
 }

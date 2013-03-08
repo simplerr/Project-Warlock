@@ -36,6 +36,8 @@ public:
 	float	 GetDamage();
 	float	 GetImpactImpulse();
 	virtual StatusEffect* GetStatusEffect() {return nullptr;}
+	string	 GetCastSound();
+	string	 GetImpactSound();
 private:
 	XMFLOAT3	mDirection;
 	int			mOwner;
@@ -44,6 +46,8 @@ private:
 	float		mTravelled;
 	float		mDamage;
 	float		mImpactImpulse;
+	string		mCastSound;
+	string		mImpactSound;
 
 	// Skill data.
 	ItemName	mSkillType;
