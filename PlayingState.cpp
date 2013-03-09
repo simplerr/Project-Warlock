@@ -16,7 +16,8 @@ void PlayingState::Init(Game* pGame)
 {
 	// Important!!
 	SetGame(pGame);
-	gSound->PlayMusic("sounds/ambient.wav", true, 0);
+	//gSound->PlayMusic("sounds/ambient.wav", true, 0);
+	gSound->SetMusicVolume(0.3f);
 }
 
 void PlayingState::Cleanup(void)

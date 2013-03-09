@@ -9,6 +9,7 @@
 #include "RoundHandler.h"
 #include "Projectile.h"
 #include "FreezeEffect.h"
+#include "ServerCvars.h"
 
 ClientMessageHandler::ClientMessageHandler(Client* pClient)
 {
@@ -254,18 +255,26 @@ void ClientMessageHandler::HandleCvarList(RakNet::BitStream& bitstream)
 void ClientMessageHandler::HandleCvarChange(RakNet::BitStream& bitstream)
 {
 	char temp[128];
-	int value;
+	int value, show;
 
 	bitstream.Read(temp);
 	bitstream.Read(value);
+	bitstream.Read(show);
 
-	string cvar = string(temp).substr(1, string(temp).size()-1);
+	// Change cvar value.
+	gCvars->SetCvarValue(temp, value);
 
-	char buffer[244];
-	sprintf(buffer, "%s changed to %i\n", cvar.c_str(), value);
+	// Show in chat?
+	if(show == 1)
+	{
+		string cvar = string(temp).substr(1, string(temp).size()-1);
 
-	// Add to chat.
-	mClient->AddChatText(buffer, RGB(0, 200, 0));
+		char buffer[244];
+		sprintf(buffer, "%s set to %i\n", cvar.c_str(), value);
+
+		// Add to chat.
+		mClient->AddChatText(buffer, RGB(0, 200, 0));
+	}
 }
 
 void ClientMessageHandler::HandlePlayerEliminated(RakNet::BitStream& bitstream)

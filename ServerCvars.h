@@ -72,3 +72,5 @@ struct ServerCvars
 
 	map<string, int> CvarMap;
 };
+
+extern ServerCvars* gCvars;

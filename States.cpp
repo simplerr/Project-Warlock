@@ -12,8 +12,7 @@ void InitShoppingState(ArenaState& state, bool server)
 	}
 	
 	state.elapsed = 0.0f;
-	ServerCvars cvars;
-	state.length = cvars.GetCvarValue(Cvars::SHOP_TIME);
+	state.length = gCvars->GetCvarValue(Cvars::SHOP_TIME);
 	state.state = SHOPPING_STATE;
 }
 

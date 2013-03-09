@@ -12,6 +12,7 @@
 #include "BrowsingState.h"
 #include "OptionsState.h"
 #include "HostState.h"
+#include "Sound.h"
 
 MainMenuState MainMenuState::mMainMenuState;
 
@@ -25,6 +26,8 @@ void MainMenuState::Init(Game* pGame)
 	BuildUi();
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
+
+	gSound->PlayMusic("sounds/menu_music.wav", true, false);
 }
 
 void MainMenuState::Cleanup(void)

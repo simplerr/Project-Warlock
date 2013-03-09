@@ -22,6 +22,7 @@
 #include "MainMenuState.h"
 #include "OptionsState.h"
 #include "Sound.h"
+#include "ServerCvars.h"
 #include "C:\Users\Axel\Documents\Visual Studio 2010\Memory_and_Exception_Trace\Stackwalker.h"
 
 using namespace GLib;
@@ -35,6 +36,7 @@ float mx, my;
 // Set global to NULL.
 GLib::Runnable* GLib::GlobalApp = nullptr;
 Sound*	gSound = nullptr;
+ServerCvars* gCvars = nullptr;
 
 //! The program starts here.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
@@ -67,6 +69,7 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 	mCurrentState = nullptr;
 
 	gSound = new Sound();
+	gCvars = new ServerCvars();
 }
 	
 Game::~Game()
@@ -74,6 +77,7 @@ Game::~Game()
 	mCurrentState->Cleanup();
 
 	delete gSound;
+	delete gCvars;
 
 	DeInitAllocCheck();
 }
