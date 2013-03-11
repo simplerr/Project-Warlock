@@ -16,12 +16,12 @@ void InitShoppingState(ArenaState& state, bool server)
 	state.state = SHOPPING_STATE;
 }
 
-void InitPlayingState(ArenaState& state, bool server)
+void InitPlayingState(ArenaState& state, bool server, XMFLOAT3 cameraTarget)
 {
 	if(!server) {
 		XMFLOAT3 pos = GLib::GetGraphics()->GetCamera()->GetPosition();
-		GLib::GetGraphics()->GetCamera()->SetPosition(XMFLOAT3(0, 60, 30));
-		GLib::GetGraphics()->GetCamera()->SetTarget(XMFLOAT3(0, 0, 0));
+		GLib::GetGraphics()->GetCamera()->SetPosition(cameraTarget + XMFLOAT3(0, 60, 30));
+		GLib::GetGraphics()->GetCamera()->SetTarget(cameraTarget);
 	}
 
 	state.elapsed = 0.0f;

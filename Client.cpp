@@ -161,7 +161,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			bitstream.Read(mRoundHandler->GetArenaState().elapsed);
 			break;
 		case NMSG_CHANGETO_PLAYING:
-			InitPlayingState(mRoundHandler->GetArenaState(), false);
+			InitPlayingState(mRoundHandler->GetArenaState(), false, GetLocalPlayer()->GetPosition());
 			break;
 		case NMSG_CHANGETO_SHOPPING:
 			InitShoppingState(mRoundHandler->GetArenaState(), false);
