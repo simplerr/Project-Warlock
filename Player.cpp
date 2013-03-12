@@ -24,6 +24,7 @@ Player::Player()
 	SetLastHitter(nullptr);
 	SetStunned(false);
 	SetMovementSpeed(0.025f);
+	SetLifeSteal(0.0f);
 	SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
 	//GetModel()->SetMeshMaterial(2, GLib::Material(GLib::Colors::Red));
 
@@ -118,14 +119,17 @@ void Player::AddItem(HudItem* pItem)
 {
 	mItemList.insert(ItemKey(pItem->GetName(), pItem->GetLevel()));
 
-	Attributes attributes = pItem->GetAttributes();
-	SetMaxHealth(GetCurrentHealth() + attributes.health);
-	SetRegen(GetRegen() + attributes.regen);
-	SetKnockBackResistance(GetKnockBackResistance() + attributes.knockbackResistance);
-	SetLavaImmunity(GetLavaImmunity() + attributes.lavaImmunity);
-	SetDamage(GetDamage() + attributes.damage);
-	SetLifeSteal(GetLifeSteal() + attributes.lifesteal);
-	SetMovementSpeed(GetMovementSpeed() + attributes.movementSpeed);
+	if(!pItem->IsSkill()) 
+	{
+		Attributes attributes = pItem->GetAttributes();
+		SetMaxHealth(GetCurrentHealth() + attributes.health);
+		SetRegen(GetRegen() + attributes.regen);
+		SetKnockBackResistance(GetKnockBackResistance() + attributes.knockbackResistance);
+		SetLavaImmunity(GetLavaImmunity() + attributes.lavaImmunity);
+		SetDamage(GetBonusDamage() + attributes.damage);
+		SetLifeSteal(GetLifeSteal() + attributes.lifesteal);
+		SetMovementSpeed(GetMovementSpeed() + attributes.movementSpeed);
+	}
 }
 
 void Player::RemoveItem(HudItem* pItem)
@@ -137,15 +141,18 @@ void Player::RemoveItem(HudItem* pItem)
 		// Remove from item set.
 		mItemList.erase(iter);
 
-		// Remove item attributes.
-		Attributes attributes = pItem->GetAttributes();
-		SetMaxHealth(GetCurrentHealth() - attributes.health);
-		SetRegen(GetRegen() - attributes.regen);
-		SetKnockBackResistance(GetKnockBackResistance() - attributes.knockbackResistance);
-		SetLavaImmunity(GetLavaImmunity() - attributes.lavaImmunity);
-		SetDamage(GetDamage() - attributes.damage);
-		SetLifeSteal(GetLifeSteal() - attributes.lifesteal);
-		SetMovementSpeed(GetMovementSpeed() - attributes.movementSpeed);
+		if(!pItem->IsSkill()) 
+		{
+			// Remove item attributes.
+			Attributes attributes = pItem->GetAttributes();
+			SetMaxHealth(GetCurrentHealth() - attributes.health);
+			SetRegen(GetRegen() - attributes.regen);
+			SetKnockBackResistance(GetKnockBackResistance() - attributes.knockbackResistance);
+			SetLavaImmunity(GetLavaImmunity() - attributes.lavaImmunity);
+			SetDamage(GetBonusDamage() - attributes.damage);
+			SetLifeSteal(GetLifeSteal() - attributes.lifesteal);
+			SetMovementSpeed(GetMovementSpeed() - attributes.movementSpeed);
+		}
 	}
 }
 
@@ -177,7 +184,7 @@ void Player::AddStatusEffect(StatusEffect* pStatusEffect)
 
 void Player::SetCurrentHealth(float health)
 {
-	mCurrentHealth = health;
+	mCurrentHealth = min(health, mAttributes.health);
 }
 
 void Player::SetRegen(float regen)
@@ -235,7 +242,7 @@ float Player::GetLavaImmunity()
 	return mAttributes.lavaImmunity;
 }
 
-float Player::GetDamage()
+float Player::GetBonusDamage()
 {
 	return mAttributes.damage;
 }

@@ -90,17 +90,19 @@ StateHeader = {
 -- Buttons
 
 DefaultButtonData = {
+	bkgd_scale = 1.2;
 	font_size = 30;
 	font_family = "Arial";
 	font_color = "255 255 255 255";
-	default_texture = "textures/button_default.png";
-	disabled_texture = "textures/button_disabled.png";
-	hoover_texture = "textures/button_hoover.png";
+	default_texture = "textures/button_bkgd.png";
+	disabled_texture = "textures/button_bkgd_disabled.png";
+	hoover_texture = "textures/button_bkgd_hoover.png";
 }
 
 StartGameButton = {
 	pos_x = 1500;
 	pos_y = 50;
+	bkgd_scale = DefaultButtonData.bkgd_scale;
 	font_size = DefaultButtonData.font_size;
 	font_family = DefaultButtonData.font_family;
 	font_color = DefaultButtonData.font_color;
@@ -111,7 +113,8 @@ StartGameButton = {
 
 LeaveLobbyButton = {
 	pos_x = 1500;
-	pos_y = 100;
+	pos_y = 120;
+	bkgd_scale = DefaultButtonData.bkgd_scale;
 	font_size = DefaultButtonData.font_size;
 	font_family = DefaultButtonData.font_family;
 	font_color = DefaultButtonData.font_color;
@@ -123,6 +126,7 @@ LeaveLobbyButton = {
 OptionsBackButton = {
 	pos_x = 905;
 	pos_y = 510;
+	bkgd_scale = DefaultButtonData.bkgd_scale;
 	font_size = 40;
 	font_family = DefaultButtonData.font_family;
 	font_color = DefaultButtonData.font_color;
@@ -134,6 +138,7 @@ OptionsBackButton = {
 GameOverButton = {
 	pos_x = 905;
 	pos_y = 510;
+	bkgd_scale = DefaultButtonData.bkgd_scale;
 	font_size = 35;
 	font_family = DefaultButtonData.font_family;
 	font_color = DefaultButtonData.font_color;

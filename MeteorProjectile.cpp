@@ -31,13 +31,15 @@ void MeteorProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena,
 	XMFLOAT3 dir = pPlayer->GetPosition() - GetPosition();
 	dir.y = 0.0f;
 	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&dir)));
-	pPlayer->SetVelocity(dir * GetImpactImpulse());
+	pPlayer->SetVelocity(dir * GetImpactImpulse() * (1.0f-pPlayer->GetKnockBackResistance()));
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));
 
+	Player* caster = (Player*)GetWorld()->GetObjectById(GetOwner());
+
 	// Damage the player.
-	pPlayer->TakeDamage(item->GetAttributes().damage);
+	pPlayer->TakeDamage(item->GetAttributes().damage + caster->GetBonusDamage());
 	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
 
 	// Dead? [NOTE] A bit of a hack.

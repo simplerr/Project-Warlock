@@ -48,6 +48,13 @@ void ItemLoaderXML::SetupKeyMap()
 	// Setup the string to ItemKey map.
 	mStringKeyMap["Iron Armor"] = IRON_ARMOR;
 	mStringKeyMap["Regen Cap"] = REGEN_CAP;
+	mStringKeyMap["Boots of speed"] = BOOTS_OF_SPEED;
+	mStringKeyMap["Mask of madness"] = MASK_OF_MADNESS;
+	mStringKeyMap["Knockback shield"] = KNOCKBACK_SHIELD;
+	mStringKeyMap["Lava staff"] = LAVA_STAFF;
+	mStringKeyMap["Magic wand"] = MAGIC_WAND;
+
+	// Skills
 	mStringKeyMap["Fireball"] = SKILL_FIREBALL;
 	mStringKeyMap["Hook"] = SKILL_HOOK;
 	mStringKeyMap["Frostnova"] = SKILL_FROSTNOVA;

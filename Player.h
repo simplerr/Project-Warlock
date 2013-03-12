@@ -63,7 +63,7 @@ public:
 	float GetRegen();
 	float GetKnockBackResistance();
 	float GetLavaImmunity();
-	float GetDamage();
+	float GetBonusDamage();
 	float GetLifeSteal();
 	float GetMovementSpeed();
 	float GetDeathTimer();

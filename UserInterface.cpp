@@ -28,11 +28,12 @@ UserInterface::UserInterface(Client* pClient)
 	SetReady(false);
 
 	mItemLoader = new ItemLoaderXML("items.xml");
+	mClient = pClient;
 
 	mStatusArea = new StatusArea(50, 50);
 	mStatusArea->SetItemLoader(mItemLoader);
 
-	mShop = new Shop(50, 200, 3, 60);
+	mShop = new Shop(50, 100, 3, 60);
 	mSkillShop = new Shop(50, 380, 3, 60);
 
 	mInventory = new Inventory(1100, 770+75, 3, 60);
@@ -50,6 +51,11 @@ UserInterface::UserInterface(Client* pClient)
 	mShop->SetInspectingInventory(mInventory);
 	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
 	mShop->PlaceInFreeSlot(ItemKey(IRON_ARMOR, 1));
+	mShop->PlaceInFreeSlot(ItemKey(BOOTS_OF_SPEED, 1));
+	mShop->PlaceInFreeSlot(ItemKey(KNOCKBACK_SHIELD, 1));
+	mShop->PlaceInFreeSlot(ItemKey(MASK_OF_MADNESS, 1));
+	mShop->PlaceInFreeSlot(ItemKey(LAVA_STAFF, 1));
+	mShop->PlaceInFreeSlot(ItemKey(MAGIC_WAND, 1));
 
 	mSkillShop->SetClient(pClient);
 	mSkillShop->SetItemLoader(mItemLoader);
@@ -198,6 +204,15 @@ void UserInterface::OnMessageSent(string message)
 		RakNet::BitStream bitstream;
 		bitstream.Write((unsigned char)NMSG_REQUEST_CVAR_LIST);
 		mInventory->GetClient()->SendServerMessage(bitstream);
+	}
+	else if(elems[0] == "-item") {
+		// Send to server.
+		RakNet::BitStream bitstream;
+		bitstream.Write((unsigned char)NMSG_ITEM_ADDED);
+		bitstream.Write(0);
+		bitstream.Write(atoi(elems[2].c_str()));
+		bitstream.Write(atoi(elems[3].c_str()));
+		mClient->SendServerMessage(bitstream);
 	}
 }
 

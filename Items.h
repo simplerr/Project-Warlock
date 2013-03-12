@@ -17,7 +17,11 @@ enum ItemName
 	//
 	IRON_ARMOR,		// Health
 	REGEN_CAP,		// Regen
-	VIPER_BOOTS,	// Movement speed
+	BOOTS_OF_SPEED,	// Movement speed
+	MASK_OF_MADNESS,
+	KNOCKBACK_SHIELD,
+	LAVA_STAFF,
+	MAGIC_WAND,
 
 	//
 	// Skills

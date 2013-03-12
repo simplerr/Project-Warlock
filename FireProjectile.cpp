@@ -22,16 +22,14 @@ void FireProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, I
 	// Add a "impulse" to the player.
 	XMFLOAT3 dir = GetDirection();
 	dir.y = 0.0f;
-	pPlayer->SetVelocity(dir * GetImpactImpulse());
+	pPlayer->SetVelocity(dir * GetImpactImpulse() * (1-pPlayer->GetKnockBackResistance()));
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));
 
-	// Damage the player.
-	pPlayer->TakeDamage(item->GetAttributes().damage);
-	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
+	Player* caster = (Player*)GetWorld()->GetObjectById(GetOwner());
 
-	// Dead? [NOTE] A bit of a hack.
-	//if(pPlayer->GetCurrentHealth() <= 0) 
-	//	pArena->PlayerEliminated(pPlayer, (Player*)GetWorld()->GetObjectById(GetOwner()));
+	// Damage the player.
+	pPlayer->TakeDamage(item->GetAttributes().damage + caster->GetBonusDamage());
+	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
 }

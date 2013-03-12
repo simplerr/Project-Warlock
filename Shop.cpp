@@ -14,7 +14,7 @@ Shop::Shop(int x, int y, int colums, float slotSize)
 	SetHooverInfoPos(XMFLOAT2(-slotSize/2, -110));
 	SetHooverBkgd("textures/white_transparent.png");
 
-	for(int i = 0; i < 6; i++)
+	for(int i = 0; i < 9; i++)
 		AddSlot();
 }
 

@@ -11,6 +11,7 @@
 #include "Input.h"
 #include "ParticleSystem.h"
 #include "PlayerModule.h"
+#include "StaticObject.h"
 
 ClientArena::ClientArena(Client* pClient)
 	: BaseArena()
@@ -22,6 +23,13 @@ ClientArena::ClientArena(Client* pClient)
 
 	mWorld->AddObjectAddedListener(&ClientArena::OnObjectAdded, this);
 	mWorld->AddObjectRemovedListener(&ClientArena::OnObjectRemoved, this);
+
+	/*for(int i = 0; i < 30; i++)
+	{
+		GLib::StaticObject* object = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/misc/PlantFlowers.obj");
+		object->SetPosition(XMFLOAT3(rand() % 50, 2, rand() % 50));
+		mWorld->AddObject(object);
+	}*/
 }
 
 ClientArena::~ClientArena()

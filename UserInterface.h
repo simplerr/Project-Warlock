@@ -77,6 +77,7 @@ private:
 	HealthBar*					mHealthBar;
 	InGameMenu*					mInGameMenu;
 	AttributesUi*				mAttributesUi;
+	Client*						mClient;
 
 	GameOverOverlay*			mGameOverOverlay;
 	bool						mIsReady;	// to prevent mChat->MsgProc() when not loaded fully.

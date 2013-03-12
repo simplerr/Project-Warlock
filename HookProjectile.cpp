@@ -21,13 +21,15 @@ void HookProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, I
 	// Add a "impulse" to the player.
 	XMFLOAT3 dir = GetDirection();
 	dir.y = 0.0f;
-	pPlayer->SetVelocity(dir * GetImpactImpulse());
+	pPlayer->SetVelocity(dir * GetImpactImpulse() * (1.0f-pPlayer->GetKnockBackResistance()));
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));
 
+	Player* caster = (Player*)GetWorld()->GetObjectById(GetOwner());
+
 	// Damage the player.
-	pPlayer->TakeDamage(item->GetAttributes().damage);
+	pPlayer->TakeDamage(item->GetAttributes().damage + caster->GetBonusDamage());
 	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
 
 	// Dead? [NOTE] A bit of a hack.
