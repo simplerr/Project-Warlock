@@ -126,8 +126,7 @@ void ClientMessageHandler::HandleConnectionSuccess(RakNet::BitStream& bitstream)
 		player->SetName(name);
 		player->SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
 		player->SetPosition(pos);
-		mClient->GetWorld()->AddObject(player);
-		player->SetId(id);	// Use the servers ID.
+		mClient->GetWorld()->AddObject(player, id); // Use the servers ID.
 	}
 
 	// Send the client info to the server (name etc).

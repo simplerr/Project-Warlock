@@ -224,6 +224,9 @@ void UserInterface::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 
 void UserInterface::SetSelectedPlayer(PlayerModule* pPlayer)
 {
+	if(pPlayer == nullptr)
+		int a = 1;
+
 	pPlayer->SetUserInterface(this);
 	mInventory->SetPlayer(pPlayer->GetPlayer());
 	mSkillInventory->SetPlayer(pPlayer);
