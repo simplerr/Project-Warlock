@@ -267,12 +267,13 @@ void UserInterface::OnStatusEffectRemoved(ItemName type)
 	mStatusArea->RemoveStatusEffect(ItemKey(type, 1));
 }
 
-void UserInterface::DisplayGameOver(Client* pClient)
+void UserInterface::DisplayGameOver(Client* pClient, string winner)
 {
 	auto scoreMap = pClient->GetRoundHandler()->GetScoreMap();
 
 	mGameOverOverlay = new GameOverOverlay(500, 500);
 	mGameOverOverlay->SetScoreMap(scoreMap);
+	mGameOverOverlay->SetWinner(winner);
 }
 
 void UserInterface::SetReady(bool ready)

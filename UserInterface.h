@@ -43,7 +43,7 @@ public:
 	void Update(GLib::Input* pInput, float dt);
 	void Draw(GLib::Graphics* pGraphics);
 	void OnResize(float width, float height);
-	void DisplayGameOver(Client* pClient);
+	void DisplayGameOver(Client* pClient, string winner);
 
 	void HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
 	void HandleItemRemoved(PlayerModule* pPlayer, RakNet::BitStream& bitstream);

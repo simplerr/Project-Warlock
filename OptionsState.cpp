@@ -91,6 +91,7 @@ void OptionsState::BuildUi()
 
 	mControlManager->AddControl(mBackButton);
 	mBackButton->SetAlignment(false, true);
+	mBackButton->SetPressedSound("sounds/button.wav");
 	
 	mControlManager->LoadLuaProperties();
 

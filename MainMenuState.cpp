@@ -73,6 +73,8 @@ void MainMenuState::BuildUi()
 	mMenu->AddItem("Options", "Options");
 	mMenu->AddItem("About", "About");
 	
+	mMenu->SetPressedSound("sounds/button.wav");
+
 	mMenu->PerformLayout();
 	mControlManager->AddControl(mMenu);
 	mControlManager->LoadLuaProperties();

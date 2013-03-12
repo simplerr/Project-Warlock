@@ -64,6 +64,7 @@ void BrowsingState::BuildUi()
 
 	TextMenu* serverMenu = new TextMenu(800, 400, "ServerMenu");
 	serverMenu->AddItemPressedListener(&BrowsingState::OnServerPressed, this);
+	serverMenu->SetPressedSound("sounds/button.wav");
 
 	for(int i = 0; i < serverList.size(); i++)
 	{

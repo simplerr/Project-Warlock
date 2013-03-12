@@ -11,6 +11,7 @@ InGameMenu::InGameMenu(string luaScript)
 	mMenu = new TextMenu(0, 0, "InGameMenu");
 	mMenu->AddItem("MainMenu", "Exit to Main Menu");
 	mMenu->SetVisible(false);
+	mMenu->SetPressedSound("sounds/button.wav");
 	mMenu->AddItemPressedListener(&InGameMenu::ButtonPressed, this);
 	AddControl(mMenu);
 

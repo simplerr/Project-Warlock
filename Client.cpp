@@ -24,6 +24,7 @@
 #include "LobbyState.h"
 #include "PlayingState.h"
 #include "RoundHandler.h"
+#include "Sound.h"
 
 Client::Client()
 {
@@ -177,7 +178,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				char winner[244];
 				bitstream.Read(winner);
 				mRoundHandler->AddScore(winner, 1);
-				mUserInterface->DisplayGameOver(this);
+				mUserInterface->DisplayGameOver(this, winner);
 				mGameOver = true;
 				break;
 			}
@@ -200,6 +201,17 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			// This is a bit ugly [NOTE].
 			LobbyState::Instance()->ChangeState(PlayingState::Instance());
 			PlayingState::Instance()->SetClient(this);
+			break;
+		case NMSG_COUNTDOWN_TICK:
+			char buffer[256], file[64];
+			bitstream.Read(buffer);
+			mUserInterface->GetChat()->AddText((char*)string(string(buffer) + "\n").c_str(), RGB(0, 0, 0));
+
+			int num = atoi(buffer);
+			if(num >= 0 && num <= 3) {
+				sprintf(file, "sounds/%s.wav", buffer);
+				gSound->PlayEffect(file);
+			}
 			break;
 	}
 
@@ -228,6 +240,19 @@ void Client::EndRound(string winner)
 
 	// Set the status text.
 	mUserInterface->SetStatusText(winner + " won the round!", 1337, 40, GLib::ColorRGBA(255, 0, 0, 255));
+
+	if(mArena->GetLocalPlayer()->GetName() == winner) 
+	{
+		int id = rand() % 7;
+
+		if(id == 0)
+			gSound->PlayEffect("sounds/godlike.wav");
+		else if(id == 1)
+			gSound->PlayEffect("sounds/rampage.wav");
+		else if(id == 2)
+			gSound->PlayEffect("sounds/wickedsick.wav");
+
+	}
 }
 
 void Client::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)

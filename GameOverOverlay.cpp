@@ -4,6 +4,7 @@
 #include "ControlManager.h"
 #include "Button.h"
 #include "UserInterface.h"
+#include "Sound.h"
 
 GameOverOverlay::GameOverOverlay(float x, float y)
 {
@@ -14,6 +15,8 @@ GameOverOverlay::GameOverOverlay(float x, float y)
 	mControlManager->LoadLuaProperties();
 
 	mChangeState = false;
+
+	gSound->PlayEffect("sounds/game_over_screen.wav");
 }
 
 GameOverOverlay::~GameOverOverlay()
@@ -28,7 +31,7 @@ void GameOverOverlay::Update(GLib::Input* pInput, float dt)
 
 void GameOverOverlay::Draw(GLib::Graphics* pGraphics)
 {
-	string text = "Game over!";
+	string text = mWinner + " wins the game!";
 	float width = pGraphics->MeasureText(text, 60, "Arial").Width();
 	pGraphics->DrawText(text, GLib::GetClientWidth()/2-width/2, 80, 60);
 
@@ -53,6 +56,7 @@ void GameOverOverlay::SetScoreMap(map<string, int> scoreMap)
 	mMainMenuButton = new Button(100, 100, "GameOverButton" ,"Main Menu");
 	mMainMenuButton->SetBkgdScale(1.2f);
 	mMainMenuButton->AddPressedListener(&GameOverOverlay::ButtonPressed, this);
+	mMainMenuButton->SetPressedSound("sounds/button.wav");
 	mControlManager->AddControl(mMainMenuButton);
 	mControlManager->LoadLuaProperties();
 
@@ -85,4 +89,9 @@ void GameOverOverlay::SetUserInterface(UserInterface* pInterface)
 bool GameOverOverlay::GetChangeState()
 {
 	return mChangeState;
+}
+
+void GameOverOverlay::SetWinner(string winner)
+{
+	mWinner = winner;
 }

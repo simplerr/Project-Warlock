@@ -52,5 +52,6 @@ enum MessageId
 	// Chat events.
 	//
 	NMSG_CHAT_MESSAGE_SENT,
-	NMSG_CVAR_CHANGE
+	NMSG_CVAR_CHANGE,
+	NMSG_COUNTDOWN_TICK
 };

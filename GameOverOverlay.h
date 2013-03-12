@@ -25,6 +25,7 @@ public:
 
 	void SetScoreMap(map<string, int> scoreMap);
 	void SetUserInterface(UserInterface* pInterface);
+	void SetWinner(string winner);
 	void OnResize(float width, float height);
 	bool GetChangeState();
 
@@ -35,4 +36,5 @@ private:
 	TextMenu*		mScoreList;
 	Button*		    mMainMenuButton;
 	bool			mChangeState;
+	string			mWinner;
 };

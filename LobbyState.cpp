@@ -97,6 +97,9 @@ void LobbyState::BuildUi()
 	leaveButton->SetAlignment(false, true);
 	mControlManager->AddControl(leaveButton);
 
+	leaveButton->SetPressedSound("sounds/button.wav");
+	startButton->SetPressedSound("sounds/button.wav");
+
 	mControlManager->LoadLuaProperties();
 }
 

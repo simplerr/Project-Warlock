@@ -24,7 +24,7 @@ struct ServerCvars
 		CvarMap[Cvars::START_GOLD] = 13;
 		CvarMap[Cvars::SHOP_TIME] = 3;
 		CvarMap[Cvars::ROUND_TIME] = 120;
-		CvarMap[Cvars::NUM_ROUNDS] = 5;
+		CvarMap[Cvars::NUM_ROUNDS] = 1;
 		CvarMap[Cvars::GOLD_PER_KILL] = 1;
 		CvarMap[Cvars::GOLD_PER_WIN] = 3;
 		CvarMap[Cvars::LAVA_DMG] = 1;
@@ -56,6 +56,25 @@ struct ServerCvars
 
 
 		//fin.close();
+
+		//FILE* file;
+		//file = fopen(filename.c_str(), "r");
+		//char trash[64], trash1[64], trash2[64], trash3[64], trash4[64], trash5[64], trash6[64], trash7[64];
+
+		///*fscanf(file, "%s %i %s %i %s %i %s %i %s %i %s %i %s %i %s %i", 
+		//trash,  CvarMap[Cvars::START_GOLD], 
+		//trash1, CvarMap[Cvars::SHOP_TIME],
+		//trash2, CvarMap[Cvars::ROUND_TIME], 
+		//trash3, CvarMap[Cvars::NUM_ROUNDS],
+		//trash4, CvarMap[Cvars::GOLD_PER_KILL],
+		//trash5, CvarMap[Cvars::GOLD_PER_WIN], 
+		//trash6, CvarMap[Cvars::LAVA_DMG], 
+		//trash7, CvarMap[Cvars::PROJECTILE_IMPULSE]);*/
+
+		//fgets(trash, 255, file);
+		//fgets(trash, 255, file);
+
+		//fclose(file);
 	}
 
 	void SetCvarValue(string cvar, int value) {
