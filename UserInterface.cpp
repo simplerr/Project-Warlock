@@ -33,8 +33,8 @@ UserInterface::UserInterface(Client* pClient)
 	mStatusArea = new StatusArea(50, 50);
 	mStatusArea->SetItemLoader(mItemLoader);
 
-	mShop = new Shop(50, 100, 3, 60);
-	mSkillShop = new Shop(50, 380, 3, 60);
+	mShop = new Shop(60, 100, 3, 70);
+	mSkillShop = new Shop(60, 380, 3, 70);
 
 	mInventory = new Inventory(1100, 770+75, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
@@ -67,6 +67,7 @@ UserInterface::UserInterface(Client* pClient)
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_HOOK, 1));
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/inventory_bkgd.png");
+	mWhiteTexture = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
 
 	mStatusText = new GLib::StatusText("nothing", 800, 200, 6);
 	mHealthBar = new HealthBar(840, 800);
@@ -117,9 +118,13 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 
 void UserInterface::Draw(GLib::Graphics* pGraphics)
 {
+	if(mClient->GetArenaState() == SHOPPING_STATE)
+		pGraphics->DrawScreenQuad(mWhiteTexture, 320/2, GLib::GetClientHeight()/2, 320, GLib::GetClientHeight());
+
 	// Background.
 	UiCoordinate coords(UiAlignmentX::CENTER, BOTTOM, 800, 800, 1600, 200, false, true);
 	pGraphics->DrawScreenQuad(mBkgdTexture, coords.x, coords.y, coords.width, coords.height);
+
 
 	mAttributesUi->Draw(pGraphics);
 	mInventory->Draw(pGraphics);

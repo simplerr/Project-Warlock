@@ -74,6 +74,7 @@ private:
 	Shop*						mShop;
 	Shop*						mSkillShop;
 	GLib::Texture2D*			mBkgdTexture;
+	GLib::Texture2D*			mWhiteTexture;
 	GLib::StatusText*			mStatusText;
 	StatusArea*					mStatusArea;
 	Chat*						mChat;

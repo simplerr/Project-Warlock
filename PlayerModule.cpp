@@ -48,6 +48,10 @@ void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 		// Add movement target for the selected object.
 		if(pInput->KeyPressed(VK_RBUTTON))
 		{
+			// Don't move if the shop area was pressed.
+			if(pClient->GetArenaState() == SHOPPING_STATE && pInput->MousePosition().x <= 320)
+				return;
+
 			XMFLOAT3 pos = mPlayer->GetWorld()->GetTerrainIntersectPoint(pInput->GetWorldPickingRay());
 
 			// Inform the server about what happened.
