@@ -3,6 +3,7 @@
 #include "BitStream.h"
 #include "d3dUtil.h"
 #include "States.h"
+#include "ServerData.h"
 #include <string>
 #include <map>
 
@@ -44,6 +45,7 @@ public:
 	bool IsGameOver();
 
 	void SetSelectedPlayer(Player* pPlayer);
+	void SetServerData(ServerData serverData);
 	void AddChatText(string text, COLORREF color = RGB(0, 0, 0));
 
 	//
@@ -55,9 +57,11 @@ public:
 	Chat*			GetChat();
 	UserInterface*	GetUi();
 	RoundHandler*	GetRoundHandler();
+	ClientArena*	GetArena();
 	string			GetName();
 	CurrentState	GetArenaState();
 	bool			IsLocalPlayerSelected();
+	bool			IsHost();
 
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:
@@ -66,6 +70,7 @@ private:
 	ClientMessageHandler*		mMessageHandler;
 	UserInterface*				mUserInterface;
 	RoundHandler*				mRoundHandler;
+	ServerData					mServerData;
 	string						mName;
 	bool						mGameOver;
 };

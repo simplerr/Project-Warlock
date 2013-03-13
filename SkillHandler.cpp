@@ -26,6 +26,9 @@ void SkillHandler::Update(float dt)
 
 bool SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 start, XMFLOAT3 end)
 {
+	if(end.x == numeric_limits<float>::infinity())
+		return false;
+
 	for(auto iter = mSkillMap.begin(); iter != mSkillMap.end(); iter++) {
 		Skill* skill = (*iter).second;
 		char key = (*iter).first;

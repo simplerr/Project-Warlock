@@ -21,6 +21,7 @@ public:
 	void SetClientsPlayerI(int id);
 
 	void AddItem(HudItem* pItem) {}
+	void RemoveItem(HudItem* pItem, bool updateLayout = true) {};
 
 	void InventoryItemRemoved(HudItem* pItem);
 private:

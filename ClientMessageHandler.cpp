@@ -1,4 +1,6 @@
 #include "ClientMessageHandler.h"
+#include "UserInterface.h"
+#include "ClientArena.h"
 #include "Sound.h"
 #include "Client.h"
 #include "World.h"
@@ -286,4 +288,12 @@ void ClientMessageHandler::HandlePlayerEliminated(RakNet::BitStream& bitstream)
 
 	string chatText = string(killed) + " was pwnd by " + string(eliminator) + "!\n";
 	mClient->AddChatText((char*)chatText.c_str(), RGB(255, 0, 0));
+}
+
+void ClientMessageHandler::HandlePerformRematch(RakNet::BitStream& bitstream)
+{
+	// Remove all the players items.
+	mClient->GetUi()->RemoveAllItems();
+
+
 }

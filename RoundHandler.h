@@ -21,6 +21,7 @@ public:
 	void SetArenaState(ArenaState state);
 	void SetCurrentState(CurrentState state);
 	void SetWinner(string winner);
+	void ResetScores();
 
 	ArenaState& GetArenaState();
 	string GetWinner();

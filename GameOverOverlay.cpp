@@ -5,8 +5,10 @@
 #include "Button.h"
 #include "UserInterface.h"
 #include "Sound.h"
+#include "Client.h"
+#include "NetworkMessages.h"
 
-GameOverOverlay::GameOverOverlay(float x, float y)
+GameOverOverlay::GameOverOverlay(float x, float y, Client* pClient)
 {
 	mScoreList = new TextMenu(x, y, "GameOverList");
 	mScoreList->SetAlignment(false, true);
@@ -15,6 +17,8 @@ GameOverOverlay::GameOverOverlay(float x, float y)
 	mControlManager->LoadLuaProperties();
 
 	mChangeState = false;
+
+	mClient = pClient;
 
 	gSound->PlayEffect("sounds/game_over_screen.wav");
 }
@@ -58,11 +62,24 @@ void GameOverOverlay::SetScoreMap(map<string, int> scoreMap)
 	mMainMenuButton->AddPressedListener(&GameOverOverlay::ButtonPressed, this);
 	mMainMenuButton->SetPressedSound("sounds/button.wav");
 	mControlManager->AddControl(mMainMenuButton);
+
+	// Add "Back to main menu" button.
+	mRematchButton = new Button(100, 100, "GameOverButton" ,"Rematch");
+	mRematchButton->SetBkgdScale(1.2f);
+	mRematchButton->AddPressedListener(&GameOverOverlay::ButtonPressed, this);
+	mRematchButton->SetPressedSound("sounds/button.wav");
+	mControlManager->AddControl(mRematchButton);
+
+	if(!mClient->IsHost())
+		mRematchButton->SetDisabled(true);
+
 	mControlManager->LoadLuaProperties();
 
 	GLib::Rect scoreRect = mScoreList->GetRect();
 	float right = (scoreRect.left + scoreRect.Width()/2) + scoreRect.Width()*mScoreList->GetBkgdScale()/2;
 	mMainMenuButton->SetPosition(right - mMainMenuButton->GetRect().Width()/2, scoreRect.bottom + mMainMenuButton->GetRect().Height()/2);
+
+	mRematchButton->SetPosition(mMainMenuButton->GetPosition().x - 200, mMainMenuButton->GetPosition().y);
 }
 
 void GameOverOverlay::OnResize(float width, float height)
@@ -77,8 +94,18 @@ void GameOverOverlay::OnResize(float width, float height)
 
 void GameOverOverlay::ButtonPressed(Button* pButton)
 {
-	mChangeState = true;
-	// Turn off the server is host. [NOTE][TODO]
+	if(pButton->GetText() == "Main Menu")
+	{
+		mChangeState = true;
+		// Turn off the server is host. [NOTE][TODO]
+	}
+	else if(pButton->GetText() == "Rematch")
+	{
+		// Send rematch request.
+		RakNet::BitStream bitstream;
+		bitstream.Write((unsigned char)NMSG_REQUEST_REMATCH);
+		mClient->SendServerMessage(bitstream);
+	}
 }
 
 void GameOverOverlay::SetUserInterface(UserInterface* pInterface)

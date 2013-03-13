@@ -28,7 +28,7 @@ public:
 
 	void AddItem(ItemName name, int level);
 	void AddItem(HudItem* pItem);
-	void RemoveItem(HudItem* pItem);
+	void RemoveItem(HudItem* pItem, bool updateLayout = true);
 	void UpdateItems();
 
 	void OnHoover(const ItemSlot& itemSlot);

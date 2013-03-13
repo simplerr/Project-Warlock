@@ -202,7 +202,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			LobbyState::Instance()->ChangeState(PlayingState::Instance());
 			PlayingState::Instance()->SetClient(this);
 			break;
-		case NMSG_COUNTDOWN_TICK:
+		case NMSG_COUNTDOWN_TICK: {
 			char buffer[256], file[64];
 			bitstream.Read(buffer);
 			mUserInterface->GetChat()->AddText((char*)string(string(buffer) + "\n").c_str(), RGB(0, 0, 0));
@@ -212,6 +212,13 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				sprintf(file, "sounds/%s.wav", buffer);
 				gSound->PlayEffect(file);
 			}
+			break;
+								  }
+		case NMSG_PERFORM_REMATCH:
+			mMessageHandler->HandlePerformRematch(bitstream);
+			mGameOver = false;
+			mRoundHandler->ResetScores();
+			mUserInterface->RemoveGameOverScreen();
 			break;
 	}
 
@@ -251,7 +258,6 @@ void Client::EndRound(string winner)
 			gSound->PlayEffect("sounds/rampage.wav");
 		else if(id == 2)
 			gSound->PlayEffect("sounds/wickedsick.wav");
-
 	}
 }
 
@@ -319,4 +325,19 @@ RoundHandler* Client::GetRoundHandler()
 bool Client::IsGameOver()
 {
 	return mGameOver;
+}
+
+bool Client::IsHost()
+{
+	return GetName() == mServerData.host;
+}
+
+void Client::SetServerData(ServerData serverData)
+{
+	mServerData = serverData;
+}
+
+ClientArena* Client::GetArena()
+{
+	return mArena;
 }

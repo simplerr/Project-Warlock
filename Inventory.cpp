@@ -63,7 +63,7 @@ void Inventory::AddItem(HudItem* pItem)
 	UpdateItems();
 }
 
-void Inventory::RemoveItem(HudItem* pItem)
+void Inventory::RemoveItem(HudItem* pItem, bool updateLayout)
 {
 	// Remove item from player.
 	mPlayer->RemoveItem(pItem);
@@ -72,7 +72,8 @@ void Inventory::RemoveItem(HudItem* pItem)
 	SendItemRemoved(mPlayer->GetId(), pItem->GetName(), pItem->GetLevel());
 
 	// Clear the inventory and update it with the players current items.
-	UpdateItems();
+	if(updateLayout)
+		UpdateItems();
 
 	// Tell the shop.
 	mShop->InventoryItemRemoved(pItem);

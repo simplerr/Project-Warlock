@@ -111,6 +111,8 @@ void LobbyState::SetServerData(ServerData data)
 		mClient->ConnectToServer(data.localIp);
 	else
 		mClient->ConnectToServer(data.publicIp);
+
+	mClient->SetServerData(mServerData);
 	
 	float chatWidth = 600;
 	float chatHeight = 250;

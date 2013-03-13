@@ -195,6 +195,16 @@ void HudItemContainer::SendGoldChange(int playerId, int newGold)
 	GetClient()->SendServerMessage(bitstream);
 }
 
+void HudItemContainer::RemoveAllItems()
+{
+	for(int i = 0; i < mItemSlots.size(); i++)
+	{
+		Item* item = mItemLoaderXML->GetItem(ItemKey(mItemSlots[i].item->GetName(), mItemSlots[i].item->GetLevel()));
+		if(item != nullptr)
+			RemoveItem(item, false);
+	}
+}
+
 void HudItemContainer::SetItemLoader(ItemLoaderXML* pLoader)
 {
 	mItemLoaderXML = pLoader;

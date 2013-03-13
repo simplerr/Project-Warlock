@@ -12,6 +12,7 @@ public:
 	void OnRightPress(ItemSlot& itemSlot);
 	string GetHooverText(HudItem* pItem);
 	void AddItem(HudItem* pItem);
+	void RemoveItem(HudItem* pItem, bool updateLayout = true) {};
 
 	void RemoveStatusEffect(ItemKey itemKey);
 private:

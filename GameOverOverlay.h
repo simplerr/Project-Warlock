@@ -13,11 +13,12 @@ class ControlManager;
 class TextMenu;
 class Button;
 class UserInterface;
+class Client;
 
 class GameOverOverlay
 {
 public:
-	GameOverOverlay(float x, float y);
+	GameOverOverlay(float x, float y, Client* pClient);
 	~GameOverOverlay();
 
 	void Update(GLib::Input* pInput, float dt);
@@ -35,6 +36,8 @@ private:
 	UserInterface*	mUserInterface; // Used to inform if the state was changed.
 	TextMenu*		mScoreList;
 	Button*		    mMainMenuButton;
+	Button*		    mRematchButton;
+	Client*			mClient;
 	bool			mChangeState;
 	string			mWinner;
 };

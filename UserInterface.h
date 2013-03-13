@@ -44,6 +44,7 @@ public:
 	void Draw(GLib::Graphics* pGraphics);
 	void OnResize(float width, float height);
 	void DisplayGameOver(Client* pClient, string winner);
+	void RemoveGameOverScreen();
 
 	void HandleItemAdded(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
 	void HandleItemRemoved(PlayerModule* pPlayer, RakNet::BitStream& bitstream);
@@ -51,6 +52,7 @@ public:
 	void HandleAddChatText(RakNet::BitStream& bitstream);
 	void SetSelectedPlayer(PlayerModule* pPlayer);
 	bool PointInsideUi(XMFLOAT3 position);
+	void RemoveAllItems();
 
 	void UpdateChatPosition();
 	void SetStatusText(string text, float time, float size = 30, UINT32 color = GLib::ColorRGBA(0, 0, 0, 255));
@@ -64,6 +66,7 @@ public:
 	bool IsReady();
 
 	Chat* GetChat();
+	ItemLoaderXML* GetItemLoader();
 private:
 	ItemLoaderXML*				mItemLoader;
 	Inventory*					mInventory;

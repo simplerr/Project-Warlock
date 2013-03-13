@@ -76,3 +76,9 @@ map<string, int> RoundHandler::GetScoreMap()
 {
 	return mScoreMap;
 }
+
+void RoundHandler::ResetScores()
+{
+	for(auto iter = mScoreMap.begin(); iter != mScoreMap.end(); iter++)
+		(*iter).second = 0;
+}

@@ -21,7 +21,7 @@ namespace Cvars {
 struct ServerCvars
 {
 	ServerCvars() {
-		CvarMap[Cvars::START_GOLD] = 13;
+		CvarMap[Cvars::START_GOLD] = 1300;
 		CvarMap[Cvars::SHOP_TIME] = 3;
 		CvarMap[Cvars::ROUND_TIME] = 120;
 		CvarMap[Cvars::NUM_ROUNDS] = 1;

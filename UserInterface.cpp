@@ -289,9 +289,15 @@ void UserInterface::DisplayGameOver(Client* pClient, string winner)
 {
 	auto scoreMap = pClient->GetRoundHandler()->GetScoreMap();
 
-	mGameOverOverlay = new GameOverOverlay(500, 500);
+	mGameOverOverlay = new GameOverOverlay(500, 500, mClient);
 	mGameOverOverlay->SetScoreMap(scoreMap);
 	mGameOverOverlay->SetWinner(winner);
+}
+
+void UserInterface::RemoveGameOverScreen()
+{
+	delete mGameOverOverlay;
+	mGameOverOverlay = nullptr;
 }
 
 void UserInterface::SetReady(bool ready)
@@ -302,4 +308,18 @@ void UserInterface::SetReady(bool ready)
 bool UserInterface::IsReady()
 {
 	return mIsReady;
+}
+
+ItemLoaderXML* UserInterface::GetItemLoader()
+{
+	return mItemLoader;
+}
+
+void UserInterface::RemoveAllItems()
+{
+	mInventory->RemoveAllItems();
+	mSkillInventory->RemoveAllItems();
+
+	mInventory->UpdateItems();
+	mSkillInventory->UpdateItems();
 }

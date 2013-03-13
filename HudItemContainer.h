@@ -40,6 +40,7 @@ public:
 	virtual void OnRightPress(ItemSlot& itemSlot) = 0;
 	virtual string GetHooverText(HudItem* pItem) = 0;
 	virtual void AddItem(HudItem* pItem) = 0;
+	virtual void RemoveItem(HudItem* pItem, bool updateLayout = true) = 0;
 
 	void AddSlot();
 	void PlaceInFreeSlot(HudItem* pItem);
@@ -47,6 +48,7 @@ public:
 	void FreeAllSlots();
 	void PerformLayout();
 	void OnResolutionChange();
+	void RemoveAllItems();
 
 	void SendItemAdded(int playerId, ItemName itemName, int itemLevel);
 	void SendItemRemoved(int playerId, ItemName itemName, int itemLevel);

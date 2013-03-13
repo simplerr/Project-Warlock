@@ -66,7 +66,7 @@ void SkillInventory::AddItem(HudItem* pItem)
 	UpdateItems();
 }
 
-void SkillInventory::RemoveSkill(HudItem* pItem)
+void SkillInventory::RemoveItem(HudItem* pItem, bool updateLayout)
 {
 	// Sell item.
 	mPlayer->RemoveSkill(pItem->GetName());
@@ -74,11 +74,12 @@ void SkillInventory::RemoveSkill(HudItem* pItem)
 	// Send message to server.
 	SendItemRemoved(mPlayer->GetPlayer()->GetId(), pItem->GetName(), pItem->GetLevel());
 
+	// Free all slots and get the current skills from the player.
+	if(updateLayout)
+		UpdateItems();
+
 	// Tell the shop that an item was sold.
 	mShop->InventoryItemRemoved(pItem);
-
-	// Free all slots and get the current skills from the player.
-	UpdateItems();
 }
 
 void SkillInventory::UpdateItems()
@@ -109,7 +110,7 @@ void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 		return;
 
 	// Sell skill.
-	RemoveSkill(itemSlot.item);
+	RemoveItem(itemSlot.item);
 	Player* player = GetClient()->GetLocalPlayer();
 	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
 
