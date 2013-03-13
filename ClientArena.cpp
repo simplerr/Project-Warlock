@@ -24,12 +24,22 @@ ClientArena::ClientArena(Client* pClient)
 	mWorld->AddObjectAddedListener(&ClientArena::OnObjectAdded, this);
 	mWorld->AddObjectRemovedListener(&ClientArena::OnObjectRemoved, this);
 
-	/*for(int i = 0; i < 30; i++)
+	for(int i = 0; i < 40; i++)
 	{
-		GLib::StaticObject* object = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), "models/misc/PlantFlowers.obj");
-		object->SetPosition(XMFLOAT3(rand() % 50, 2, rand() % 50));
+		string plant;
+		int plantId = rand() % 3 + 1;
+		if(plantId == 1)
+			plant = "models/misc/PlantReed.obj";
+		else if(plantId == 2)
+			plant = "models/misc/PlantFlowers.obj";
+		else if(plantId == 3)
+			plant = "models/misc/PlantGrass.obj";
+
+		GLib::StaticObject* object = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), plant);
+		object->SetPosition(XMFLOAT3(40 - rand() % 80, 2, 40 - rand() % 80));
 		mWorld->AddObject(object);
-	}*/
+		object->SetId(i +1000);
+	}
 }
 
 ClientArena::~ClientArena()

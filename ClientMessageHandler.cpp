@@ -88,10 +88,10 @@ void ClientMessageHandler::HandleTargetAdded(RakNet::BitStream& bitstream)
 	bitstream.Read(z);
 	bitstream.Read(clear);
 
-	GLib::ObjectList* objects = mClient->GetWorld()->GetObjects();
-	for(int i = 0; i < objects->size(); i++)
+	auto playerList = mClient->GetPlayerList();
+	for(int i = 0; i < playerList.size(); i++)
 	{
-		Actor* object = (Actor*)objects->operator[](i);
+		Actor* object = (Actor*)playerList[i];
 		if(object->GetId() == id)
 			object->AddTarget(XMFLOAT3(x, y, z), clear);
 	}
