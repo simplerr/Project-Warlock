@@ -1,19 +1,17 @@
 #pragma once
 #include "Projectile.h"
 
-class StatusEffect;
+class Player;
+class BaseArena;
+class ItemLoaderXML;
 
-class FrostProjectile : public Projectile
+class VenomProjectile : public Projectile
 {
 public:
-	FrostProjectile(int owner, XMFLOAT3 position);
-	~FrostProjectile();
+	VenomProjectile(int owner, XMFLOAT3 position, XMFLOAT3 dir);
+	~VenomProjectile();
 
-	void Draw(GLib::Graphics* pGraphics);
 	void HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, ItemLoaderXML* pItemLoader);
-
-	XNA::AxisAlignedBox GetBoundingBox();
 	StatusEffect* GetStatusEffect(ItemLoaderXML* pItemLoader);
 private:
-
 };

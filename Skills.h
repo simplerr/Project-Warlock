@@ -80,3 +80,12 @@ public:
 
 	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
 };
+
+class VenomSkill : public Skill
+{
+public:
+	VenomSkill(string icon);
+	~VenomSkill();
+
+	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
+};

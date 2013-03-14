@@ -35,7 +35,7 @@ public:
 	int		 GetSkillLevel();
 	float	 GetDamage();
 	float	 GetImpactImpulse();
-	virtual StatusEffect* GetStatusEffect() {return nullptr;}
+	virtual StatusEffect* GetStatusEffect(ItemLoaderXML* pItemLoader) {return nullptr;}
 	string	 GetCastSound();
 	string	 GetImpactSound();
 private:

@@ -211,7 +211,7 @@ void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bi
 	gSound->PlayEffect(projectile->GetImpactSound());
 
 	// Add status effect if there is any.
-	StatusEffect* statusEffect = projectile->GetStatusEffect();
+	StatusEffect* statusEffect = projectile->GetStatusEffect(mClient->GetUi()->GetItemLoader());
 	if(statusEffect != nullptr)
 		player->AddStatusEffect(statusEffect);
 

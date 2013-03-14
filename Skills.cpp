@@ -201,3 +201,20 @@ void Hook::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 e
 {
 
 }
+
+// Venom.
+
+VenomSkill::VenomSkill(string icon) : Skill(icon)
+{
+	SetName(SKILL_VENOM);
+}
+
+VenomSkill::~VenomSkill()
+{
+
+}
+
+void VenomSkill::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
+{
+
+}

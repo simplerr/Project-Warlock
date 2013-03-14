@@ -78,7 +78,7 @@ AxisAlignedBox FrostProjectile::GetBoundingBox()
 	return box;
 }
 
-StatusEffect* FrostProjectile::GetStatusEffect()
+StatusEffect* FrostProjectile::GetStatusEffect(ItemLoaderXML* pItemLoader)
 {
 	return new FreezeEffect();
 }

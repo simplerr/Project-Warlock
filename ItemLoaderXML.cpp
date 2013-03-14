@@ -60,8 +60,12 @@ void ItemLoaderXML::SetupKeyMap()
 	mStringKeyMap["Frostnova"] = SKILL_FROSTNOVA;
 	mStringKeyMap["Teleport"] = SKILL_TELEPORT;	
 	mStringKeyMap["Meteor"] = SKILL_METEOR;
+	mStringKeyMap["Venom Acid"] = SKILL_VENOM;
+
+	// Status effects.
 	mStringKeyMap["Freeze Effect"] = FREEZE_STATUS;	
 	mStringKeyMap["Teleport Effect"] = TELEPORT_STATUS;
+	mStringKeyMap["Poisoned Effect"] = POISON_STATUS;
 }
 
 void ItemLoaderXML::LoadItems(TiXmlElement* pRoot)
@@ -78,15 +82,18 @@ void ItemLoaderXML::LoadItems(TiXmlElement* pRoot)
 		{
 			// Load the attributes.
 			Attributes attributes;
-			attributes.health = level->Attribute("health") == NULL ? 0.0f : atof(level->Attribute("health"));
-			attributes.regen = level->Attribute("regen") == NULL ? 0.0f : atof(level->Attribute("regen"));
-			attributes.movementSpeed = level->Attribute("movementSpeed") == NULL ? 0.0f : atof(level->Attribute("movementSpeed"));
-			attributes.knockbackResistance = level->Attribute("knockbakResistance") == NULL ? 0.0f : atof(level->Attribute("knockbakResistance"));
-			attributes.lavaImmunity = level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
-			attributes.damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
-			attributes.lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
-			attributes.cooldown = level->Attribute("cooldown") == NULL ? 0.0f : atof(level->Attribute("cooldown"));
-			attributes.name = name;
+			attributes.health				= level->Attribute("health") == NULL ? 0.0f : atof(level->Attribute("health"));
+			attributes.regen				= level->Attribute("regen") == NULL ? 0.0f : atof(level->Attribute("regen"));
+			attributes.movementSpeed		= level->Attribute("movementSpeed") == NULL ? 0.0f : atof(level->Attribute("movementSpeed"));
+			attributes.knockbackResistance	= level->Attribute("knockbakResistance") == NULL ? 0.0f : atof(level->Attribute("knockbakResistance"));
+			attributes.lavaImmunity			= level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
+			attributes.damage				= level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
+			attributes.lifesteal			= level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
+			attributes.cooldown				= level->Attribute("cooldown") == NULL ? 0.0f : atof(level->Attribute("cooldown"));
+			attributes.dot					= level->Attribute("dot") == NULL ? 0.0f : atof(level->Attribute("dot"));
+			attributes.slow					= level->Attribute("slow") == NULL ? 0.0f : atof(level->Attribute("slow"));
+			attributes.duration				= level->Attribute("duration") == NULL ? 0.0f : atof(level->Attribute("duration"));
+			attributes.name					= name;
 
 			// Set the attributes and the other data.
 			Item* loadedItem = new Item(icon);
@@ -122,15 +129,18 @@ void ItemLoaderXML::LoadSkills(TiXmlElement* pRoot)
 		{
 			// Load the attributes.
 			Attributes attributes;
-			attributes.health = level->Attribute("health") == NULL ? 0.0f : atof(level->Attribute("health"));
-			attributes.regen = level->Attribute("regen") == NULL ? 0.0f : atof(level->Attribute("regen"));
-			attributes.movementSpeed = level->Attribute("movementSpeed") == NULL ? 0.0f : atof(level->Attribute("movementSpeed"));
-			attributes.knockbackResistance = level->Attribute("knockbakResistance") == NULL ? 0.0f : atof(level->Attribute("knockbakResistance"));
-			attributes.lavaImmunity = level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
-			attributes.damage = level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
-			attributes.lifesteal = level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
-			attributes.cooldown = level->Attribute("cooldown") == NULL ? 0.0f : atof(level->Attribute("cooldown"));
-			attributes.name = name;
+			attributes.health				= level->Attribute("health") == NULL ? 0.0f : atof(level->Attribute("health"));
+			attributes.regen				= level->Attribute("regen") == NULL ? 0.0f : atof(level->Attribute("regen"));
+			attributes.movementSpeed		= level->Attribute("movementSpeed") == NULL ? 0.0f : atof(level->Attribute("movementSpeed"));
+			attributes.knockbackResistance	= level->Attribute("knockbakResistance") == NULL ? 0.0f : atof(level->Attribute("knockbakResistance"));
+			attributes.lavaImmunity			= level->Attribute("lavaImmunity") == NULL ? 0.0f : atof(level->Attribute("lavaImmunity"));
+			attributes.damage				= level->Attribute("damage") == NULL ? 0.0f : atof(level->Attribute("damage"));
+			attributes.lifesteal			= level->Attribute("lifesteal") == NULL ? 0.0f : atof(level->Attribute("lifesteal"));
+			attributes.cooldown				= level->Attribute("cooldown") == NULL ? 0.0f : atof(level->Attribute("cooldown"));
+			attributes.dot					= level->Attribute("dot") == NULL ? 0.0f : atof(level->Attribute("dot"));
+			attributes.slow					= level->Attribute("slow") == NULL ? 0.0f : atof(level->Attribute("slow"));
+			attributes.duration				= level->Attribute("duration") == NULL ? 0.0f : atof(level->Attribute("duration"));
+			attributes.name					= name;
 
 			// Set the attributes and the other data.
 			Item* loadedItem = new Item(icon);

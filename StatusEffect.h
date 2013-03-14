@@ -14,10 +14,10 @@ enum StatusEffectType {
 class StatusEffect
 {
 public:
-	StatusEffect(ItemName type) {
+	StatusEffect(ItemName type, float duration = 3) {
 		mTimer = 0.0f;
 		mType = type;
-		mDuration = 3.0f;
+		mDuration = duration;
 	}
 
 	virtual ~StatusEffect() {};

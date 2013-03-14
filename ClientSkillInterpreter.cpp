@@ -8,6 +8,7 @@
 #include "TeleportEffect.h"
 #include "MeteorProjectile.h"
 #include "HookProjectile.h"
+#include "VenomProjectile.h"
 #include "Sound.h"
 
 ClientSkillInterpreter::ClientSkillInterpreter()
@@ -47,6 +48,8 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 		projectile = new FrostProjectile(owner, start);
 	else if(id == SKILL_METEOR) 
 		projectile = new MeteorProjectile(owner, end);
+	else if(id == SKILL_VENOM) 
+		projectile = new VenomProjectile(owner, start, dir);
 	else if(id == SKILL_TELEPORT) 
 	{
 		player->ClearTargetQueue();
@@ -61,11 +64,11 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 	if(projectile != nullptr)
 		gSound->PlayEffect(projectile->GetCastSound());
 
-	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR || id == SKILL_HOOK) 
+	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR || id == SKILL_HOOK || id == SKILL_VENOM) 
 	{
 		bitstream.Read(projectileId);
 		projectile->SetSkillLevel(skillLevel);
-		projectile->SetSkillLevel(skillType);
+		projectile->SetSkillType(skillType);
 		projectile->SetOriginObject(world->GetObjectById(owner));
 		world->AddObject(projectile);
 

@@ -31,12 +31,14 @@ enum ItemName
 	SKILL_TELEPORT,
 	SKILL_METEOR,
 	SKILL_HOOK,
+	SKILL_VENOM,
 	
 	//
 	// Status Effects
 	//
 	FREEZE_STATUS,
-	TELEPORT_STATUS
+	TELEPORT_STATUS,
+	POISON_STATUS
 };
 
 struct Attributes
@@ -53,6 +55,9 @@ struct Attributes
 	float damage;
 	float lifesteal;
 	float cooldown;
+	float slow;
+	float dot;	// damage per second
+	float duration;
 	string name;
 };
 

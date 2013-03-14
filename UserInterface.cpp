@@ -65,6 +65,7 @@ UserInterface::UserInterface(Client* pClient)
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_TELEPORT, 1));
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_METEOR, 1));
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_HOOK, 1));
+	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_VENOM, 1));
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/inventory_bkgd.png");
 	mWhiteTexture = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
