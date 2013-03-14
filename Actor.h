@@ -35,6 +35,7 @@ public:
 	void SetSelected(bool selected);
 	void SetVelocity(XMFLOAT3 velocity);
 	void SetFriction(float friction);
+	void SetSlow(float slow);
 	bool IsSelected();
 
 	virtual float GetMovementSpeed() = 0;
@@ -43,6 +44,7 @@ private:
 	std::list<Target> mTargetQueue;
 	bool			  mSelected;
 
-	float mFriction;
+	float	 mFriction;
+	float	 mSlow;
 	XMFLOAT3 mVelocity;
 };

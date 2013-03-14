@@ -8,6 +8,7 @@ Actor::Actor(GLib::ModelImporter* pImporter, string filename)
 	SetSelected(false);
 	SetVelocity(XMFLOAT3(0, 0, 0));
 	SetFriction(0.99f);
+	SetSlow(0.0f);
 	Init();
 }
 
@@ -41,7 +42,7 @@ void Actor::Update(float dt)
 		else if(GetCurrentAnimation() == 5)
 			int a = 1;
 
-		XMFLOAT3 newPos = GetPosition() + mTargetQueue.front().dir * GetMovementSpeed();
+		XMFLOAT3 newPos = GetPosition() + mTargetQueue.front().dir * GetMovementSpeed() * (1 - mSlow);
 		SetPosition(XMFLOAT3(newPos.x, GetPosition().y, newPos.z));
 
 		// Reached the target?
@@ -126,4 +127,9 @@ void Actor::SetFriction(float friction)
 float Actor::IsKnockedBack()
 {
 	return sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z) > 0.09f;
+}
+
+void Actor::SetSlow(float slow)
+{
+	mSlow = slow;
 }

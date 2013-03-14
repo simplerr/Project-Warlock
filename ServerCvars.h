@@ -15,6 +15,7 @@ namespace Cvars {
 	const string GOLD_PER_KILL = "-goldperkill";
 	const string GOLD_PER_WIN = "-goldperwin";
 	const string LAVA_DMG = "-lavadmg";
+	const string LAVA_SLOW = "-lavaslow";
 	const string PROJECTILE_IMPULSE = "-impulse";
 }
 
@@ -28,6 +29,7 @@ struct ServerCvars
 		CvarMap[Cvars::GOLD_PER_KILL] = 1;
 		CvarMap[Cvars::GOLD_PER_WIN] = 3;
 		CvarMap[Cvars::LAVA_DMG] = 1;
+		CvarMap[Cvars::LAVA_SLOW] = 0.6;
 		CvarMap[Cvars::PROJECTILE_IMPULSE] =  3; // Divided by 10 later.
 	}
 
@@ -77,19 +79,19 @@ struct ServerCvars
 		//fclose(file);
 	}
 
-	void SetCvarValue(string cvar, int value) {
+	void SetCvarValue(string cvar, float value) {
 		if(CvarMap.find(cvar) != CvarMap.end())
 			CvarMap[cvar] = value;
 	}
 
-	int GetCvarValue(string cvar) {
+	float GetCvarValue(string cvar) {
 		if(CvarMap.find(cvar) != CvarMap.end())
 			return CvarMap[cvar];
 		else
 			return 0;
 	}
 
-	map<string, int> CvarMap;
+	map<string, float> CvarMap;
 };
 
 extern ServerCvars* gCvars;
