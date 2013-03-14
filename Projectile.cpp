@@ -42,6 +42,11 @@ void Projectile::Update(float dt)
 void Projectile::Draw(GLib::Graphics* pGraphics)
 {
 	ParticleSystem::Draw(pGraphics);
+
+	XNA::AxisAlignedBox box;
+	box.Center = GetPosition();
+	box.Extents = XMFLOAT3(0.4, 0.4, 0.4);
+	pGraphics->DrawBoundingBox(&box, GetWorldMatrix(), GLib::Material(XMFLOAT4(1, 1, 1, 1)), 1.0f);
 }
 
 void Projectile::SetPosition(XMFLOAT3 position)
