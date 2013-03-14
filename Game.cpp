@@ -24,6 +24,7 @@
 #include "Sound.h"
 #include "ServerCvars.h"
 #include "C:\Users\Axel\Documents\Visual Studio 2010\Memory_and_Exception_Trace\Stackwalker.h"
+#include "ShadowMap.h"
 
 using namespace GLib;
 
@@ -102,6 +103,8 @@ void Game::Init()
 void Game::Update(GLib::Input* pInput, float dt)
 {
 	mCurrentState->Update(pInput, dt);
+
+	GetGraphics()->Update(pInput, dt);
 
 	mx = pInput->MousePosition().x;
 	my = pInput->MousePosition().y;

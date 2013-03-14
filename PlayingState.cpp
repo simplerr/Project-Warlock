@@ -30,7 +30,7 @@ void PlayingState::Update(GLib::Input* pInput, double dt)
 {
 	mClient->Update(pInput, dt);
 
-	GLib::GetGraphics()->GetCamera()->Update(pInput, dt);
+	//GLib::GetGraphics()->GetCamera()->Update(pInput, dt);
 }
 
 void PlayingState::Draw(GLib::Graphics* pGraphics)
