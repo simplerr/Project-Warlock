@@ -52,6 +52,13 @@ ParticleData = {
 	speed = 28,
 }
 
+LightData = {
+	color = "69 66 255 0";
+	intensity = "0 1 1";
+	att = "1 0.1 0.05";
+	spot = 64;
+}
+
 -- Updates the particle with a custom function.
 -- Don't have to return anything since particle acts like a pointer.
 function UpdateParticle(particle, time)

@@ -3,6 +3,8 @@
 #include "Graphics.h"
 #include "Skills.h"
 #include "LuaWrapper.h"
+#include "LightObject.h"
+#include "World.h"
 
 Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 	: ParticleSystem(pos, luaScript)
@@ -24,7 +26,30 @@ Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 
 Projectile::~Projectile()
 {
+	mLight->Kill();
+}
 
+void Projectile::Init()
+{
+	string color = GetLuaWrapper()->GetTableString("LightData", "color");
+	string intensity = GetLuaWrapper()->GetTableString("LightData", "intensity");
+	string att = GetLuaWrapper()->GetTableString("LightData", "att");
+	float spot = GetLuaWrapper()->GetTableNumber("LightData", "spot");
+
+	auto colorsSplit = GLib::SplitString(color, ' ');
+	auto intensitySplit = GLib::SplitString(intensity, ' ');
+	auto attSplit = GLib::SplitString(att, ' ');
+
+	mLight = new GLib::LightObject();
+	XMFLOAT4 colors = XMFLOAT4(atoi(colorsSplit[0].c_str()) / 255.0f, atoi(colorsSplit[1].c_str()) / 255.0f, atoi(colorsSplit[2].c_str()) / 255.0f, atoi(colorsSplit[3].c_str()) / 255.0f);
+	mLight->SetMaterials(GLib::Material(colors));
+	mLight->SetLightType((GLib::LightType)GLib::POINT_LIGHT);
+	mLight->SetIntensity(atof(intensitySplit[0].c_str()), atof(intensitySplit[1].c_str()), atof(intensitySplit[2].c_str()));
+	mLight->SetAtt(atof(attSplit[0].c_str()), atof(attSplit[1].c_str()), atof(attSplit[2].c_str()));
+	mLight->SetSpot(spot);
+	mLight->SetRange(1000);
+	mLight->SetRotation(XMFLOAT3(0, -1, 0));
+	GetWorld()->AddObject(mLight);
 }
 
 void Projectile::Update(float dt)
@@ -35,6 +60,8 @@ void Projectile::Update(float dt)
 	SetPosition(GetPosition() + velocity);
 	mTravelled += sqrt(velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z);
 
+	mLight->SetPosition(GetPosition());
+
 	if(mTravelled > mMaxDistance)
 		Kill();
 }
@@ -43,10 +70,10 @@ void Projectile::Draw(GLib::Graphics* pGraphics)
 {
 	ParticleSystem::Draw(pGraphics);
 
-	XNA::AxisAlignedBox box;
+	/*XNA::AxisAlignedBox box;
 	box.Center = GetPosition();
 	box.Extents = XMFLOAT3(0.4, 0.4, 0.4);
-	pGraphics->DrawBoundingBox(&box, GetWorldMatrix(), GLib::Material(XMFLOAT4(1, 1, 1, 1)), 1.0f);
+	pGraphics->DrawBoundingBox(&box, GetWorldMatrix(), GLib::Material(XMFLOAT4(1, 1, 1, 1)), 1.0f);*/
 }
 
 void Projectile::SetPosition(XMFLOAT3 position)

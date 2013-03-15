@@ -47,10 +47,17 @@ ParticleSystemData = {
 
 ParticleData = {
 	texture = "textures/venom.png",
-	size = 13,
+	size = 8,
 	lifetime = 0.6,
 	mass = 0.1,
 	speed = 1,
+}
+
+LightData = {
+	color = "0 100 0 0";
+	intensity = "0 1 1";
+	att = "1 0.1 0.05";
+	spot = 64;
 }
 
 -- Updates the particle with a custom function.
@@ -61,7 +68,7 @@ function UpdateParticle(particle, time)
 
 	-- Calculate position.
 	pos_x = particle:GetInitPosX() + particle:GetInitVelX() * age + 0.5 * GetAccelX() * age * age;
-	pos_y = 2;--particle:GetInitPosY() + particle:GetInitVelY() * age + 0.5 * GetAccelY() * age * age;
+	pos_y = particle:GetInitPosY() + particle:GetInitVelY() * age + 0.5 * GetAccelY() * age * age;
 	pos_z = particle:GetInitPosZ() + particle:GetInitVelZ() * age + 0.5 * GetAccelZ() * age * age;
 
 	-- Set new position.

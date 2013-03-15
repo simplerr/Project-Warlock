@@ -5,6 +5,7 @@
 
 namespace GLib {
 	class Graphics;
+	class LightObject;
 }
 
 class Player;
@@ -18,7 +19,8 @@ public:
 	Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript);
 	virtual ~Projectile();
 
-	void Update(float dt);
+	virtual void Init();
+	virtual void Update(float dt);
 	virtual void Draw(GLib::Graphics* pGraphics);
 
 	virtual void HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, ItemLoaderXML* pItemLoader) = 0;
@@ -48,6 +50,7 @@ private:
 	float		mImpactImpulse;
 	string		mCastSound;
 	string		mImpactSound;
+	GLib::LightObject* mLight;
 
 	// Skill data.
 	ItemName	mSkillType;
