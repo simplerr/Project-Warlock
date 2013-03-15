@@ -9,6 +9,7 @@
 #include "Camera.h"
 #include "UserInterface.h"
 #include "Sound.h"
+#include "Config.h"
 
 PlayingState PlayingState::mPlayingState;
 
@@ -18,6 +19,9 @@ void PlayingState::Init(Game* pGame)
 	SetGame(pGame);
 	//gSound->PlayMusic("sounds/ambient.wav", true, 0);
 	gSound->SetMusicVolume(0.3f);
+
+	Config config("config.txt");
+	GLib::GetGraphics()->GetCamera()->SetMovementSpeed(config.lookSense);
 }
 
 void PlayingState::Cleanup(void)

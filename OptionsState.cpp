@@ -25,6 +25,7 @@ OptionsState OptionsState::mOptionsState;
 #define ID_UPDATE_NAME 101
 #define IDC_NICKNAME_BOX  102
 #define IDC_SERVERNAME_BOX  103
+#define IDC_LOOKSENSE_BOX 104
 
 void OptionsState::Init(Game* pGame)
 {
@@ -42,6 +43,7 @@ void OptionsState::Cleanup(void)
 {
 	DestroyWindow(mhNameBox);
 	DestroyWindow(mhServerNameBox);
+	DestroyWindow(mhLookSensBox);
 }
 
 void OptionsState::Pause()
@@ -67,10 +69,11 @@ void OptionsState::Update(GLib::Input* pInput, double dt)
 void OptionsState::Draw(GLib::Graphics* pGraphics)
 {
 	pGraphics->DrawScreenQuad(mBkgdTexture, GLib::GetClientWidth()/2, GLib::GetClientHeight()/2, GLib::GetClientWidth(), GLib::GetClientHeight());
-	pGraphics->DrawScreenQuad(mWhiteTexture, GLib::GetClientWidth()/2, 330, 300, 300);
+	pGraphics->DrawScreenQuad(mWhiteTexture, GLib::GetClientWidth()/2, 400, 300, 400);
 
 	pGraphics->DrawText("Nickname", GLib::GetClientWidth()/2-100, 220, 20, GLib::ColorRGBA(0, 0, 0, 255));
 	pGraphics->DrawText("Server name", GLib::GetClientWidth()/2-100, 320, 20, GLib::ColorRGBA(0, 0, 0, 255));
+	pGraphics->DrawText("Look sense (0 - 10)", GLib::GetClientWidth()/2-100, 420, 20, GLib::ColorRGBA(0, 0, 0, 255));
 	mControlManager->Draw(pGraphics);
 }
 
@@ -84,6 +87,9 @@ void OptionsState::BuildUi()
 
 	mhServerNameBox = CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_OVERLAPPED,
 		GLib::GetClientWidth()/2-100, 350, 200, 30, GLib::GetWindowHandler(), (HMENU)IDC_SERVERNAME_BOX, GLib::GetAppInstance(), NULL);
+
+	mhLookSensBox = CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_OVERLAPPED,
+		GLib::GetClientWidth()/2-100, 450, 200, 30, GLib::GetWindowHandler(), (HMENU)IDC_LOOKSENSE_BOX, GLib::GetAppInstance(), NULL);
 
 	// Add a back button.
 	mBackButton = new Button(905, 510, "OptionsBackButton", "Back");
@@ -99,6 +105,9 @@ void OptionsState::BuildUi()
 	Config config("config.txt");
 	SetWindowText(mhNameBox, config.nickName.c_str());
 	SetWindowText(mhServerNameBox, config.serverName.c_str());
+	char buffer[32];
+	sprintf(buffer, "%.1f", config.lookSense);
+	SetWindowText(mhLookSensBox, buffer);
 }
 
 void OptionsState::OnResize(float width, float height)
@@ -122,6 +131,15 @@ void OptionsState::OnButtonPressed(Button* pButton)
 		GetWindowText(mhServerNameBox, buffer, 255);
 		config.serverName = buffer;
 		
+		GetWindowText(mhLookSensBox, buffer, 255);
+
+		if(GLib::IsNumber(string(buffer))) {
+			config.lookSense = atof(buffer);
+		}
+		else 
+			config.lookSense = 1.0f;
+		
+
 		config.Save();
 
 		ChangeState(MainMenuState::Instance());

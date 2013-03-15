@@ -35,4 +35,5 @@ private:
 	Button*				 mBackButton;
 	HWND				 mhNameBox;
 	HWND				 mhServerNameBox;
+	HWND				 mhLookSensBox;
 };

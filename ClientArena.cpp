@@ -36,7 +36,7 @@ ClientArena::ClientArena(Client* pClient)
 			plant = "models/misc/PlantGrass.obj";
 
 		GLib::StaticObject* object = new GLib::StaticObject(GLib::GetGraphics()->GetModelImporter(), plant);
-		object->SetPosition(XMFLOAT3(40 - rand() % 80, 2, 40 - rand() % 80));
+		object->SetPosition(XMFLOAT3(40 - rand() % 80, 1, 40 - rand() % 80));
 		mWorld->AddObject(object);
 		object->SetId(i +1000);
 	}
