@@ -326,3 +326,8 @@ void UserInterface::RemoveAllItems()
 	mInventory->UpdateItems();
 	mSkillInventory->UpdateItems();
 }
+
+bool UserInterface::HasChatFocus()
+{
+	return mChat->HasFocus();
+}

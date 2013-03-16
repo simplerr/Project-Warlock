@@ -246,3 +246,11 @@ void Chat::SetDimensions(int x, int y, int width, int height)
 	SetWindowPos(mhInputBox, HWND_TOP, x, y+height+10, width-80, 40, SWP_SHOWWINDOW);
 	SetWindowPos(mhSendButton, HWND_TOP, x+width-70, y+height+10, 70, 40, SWP_SHOWWINDOW);
 }
+
+bool Chat::HasFocus()
+{
+	if(GetFocus() == mhInputBox)
+		return true;
+	else
+		return false;
+}

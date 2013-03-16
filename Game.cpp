@@ -109,12 +109,12 @@ void Game::Update(GLib::Input* pInput, float dt)
 	mx = pInput->MousePosition().x;
 	my = pInput->MousePosition().y;
 
-	if(pInput->KeyReleased('F')) {
+	/*if(pInput->KeyReleased('F')) {
 		float width = GetSystemMetrics(SM_CXSCREEN);
 		float height = GetSystemMetrics(SM_CYSCREEN);
 
 		ResizeWindow(width, height);
-	}
+	}*/
 }
 	
 void Game::Draw(GLib::Graphics* pGraphics)

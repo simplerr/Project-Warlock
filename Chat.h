@@ -29,6 +29,8 @@ public:
 	void	SetClient(Client* pClient);
 	void	SetDimensions(int x, int y, int width, int height);
 
+	bool	HasFocus();
+
 	template <class T>
 	void AddOnMessageSentListener(void(T::*_callback)(string), T* _object)	{
 		OnMessageSent = boost::bind(_callback, _object, _1);

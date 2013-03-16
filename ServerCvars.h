@@ -20,6 +20,7 @@ namespace Cvars {
 	const string ARENA_RADIUS = "-radius";
 	const string FLOOD_INTERVAL = "-flood_interval";
 	const string FLOD_SIZE = "-flood_size";
+	const string CHEATS = "-cheats";
 }
 
 struct ServerCvars
@@ -37,6 +38,7 @@ struct ServerCvars
 		CvarMap[Cvars::ARENA_RADIUS] = 60;
 		CvarMap[Cvars::FLOOD_INTERVAL] = 10;
 		CvarMap[Cvars::FLOD_SIZE] = 10;
+		CvarMap[Cvars::CHEATS] = 1;
 	}
 
 	void LoadFromFile(string filename) {

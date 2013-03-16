@@ -39,6 +39,9 @@ void PlayerModule::Update(float dt)
 
 void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 {
+	if(mUserInterface->HasChatFocus())
+		return;
+
 	if(!mPlayer->GetEliminated() && !mPlayer->GetStunned())
 	{
 		// [TODO] Add mSkillHandler->PollAction().

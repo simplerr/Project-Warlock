@@ -64,6 +64,7 @@ public:
 	void MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 	void SetReady(bool ready);
 	bool IsReady();
+	bool HasChatFocus();
 
 	Chat* GetChat();
 	ItemLoaderXML* GetItemLoader();
