@@ -10,6 +10,9 @@
 #include "UserInterface.h"
 #include "Sound.h"
 #include "Config.h"
+#include "Graphics.h"
+#include "Effects.h"
+#include "ServerCvars.h"
 
 PlayingState PlayingState::mPlayingState;
 
@@ -22,6 +25,8 @@ void PlayingState::Init(Game* pGame)
 
 	Config config("config.txt");
 	GLib::GetGraphics()->GetCamera()->SetMovementSpeed(config.lookSense);
+
+	GLib::Effects::TerrainFX->SetArenaRadius(gCvars->GetCvarValue(Cvars::ARENA_RADIUS));
 }
 
 void PlayingState::Cleanup(void)

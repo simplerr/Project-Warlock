@@ -17,6 +17,9 @@ namespace Cvars {
 	const string LAVA_DMG = "-lavadmg";
 	const string LAVA_SLOW = "-lavaslow";
 	const string PROJECTILE_IMPULSE = "-impulse";
+	const string ARENA_RADIUS = "-radius";
+	const string FLOOD_INTERVAL = "-flood_interval";
+	const string FLOD_SIZE = "-flood_size";
 }
 
 struct ServerCvars
@@ -31,6 +34,9 @@ struct ServerCvars
 		CvarMap[Cvars::LAVA_DMG] = 1;
 		CvarMap[Cvars::LAVA_SLOW] = 0.6;
 		CvarMap[Cvars::PROJECTILE_IMPULSE] =  3; // Divided by 10 later.
+		CvarMap[Cvars::ARENA_RADIUS] = 60;
+		CvarMap[Cvars::FLOOD_INTERVAL] = 10;
+		CvarMap[Cvars::FLOD_SIZE] = 10;
 	}
 
 	void LoadFromFile(string filename) {

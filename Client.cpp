@@ -25,6 +25,7 @@
 #include "PlayingState.h"
 #include "RoundHandler.h"
 #include "Sound.h"
+#include "Effects.h"
 
 Client::Client()
 {
@@ -220,6 +221,14 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			mRoundHandler->ResetScores();
 			mUserInterface->RemoveGameOverScreen();
 			break;
+		case NMSG_FLOOD_START:
+			gSound->PlayEffect("sounds/flood_start.wav");
+			break;
+		case NMSG_ARENA_RADIUS:
+			float radius;
+			bitstream.Read(radius);
+			GLib::Effects::TerrainFX->SetArenaRadius(radius);
+			break;
 	}
 
 	return true;
@@ -238,6 +247,8 @@ void Client::StartRound()
 
 	// Remove the "PlayerX won the round!" status text.
 	mUserInterface->SetStatusText("nothing", 0);
+
+	GLib::Effects::TerrainFX->SetArenaRadius(gCvars->GetCvarValue(Cvars::ARENA_RADIUS));
 }
 
 void Client::EndRound(string winner)
