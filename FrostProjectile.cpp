@@ -51,10 +51,6 @@ void FrostProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, 
 	// Damage the player.
 	pPlayer->TakeDamage(item->GetAttributes().damage);
 	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
-
-	// Dead? [NOTE] A bit of a hack.
-	if(pPlayer->GetCurrentHealth() <= 0) 
-		pArena->PlayerEliminated(pPlayer, (Player*)GetWorld()->GetObjectById(GetOwner()));
 }
 
 AxisAlignedBox FrostProjectile::GetBoundingBox()

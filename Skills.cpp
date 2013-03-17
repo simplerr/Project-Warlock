@@ -33,13 +33,23 @@ void Skill::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
 {
 	pGraphics->DrawScreenQuad(GetIconTexture(), pos.x, pos.y, size, size);
 
-	if(mCooldownCounter > 0.0f) {
+	// Draw cooldown left.
+	if(mCooldownCounter > 0.0f)
+	{
 		char buffer[244];
 		sprintf(buffer, "%.2f", mCooldownCounter);
 		float textSize = 28;
 		//GLib::Rect textRect = pGraphics->MeasureText(buffer, size, "Arial");
 		pGraphics->DrawScreenQuad(mDarkOverlay, pos.x, pos.y, size, size);
 		pGraphics->DrawText(buffer, pos.x-30, pos.y-textSize/2, textSize, GLib::ColorRGBA(255, 255, 255, 255));
+	}
+	// Draw hotkey.
+	else
+	{
+		float textSize = 25;
+		GLib::Rect textRect = pGraphics->MeasureText(GetAttributes().hotkey, textSize, "Arial");
+		pGraphics->DrawScreenQuad(mDarkOverlay, pos.x - size/2 + textRect.Width()/2, pos.y - size/2 + textRect.Height()/2, textRect.Width(), textRect.Height());
+		pGraphics->DrawText(GetAttributes().hotkey, pos.x-30, pos.y - size/2 - 4, textSize, GLib::ColorRGBA(255, 255, 255, 255));
 	}
 }
 

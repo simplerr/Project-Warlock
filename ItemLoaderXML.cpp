@@ -123,6 +123,7 @@ void ItemLoaderXML::LoadSkills(TiXmlElement* pRoot)
 		string name = skill->Attribute("name") == NULL ? "#NOVALUE" : skill->Attribute("name");
 		string desc = skill->FirstChildElement("Desc")->GetText();
 		string icon = skill->Attribute("icon") == NULL ? "#NOVALUE" : skill->Attribute("icon");
+		string hotkey = skill->Attribute("hotkey") == NULL ? " " : skill->Attribute("hotkey");
 
 		// Loop over all levels.
 		for(TiXmlElement* level = skill->FirstChildElement("Level"); level != NULL; level = level->NextSiblingElement("Level"))
@@ -140,6 +141,7 @@ void ItemLoaderXML::LoadSkills(TiXmlElement* pRoot)
 			attributes.dot					= level->Attribute("dot") == NULL ? 0.0f : atof(level->Attribute("dot"));
 			attributes.slow					= level->Attribute("slow") == NULL ? 0.0f : atof(level->Attribute("slow"));
 			attributes.duration				= level->Attribute("duration") == NULL ? 0.0f : atof(level->Attribute("duration"));
+			attributes.hotkey				= hotkey;
 			attributes.name					= name;
 
 			// Set the attributes and the other data.

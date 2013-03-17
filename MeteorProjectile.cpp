@@ -41,10 +41,6 @@ void MeteorProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena,
 	// Damage the player.
 	pPlayer->TakeDamage(item->GetAttributes().damage + caster->GetBonusDamage());
 	pPlayer->SetLastHitter((Player*)GetWorld()->GetObjectById(GetOwner()));
-
-	// Dead? [NOTE] A bit of a hack.
-	if(pPlayer->GetCurrentHealth() <= 0) 
-		pArena->PlayerEliminated(pPlayer, (Player*)GetWorld()->GetObjectById(GetOwner()));
 }
 
 AxisAlignedBox MeteorProjectile::GetBoundingBox()

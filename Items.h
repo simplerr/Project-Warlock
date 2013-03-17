@@ -59,6 +59,7 @@ struct Attributes
 	float dot;	// damage per second
 	float duration;
 	string name;
+	string hotkey;
 };
 
 /************************************************************************

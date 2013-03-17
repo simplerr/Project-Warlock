@@ -31,7 +31,7 @@ bool SkillHandler::PollAction(Client* pClient, GLib::Input* pInput, XMFLOAT3 sta
 
 	for(auto iter = mSkillMap.begin(); iter != mSkillMap.end(); iter++) {
 		Skill* skill = (*iter).second;
-		char key = (*iter).first;
+		char key = skill->GetAttributes().hotkey[0];
 		if(pInput->KeyPressed(key) && skill->IsReady())
 		{
 			// Send a skill casted event to the server.

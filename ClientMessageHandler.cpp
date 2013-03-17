@@ -214,10 +214,6 @@ void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bi
 	StatusEffect* statusEffect = projectile->GetStatusEffect(mClient->GetUi()->GetItemLoader());
 	if(statusEffect != nullptr)
 		player->AddStatusEffect(statusEffect);
-
-	char buffer[244];
-	sprintf(buffer, "projectile %i collided with player %i health: %.2f\n", projectileId, playerId, player->GetCurrentHealth());
-	OutputDebugString(buffer);
 }
 
 void ClientMessageHandler::HandleRoundStarted(RakNet::BitStream& bitstream)
