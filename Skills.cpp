@@ -37,7 +37,7 @@ void Skill::DrawIcon(GLib::Graphics* pGraphics, XMFLOAT2 pos, float size)
 	if(mCooldownCounter > 0.0f)
 	{
 		char buffer[244];
-		sprintf(buffer, "%.2f", mCooldownCounter);
+		sprintf(buffer, "%.2f", mCooldownCounter); 
 		float textSize = 28;
 		//GLib::Rect textRect = pGraphics->MeasureText(buffer, size, "Arial");
 		pGraphics->DrawScreenQuad(mDarkOverlay, pos.x, pos.y, size, size);

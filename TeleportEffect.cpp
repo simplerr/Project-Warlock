@@ -3,7 +3,7 @@
 #include "Graphics.h"
 
 TeleportEffect::TeleportEffect()
-	: StatusEffect(TELEPORT_STATUS)
+	: StatusEffect(TELEPORT_STATUS, 3, "textures/smoke.dds", "StatusEffectParticle.lua")
 {
 	SetDuration(0.5f);
 }
@@ -24,6 +24,8 @@ void TeleportEffect::Draw(GLib::Graphics* pGraphics)
 	box.Center = GetPlayer()->GetPosition() + XMFLOAT3(0, 5, 0);
 	box.Extents = XMFLOAT3(1, 1, 1);
 	pGraphics->DrawBoundingBox(&box, XMMatrixIdentity(), GLib::Material(GLib::Colors::Red));
+
+	StatusEffect::Draw(pGraphics);
 }
 
 void TeleportEffect::Apply()
@@ -33,5 +35,5 @@ void TeleportEffect::Apply()
 
 void TeleportEffect::Remove()
 {
-	
+	StatusEffect::Remove();
 }

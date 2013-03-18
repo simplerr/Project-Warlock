@@ -1,10 +1,13 @@
 #pragma once
 #include "Items.h"
+#include "ParticleSystem.h"
 
 class Player;
 
 namespace GLib {
 	class Graphics;
+	class Texture2D;
+	class ParticleSystem;
 }
 
 enum StatusEffectType {
@@ -14,45 +17,25 @@ enum StatusEffectType {
 class StatusEffect
 {
 public:
-	StatusEffect(ItemName type, float duration = 3) {
-		mTimer = 0.0f;
-		mType = type;
-		mDuration = duration;
-	}
+	StatusEffect(ItemName type, float duration, string particleTexture, string luaScript);
 
-	virtual ~StatusEffect() {};
+	virtual ~StatusEffect();
+	void DeleteParticleSystem();
 
-	virtual void Update(float dt) {
-		mTimer += dt;
-	}
-	virtual void Draw(GLib::Graphics* pGraphics) = 0;
+	virtual void Update(float dt);
+	virtual void Draw(GLib::Graphics* pGraphics);
 	virtual void Apply() = 0;
-	virtual void Remove() = 0;
+	virtual void Remove();
 
-	void SetPlayer(Player* pPlayer) {
-		mPlayer = pPlayer;
-	}
+	void SetPlayer(Player* pPlayer);
+	void SetDuration(float duration);
 
-	void SetDuration(float duration) {
-		mDuration = duration;
-	}
-
-	float GetDuration() {
-		return mDuration;
-	}
-
-	float GetTimer() {
-		return mTimer;
-	}
-
-	ItemName GetType() {
-		return mType;
-	}
-
-	Player* GetPlayer() {
-		return mPlayer;
-	}
+	float GetDuration();
+	float GetTimer();
+	ItemName GetType();
+	Player* GetPlayer();
 private:
+	GLib::ParticleSystem* mParticleSystem;
 	Player* mPlayer;
 	ItemName mType;
 	float mDuration;

@@ -53,42 +53,45 @@ void HudItemContainer::Draw(GLib::Graphics* pGraphics)
 	for(int i = 0; i < mItemSlots.size(); i++)
 	{
 		XMFLOAT2 pos = mItemSlots[i].position;
-		if(mItemSlots[i].taken) {
+		if(mItemSlots[i].taken)
 			mItemSlots[i].item->DrawIcon(pGraphics, XMFLOAT2(pos.x, pos.y), mSlotSize);
-			
-			if(mHooveringSlotId == i) 
-			{
-				string name = mItemSlots[i].item->GetAttributes().name;
-				string description = GetHooverText(mItemSlots[i].item);
-
-				// * represents newline(\n).
-				std::replace(description.begin(), description.end(), '*', '\n');
-
-				GLib::Rect nameRect = pGraphics->MeasureText(name, 25, "Arial");
-				GLib::Rect descRect = pGraphics->MeasureText(description, 18, "Arial");
-				float scale = 1.1f;
-
-				float rectHeight = (nameRect.bottom/2 + descRect.bottom/2) * scale;
-
-				// mHooverInfoPos is the origin for the hoover box, probably top left or bottom left.
-				float y = GetPosition().y + mHooverInfoPos.y + (mHooverInfoBelow ? 1 : -1) * rectHeight;
-
-				if(mHooverBkgd != nullptr) {
-					
-					pGraphics->DrawScreenQuad(mHooverBkgd, GetPosition().x + mHooverInfoPos.x + descRect.right/2, y, descRect.right * scale, (descRect.bottom + nameRect.bottom)* scale);
-				}
-
-				float text_y = y - rectHeight/scale*(((scale-1.0f)/2)+1);
-				pGraphics->DrawText(name, mPosition.x + mHooverInfoPos.x, text_y, 25, GLib::ColorRGBA(204, 102, 34, 255));
-				pGraphics->DrawText(description, mPosition.x + mHooverInfoPos.x, text_y + nameRect.bottom, 18);
-			}
-		}	
-		else {
+		else
+		{
 			if(mDrawEmptySlots)
 				pGraphics->DrawScreenQuad(mEmptySlotTexture, pos.x, pos.y, mSlotSize, mSlotSize);
 
 			//UiCoordinate coord(UiAlignmentX::CENTER, BOTTOM, pos.x, pos.y, mSlotSize, mSlotSize, false, false);
 			//pGraphics->DrawScreenQuad(mEmptySlotTexture, coord.x, coord.y, coord.width, coord.height);
+		}
+	}	
+
+	for(int i = 0; i < mItemSlots.size(); i++)
+	{
+		if(mHooveringSlotId == i) 
+		{
+			string name = mItemSlots[i].item->GetAttributes().name;
+			string description = GetHooverText(mItemSlots[i].item);
+
+			// * represents newline(\n).
+			std::replace(description.begin(), description.end(), '*', '\n');
+
+			GLib::Rect nameRect = pGraphics->MeasureText(name, 25, "Arial");
+			GLib::Rect descRect = pGraphics->MeasureText(description, 18, "Arial");
+			float scale = 1.1f;
+
+			float rectHeight = (nameRect.bottom/2 + descRect.bottom/2) * scale;
+
+			// mHooverInfoPos is the origin for the hoover box, probably top left or bottom left.
+			float y = GetPosition().y + mHooverInfoPos.y + (mHooverInfoBelow ? 1 : -1) * rectHeight;
+
+			if(mHooverBkgd != nullptr) {
+					
+				pGraphics->DrawScreenQuad(mHooverBkgd, GetPosition().x + mHooverInfoPos.x + descRect.right/2, y, descRect.right * scale, (descRect.bottom + nameRect.bottom)* scale);
+			}
+
+			float text_y = y - rectHeight/scale*(((scale-1.0f)/2)+1);
+			pGraphics->DrawText(name, mPosition.x + mHooverInfoPos.x, text_y, 25, GLib::ColorRGBA(204, 102, 34, 255));
+			pGraphics->DrawText(description, mPosition.x + mHooverInfoPos.x, text_y + nameRect.bottom, 18);
 		}
 	}
 }

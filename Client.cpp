@@ -180,6 +180,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				bitstream.Read(winner);
 				mRoundHandler->AddScore(winner, 1);
 				mUserInterface->DisplayGameOver(this, winner);
+				mArena->RemoveStatusEffects();
 				mGameOver = true;
 				break;
 			}
@@ -255,6 +256,8 @@ void Client::EndRound(string winner)
 {
 	mRoundHandler->SetWinner(winner);
 	mRoundHandler->AddScore(winner, 1);
+
+	mArena->RemoveStatusEffects();
 
 	// Set the status text.
 	mUserInterface->SetStatusText(winner + " won the round!", 1337, 40, GLib::ColorRGBA(255, 0, 0, 255));

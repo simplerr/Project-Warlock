@@ -70,7 +70,6 @@ void Player::Draw(GLib::Graphics* pGraphics)
 		Actor::Draw(pGraphics);
 
 		for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
-			(*iter)->Draw(pGraphics);
 			if((*iter)->GetTimer() > (*iter)->GetDuration()) {
 				// Call the OnStatusEffectRemoved callback.
 				if(!OnStatusEffectRemoved.empty())
@@ -80,6 +79,8 @@ void Player::Draw(GLib::Graphics* pGraphics)
 				//delete (*iter);	// [NOTE][HACK] Memory leak!!
 				iter = mStatusEffects.erase(iter);
 			}
+			else
+				(*iter)->Draw(pGraphics);
 		}
 
 		// Draw the health in 2D coordinates.
@@ -169,10 +170,10 @@ multiset<ItemKey> Player::GetItemList()
 void Player::AddStatusEffect(StatusEffect* pStatusEffect)
 {
 	// Status effects can't stack!
-	for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
+	/*for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
 		if((*iter)->GetType() == pStatusEffect->GetType())
 			return;
-	}
+	}*/
 
 	if(!OnStatusEffectAdded.empty())
 		OnStatusEffectAdded(pStatusEffect->GetType());
@@ -316,7 +317,7 @@ void Player::RemoveStatusEffects()
 			OnStatusEffectRemoved((*iter)->GetType());
 
 		(*iter)->Remove();
-		//delete (*iter); // [NOTE][HACK] Memory leak!!
+		delete (*iter); // [NOTE][HACK] Memory leak!!
 		iter = mStatusEffects.erase(iter);
 	}
 }

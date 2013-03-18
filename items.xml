@@ -60,42 +60,42 @@
   <!--____________________________________________________________-->
   <Skills>
     <Skill name="Fireball" skill="true" icon="textures/icons/fireball.png" hotkey="Q">
-      <Desc>A fireball projectile that gives a*impulse to the collider*Hotkey: [Q]</Desc>
+      <Desc>A fireball projectile that gives a*impulse to the collider</Desc>
       <Level cost="4" num="1" damage="30" cooldown="0"/>
       <Level cost="9" num="2" damage="40" cooldown="1.6"/>
       <Level cost="13" num="3" damage="60" cooldown="1.6"/>
     </Skill>
 
     <Skill name="Frostnova" skill="true" icon="textures/icons/frost_nova.png" hotkey="W">
-      <Desc>Freezes all players in a radius*Hotkey: [W]</Desc>
+      <Desc>Freezes all players in a radius</Desc>
       <Level cost="4" num="1" damage="5" cooldown="0.5"/>
       <Level cost="9" num="2" damage="10" cooldown="1.6"/>
       <Level cost="13" num="3" damage="15" cooldown="1.6"/>
     </Skill>
 
     <Skill name="Teleport" skill="true" icon="textures/icons/leap.png" hotkey="E">
-      <Desc>Teleports the player*Hotkey: [E]</Desc>
+      <Desc>Teleports the player</Desc>
       <Level cost="4" num="1" damage="5" cooldown="1.0"/>
       <Level cost="9" num="2" damage="10" cooldown="1.6"/>
       <Level cost="13" num="3" damage="15" cooldown="1.6"/>
     </Skill>
 
     <Skill name="Meteor" skill="true" icon="textures/icons/meteor.png" hotkey="R">
-      <Desc>Summons a meteor from the sky*dealing AOE damage*Hotkey: [R]</Desc>
+      <Desc>Summons a meteor from the sky*dealing AOE damage</Desc>
       <Level cost="4" num="1" damage="20" cooldown="1.0"/>
       <Level cost="9" num="2" damage="30" cooldown="1.6"/>
       <Level cost="13" num="3" damage="15" cooldown="1.6"/>
     </Skill>
 
     <Skill name="Hook" skill="true" icon="textures/icons/hook.png" hotkey="A">
-      <Desc>A projectile that drags the*collider against you*Hotkey: [A]</Desc>
+      <Desc>A projectile that drags the*collider against you</Desc>
       <Level cost="4" num="1" damage="30" cooldown="0"/>
       <Level cost="9" num="2" damage="40" cooldown="1.6"/>
       <Level cost="13" num="3" damage="60" cooldown="1.6"/>
     </Skill>
 
     <Skill name="Venom Acid" skill="true" icon="textures/icons/venom_acid.png" hotkey="S">
-      <Desc>A projectile that slows and deals*damage over time to the target*Hotkey: [S]</Desc>
+      <Desc>A projectile that slows and deals*damage over time to the target</Desc>
       <Level cost="4" num="1" damage="5" slow="0.2" dot="2.0" duration="4" cooldown="0"/>
       <Level cost="9" num="2" damage="8" slow="0.25" dot="2.5" duration="4" cooldown="1.6"/>
       <Level cost="13" num="3" damage="13" slow="0.30" dot="3.0" duration="5" cooldown="1.6"/>

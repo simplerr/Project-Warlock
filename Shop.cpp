@@ -11,7 +11,7 @@ Shop::Shop(int x, int y, int colums, float slotSize)
 	: HudItemContainer(x, y, colums, slotSize)
 {
 	SetInspectingInventory(nullptr);
-	SetHooverInfoPos(XMFLOAT2(-slotSize/2, -110));
+	SetHooverInfoPos(XMFLOAT2(-20, -160));
 	SetHooverBkgd("textures/white_transparent.png");
 
 	for(int i = 0; i < 9; i++)

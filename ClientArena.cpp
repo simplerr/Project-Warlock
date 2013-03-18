@@ -203,3 +203,9 @@ PlayerModule* ClientArena::GetPlayerModule(int id)
 	else
 		return nullptr;
 }
+
+void ClientArena::RemoveStatusEffects()
+{
+	for(int i = 0; i < mPlayerList.size(); i++) 
+		mPlayerList[i]->RemoveStatusEffects();
+}

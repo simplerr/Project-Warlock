@@ -32,6 +32,7 @@ public:
 
 	void RemovePlayer(int id);
 	void ResetPlayers();
+	void RemoveStatusEffects();
 
 	void SetSelectedPlayer(Player* pPlayer);
 	void SetLocalModule(PlayerModule* pModule);

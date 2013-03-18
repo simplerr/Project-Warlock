@@ -3,7 +3,7 @@
 #include "Graphics.h"
 
 PoisonEffect::PoisonEffect(float duration, float slow, float dot)
-	: StatusEffect(POISON_STATUS, duration)
+	: StatusEffect(POISON_STATUS, 3, "textures/venom.png", "StatusEffectParticle.lua")
 {
 	mSlow = slow;
 	mDamagePerSecond = dot;
@@ -34,6 +34,8 @@ void PoisonEffect::Draw(GLib::Graphics* pGraphics)
 	box.Center = GetPlayer()->GetPosition() + XMFLOAT3(0, 10, 0);
 	box.Extents = XMFLOAT3(3, 3, 3);
 	pGraphics->DrawBoundingBox(&box, XMMatrixIdentity(), GLib::Material(GLib::Colors::Green));
+
+	StatusEffect::Draw(pGraphics);
 }
 
 void PoisonEffect::Apply()
@@ -44,4 +46,5 @@ void PoisonEffect::Apply()
 void PoisonEffect::Remove()
 {
 	GetPlayer()->SetSlow(0.0f);
+	StatusEffect::Remove();
 }
