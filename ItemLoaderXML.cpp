@@ -40,7 +40,10 @@ ItemLoaderXML::ItemLoaderXML(string filename)
 
 ItemLoaderXML::~ItemLoaderXML()
 {
+	for(auto iter = mItemMap.begin(); iter != mItemMap.end(); iter++)
+		delete (*iter).second;
 
+	mItemMap.clear();
 }
 
 void ItemLoaderXML::SetupKeyMap()

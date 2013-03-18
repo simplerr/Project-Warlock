@@ -25,7 +25,7 @@ GameOverOverlay::GameOverOverlay(float x, float y, Client* pClient)
 
 GameOverOverlay::~GameOverOverlay()
 {
-
+	delete mControlManager;
 }
 
 void GameOverOverlay::Update(GLib::Input* pInput, float dt)

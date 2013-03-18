@@ -44,6 +44,8 @@ void OptionsState::Cleanup(void)
 	DestroyWindow(mhNameBox);
 	DestroyWindow(mhServerNameBox);
 	DestroyWindow(mhLookSensBox);
+	
+	delete mControlManager;
 }
 
 void OptionsState::Pause()

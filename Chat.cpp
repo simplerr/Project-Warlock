@@ -200,6 +200,7 @@ void Chat::SendChatMessage()
 		OnMessageSent(string(inputBuffer));
 
 	first = false;
+	delete inputBuffer;
 }
 
 //! The message proc for the chat.

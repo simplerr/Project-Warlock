@@ -26,7 +26,8 @@ void BrowsingState::Init(Game* pGame)
 
 void BrowsingState::Cleanup(void)
 {
-
+	delete mDatabase;
+	delete mControlManager;
 }
 
 void BrowsingState::Pause()

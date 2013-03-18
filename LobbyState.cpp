@@ -37,7 +37,8 @@ void LobbyState::Init(Game* pGame)
 
 void LobbyState::Cleanup(void)
 {
-
+	delete mControlManager;
+	delete mDatabase;
 }
 
 void LobbyState::Pause()

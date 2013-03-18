@@ -19,7 +19,7 @@ ClientArena::ClientArena(Client* pClient)
 	mClient = pClient;
 
 	mSelectedPlayer = nullptr;
-	mPlayer			= new PlayerModule();
+	mPlayer = nullptr;
 
 	mWorld->AddObjectAddedListener(&ClientArena::OnObjectAdded, this);
 	mWorld->AddObjectRemovedListener(&ClientArena::OnObjectRemoved, this);
@@ -44,7 +44,8 @@ ClientArena::ClientArena(Client* pClient)
 
 ClientArena::~ClientArena()
 {
-	delete mPlayer;
+	for(int i = 0; i < mModuleList.size(); i++)
+		delete mModuleList[i];
 }
 
 void ClientArena::Update(GLib::Input* pInput, float dt)
@@ -129,6 +130,9 @@ void ClientArena::OnObjectAdded(GLib::Object3D* pObject)
 		module->SetPlayer((Player*)pObject);
 		mModuleList[pObject->GetId()] = module;
 
+		if(mModuleList.size() == 4)
+			int a = 1;
+
 		if(mClient->GetName() == pObject->GetName() && mClient->GetLocalPlayer() == nullptr)
 			SetLocalModule(module);
 	}
@@ -167,7 +171,10 @@ GLib::World* ClientArena::GetWorld()
 
 Player*	ClientArena::GetLocalPlayer()
 {
-	return mPlayer->GetPlayer();
+	if(mPlayer == nullptr)
+		return nullptr;
+	else
+		return mPlayer->GetPlayer();
 }
 
 void ClientArena::SetLocalModule(PlayerModule* pModule)

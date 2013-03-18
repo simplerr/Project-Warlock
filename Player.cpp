@@ -36,7 +36,10 @@ Player::Player()
 
 Player::~Player()
 {
-	
+	for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) 
+		delete (*iter);
+
+	mStatusEffects.clear();
 }
 
 void Player::Init()
@@ -76,7 +79,7 @@ void Player::Draw(GLib::Graphics* pGraphics)
 					OnStatusEffectRemoved((*iter)->GetType());
 
 				(*iter)->Remove();
-				//delete (*iter);	// [NOTE][HACK] Memory leak!!
+				delete (*iter);	// [NOTE][HACK] Memory leak!!
 				iter = mStatusEffects.erase(iter);
 			}
 			else

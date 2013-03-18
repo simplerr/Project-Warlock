@@ -90,12 +90,15 @@ UserInterface::~UserInterface()
 {
 	delete mChat;
 	delete mShop;
+	delete mSkillShop;
+	delete mSkillInventory;
 	delete mInventory;
 	delete mItemLoader;
 	delete mStatusArea;
 	delete mHealthBar;
 	delete mInGameMenu;
 	delete mAttributesUi;
+	delete mStatusText;
 }
 
 void UserInterface::Update(GLib::Input* pInput, float dt)

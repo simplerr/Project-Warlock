@@ -32,4 +32,5 @@ private:
 	ControlManager*		 mControlManager;
 	GLib::Texture2D*	 mBkgdTexture;
 	TextMenu*			 mMenu;
+	string				 mChageToState;
 };

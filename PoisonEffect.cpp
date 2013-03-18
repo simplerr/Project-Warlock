@@ -30,11 +30,6 @@ void PoisonEffect::Update(float dt)
 
 void PoisonEffect::Draw(GLib::Graphics* pGraphics)
 {
-	XNA::AxisAlignedBox box;
-	box.Center = GetPlayer()->GetPosition() + XMFLOAT3(0, 10, 0);
-	box.Extents = XMFLOAT3(3, 3, 3);
-	pGraphics->DrawBoundingBox(&box, XMMatrixIdentity(), GLib::Material(GLib::Colors::Green));
-
 	StatusEffect::Draw(pGraphics);
 }
 

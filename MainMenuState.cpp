@@ -32,7 +32,7 @@ void MainMenuState::Init(Game* pGame)
 
 void MainMenuState::Cleanup(void)
 {
-	//delete mControlManager;
+	delete mControlManager;
 }
 
 void MainMenuState::Pause()
@@ -53,6 +53,25 @@ void MainMenuState::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 void MainMenuState::Update(GLib::Input* pInput, double dt)
 {
 	mControlManager->Update(pInput, dt);
+
+	if(mChageToState == "Play")
+	{
+		mMenu->ClearItems();
+
+		mMenu->AddItem("Host", "Host");
+		mMenu->AddItem("Browse", "Browse");
+		mMenu->PerformLayout();
+	}
+	else if(mChageToState == "Options")
+		ChangeState(OptionsState::Instance());
+	else if(mChageToState == "About")
+	{
+
+	}
+	else if(mChageToState == "Browse")
+		ChangeState(BrowsingState::Instance());
+	else if(mChageToState == "Host")
+		ChangeState(HostState::Instance());
 }
 
 void MainMenuState::Draw(GLib::Graphics* pGraphics)
@@ -87,28 +106,5 @@ void MainMenuState::OnResize(float width, float height)
 
 void MainMenuState::OnMenuItemPressed(Label* pLabel)
 {
-	if(pLabel->GetName() == "Play")
-	{
-		mMenu->ClearItems();
-
-		mMenu->AddItem("Host", "Host");
-		mMenu->AddItem("Browse", "Browse");
-		mMenu->PerformLayout();
-	}
-	else if(pLabel->GetName() == "Options")
-	{
-		ChangeState(OptionsState::Instance());
-	}
-	else if(pLabel->GetName() == "About")
-	{
-		
-	}
-	else if(pLabel->GetName() == "Browse")
-	{
-		ChangeState(BrowsingState::Instance());
-	}
-	else if(pLabel->GetName() == "Host")
-	{
-		ChangeState(HostState::Instance());
-	}
+	mChageToState = pLabel->GetName();
 }
