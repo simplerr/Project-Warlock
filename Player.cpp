@@ -14,7 +14,7 @@
 #define NOT_DEAD 9999999999
 
 Player::Player()
-	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/wizard/sorceress_anims_split.x")
+	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/wizard/sorceress.dae")
 {
 	SetType(GLib::PLAYER);
 	SetMaxHealth(100.0f);
@@ -23,7 +23,7 @@ Player::Player()
 	SetEliminated(false);
 	SetLastHitter(nullptr);
 	SetStunned(false);
-	SetMovementSpeed(0.025f);
+	SetMovementSpeed(0.1f);
 	SetLifeSteal(0.0f);
 	SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
 	//GetModel()->SetMeshMaterial(2, GLib::Material(GLib::Colors::Red));

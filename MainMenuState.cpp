@@ -56,11 +56,12 @@ void MainMenuState::Update(GLib::Input* pInput, double dt)
 
 	if(mChageToState == "Play")
 	{
-		mMenu->ClearItems();
+		ChangeState(BrowsingState::Instance());
+		/*mMenu->ClearItems();
 
 		mMenu->AddItem("Host", "Host");
 		mMenu->AddItem("Browse", "Browse");
-		mMenu->PerformLayout();
+		mMenu->PerformLayout();*/
 	}
 	else if(mChageToState == "Options")
 		ChangeState(OptionsState::Instance());

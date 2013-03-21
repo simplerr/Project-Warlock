@@ -101,7 +101,11 @@ void ClientMessageHandler::HandleObjectRemvoed(RakNet::BitStream& bitstream)
 {
 	int id;
 	bitstream.Read(id);
-	mClient->GetWorld()->RemoveObject(id);
+
+	GLib::Object3D* object = mClient->GetWorld()->GetObjectById(id);
+	if(object != nullptr)
+		object->Kill();
+	//mClient->GetWorld()->RemoveObject(id);
 }
 
 void ClientMessageHandler::HandleConnectionSuccess(RakNet::BitStream& bitstream)

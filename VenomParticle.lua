@@ -19,7 +19,6 @@ function InitParticle(pos_x, pos_y, pos_z, time, counter)
 	vel_y = math.random(-900, 1000) / 1000.0 * ParticleData.speed;		-- Y velocity
 	vel_z = math.random(-1000, 1000) / 1000.0 * ParticleData.speed;		-- Z velocity
 	particle:SetInitialVelocity(vel_x, vel_y, vel_z);
-	--particle:SetInitialVelocity(0, 0, 0);
 
 	--particle:Debug();
 
@@ -30,9 +29,9 @@ end
 Projectile = {
 	cast_sound = "sounds/venom_attack.wav";
 	impact_sound = "sounds/venom_impact.wav";
-	speed = 0.07;
+	speed = 0.28;
 	max_distance = 40.0;
-	impact_impulse = 0.2;
+	impact_impulse = 0.4;
 }
 
 ParticleSystemData = {
@@ -68,12 +67,12 @@ function UpdateParticle(particle, time)
 
 	-- Calculate position.
 	pos_x = particle:GetInitPosX() + particle:GetInitVelX() * age + 0.5 * GetAccelX() * age * age;
-	pos_y = particle:GetInitPosY() + particle:GetInitVelY() * age + 0.5 * GetAccelY() * age * age;
+	pos_y = 2;--particle:GetInitPosY() + particle:GetInitVelY() * age + 0.5 * GetAccelY() * age * age;
 	pos_z = particle:GetInitPosZ() + particle:GetInitVelZ() * age + 0.5 * GetAccelZ() * age * age;
 
 	-- Set new position.
 	particle:SetPosition(pos_x, pos_y, pos_z);
 
 	-- Set new size.
-	particle:SetSize(particle:GetInitialSize() * math.min((ParticleData.lifetime / age) / 10.0, 1));-- * math.sin(age * 4.0));
+	particle:SetSize(particle:GetInitialSize() * math.min((ParticleData.lifetime / age) / 10.0, 1));
 end

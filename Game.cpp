@@ -66,7 +66,7 @@ Game::Game(HINSTANCE hInstance, string caption, int width, int height)
 	: Runnable(hInstance, caption, width, height)
 {
 	// Cap the fps to 100.
-	//SetFpsCap(100.0f);
+	SetFpsCap(99.0f);
 	mCurrentState = nullptr;
 
 	gSound = new Sound();

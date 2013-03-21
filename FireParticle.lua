@@ -29,9 +29,9 @@ end
 Projectile = {
 	cast_sound = "sounds/fireball.wav";
 	impact_sound = "sounds/fireball_impact.wav";
-	speed = 0.07;
+	speed = 0.28;
 	max_distance = 40.0;
-	impact_impulse = 0.2;
+	impact_impulse = 0.4;
 }
 
 ParticleSystemData = {

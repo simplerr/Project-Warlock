@@ -24,7 +24,7 @@ ClientArena::ClientArena(Client* pClient)
 	mWorld->AddObjectAddedListener(&ClientArena::OnObjectAdded, this);
 	mWorld->AddObjectRemovedListener(&ClientArena::OnObjectRemoved, this);
 
-	for(int i = 0; i < 40; i++)
+	/*for(int i = 0; i < 40; i++)
 	{
 		string plant;
 		int plantId = rand() % 3 + 1;
@@ -39,7 +39,7 @@ ClientArena::ClientArena(Client* pClient)
 		object->SetPosition(XMFLOAT3(40 - rand() % 80, 1, 40 - rand() % 80));
 		mWorld->AddObject(object);
 		object->SetId(i +1000);
-	}
+	}*/
 }
 
 ClientArena::~ClientArena()

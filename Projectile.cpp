@@ -17,11 +17,11 @@ Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 	mTravelled = 0.0f;
 	mOwner = owner;
 
-	mSpeed = GetLuaWrapper()->GetTableNumber("Projectile", "speed");
-	mMaxDistance = GetLuaWrapper()->GetTableNumber("Projectile", "max_distance");
-	mImpactImpulse = GetLuaWrapper()->GetTableNumber("Projectile", "impact_impulse");
-	mCastSound = GetLuaWrapper()->GetTableString("Projectile", "cast_sound");
-	mImpactSound = GetLuaWrapper()->GetTableString("Projectile", "impact_sound");
+	mSpeed = GetLuaWrapper()->Get<float>("Projectile.speed");
+	mMaxDistance = GetLuaWrapper()->Get<float>("Projectile.max_distance");
+	mImpactImpulse = GetLuaWrapper()->Get<float>("Projectile.impact_impulse");
+	mCastSound = GetLuaWrapper()->Get<string>("Projectile.cast_sound");
+	mImpactSound = GetLuaWrapper()->Get<string>("Projectile.impact_sound");
 }
 
 Projectile::~Projectile()
@@ -31,10 +31,10 @@ Projectile::~Projectile()
 
 void Projectile::Init()
 {
-	string color = GetLuaWrapper()->GetTableString("LightData", "color");
-	string intensity = GetLuaWrapper()->GetTableString("LightData", "intensity");
-	string att = GetLuaWrapper()->GetTableString("LightData", "att");
-	float spot = GetLuaWrapper()->GetTableNumber("LightData", "spot");
+	string color = GetLuaWrapper()->Get<string>("LightData.color");
+	string intensity =GetLuaWrapper()->Get<string>("LightData.intensity");
+	string att = GetLuaWrapper()->Get<string>("LightData.att");
+	float spot = GetLuaWrapper()->Get<float>("LightData.spot");
 
 	auto colorsSplit = GLib::SplitString(color, ' ');
 	auto intensitySplit = GLib::SplitString(intensity, ' ');
@@ -50,6 +50,7 @@ void Projectile::Init()
 	mLight->SetRange(1000);
 	mLight->SetRotation(XMFLOAT3(0, -1, 0));
 	GetWorld()->AddObject(mLight);
+	mLight->SetId(mLight->GetId() + 100); // [HACK]
 }
 
 void Projectile::Update(float dt)

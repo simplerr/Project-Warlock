@@ -22,6 +22,8 @@ void BrowsingState::Init(Game* pGame)
 	BuildUi();
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
+
+	mSelectedServerHost = "none";
 }
 
 void BrowsingState::Cleanup(void)
@@ -48,6 +50,14 @@ void BrowsingState::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 void BrowsingState::Update(GLib::Input* pInput, double dt)
 {
 	mControlManager->Update(pInput, dt);
+
+	if(mSelectedServerHost != "none")
+	{
+		ServerData server = mServerMap[mSelectedServerHost];
+
+		ChangeState(LobbyState::Instance());
+		LobbyState::Instance()->SetServerData(server);
+	}
 }
 
 void BrowsingState::Draw(GLib::Graphics* pGraphics)
@@ -93,18 +103,7 @@ void BrowsingState::BuildUi()
 
 void BrowsingState::OnServerPressed(Label* pLabel)
 {
-	string host = pLabel->GetName();
-	ServerData server = mServerMap[host];
-
-	ChangeState(LobbyState::Instance());
-	LobbyState::Instance()->SetServerData(server);
-
-	//PlayingState::Instance()->GetClient()->ConnectToServer(server.localIp);
-
-	//ChangeState(PlayingState::Instance());
-
-	////if(!PlayingState::Instance()->GetClient()->ConnectToServer(server.publicIp))
-	//	PlayingState::Instance()->GetClient()->ConnectToServer(server.localIp);
+	mSelectedServerHost = pLabel->GetName();
 }
 
 void BrowsingState::OnResize(float width, float height)
