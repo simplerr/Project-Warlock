@@ -62,17 +62,6 @@ void Player::Update(float dt)
 			Actor::Update(dt);
 
 		for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++)
-			(*iter)->Update(dt);
-	}
-}
-
-void Player::Draw(GLib::Graphics* pGraphics)
-{
-	if(!GetEliminated())
-	{
-		Actor::Draw(pGraphics);
-
-		for(auto iter = mStatusEffects.begin(); iter != mStatusEffects.end(); iter++) {
 			if((*iter)->GetTimer() > (*iter)->GetDuration()) {
 				// Call the OnStatusEffectRemoved callback.
 				if(!OnStatusEffectRemoved.empty())
@@ -83,8 +72,15 @@ void Player::Draw(GLib::Graphics* pGraphics)
 				iter = mStatusEffects.erase(iter);
 			}
 			else
-				(*iter)->Draw(pGraphics);
-		}
+				(*iter)->Update(dt);
+	}
+}
+
+void Player::Draw(GLib::Graphics* pGraphics)
+{
+	if(!GetEliminated())
+	{
+		Actor::Draw(pGraphics);
 
 		// Draw the health in 2D coordinates.
 		XMFLOAT2 pos = pGraphics->TransformToScreenSpace(GetPosition() + XMFLOAT3(0, 6, 0));
