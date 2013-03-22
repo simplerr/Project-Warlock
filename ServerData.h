@@ -10,4 +10,5 @@ struct ServerData
 	string publicIp;
 	string localIp;
 	int numPlayers;
+	unsigned int creationTime;
 };

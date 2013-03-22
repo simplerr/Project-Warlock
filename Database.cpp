@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <wininet.h>
 #include <sys/types.h>
+#include <ctime>
 
 #pragma comment(lib, "wininet")
 
@@ -29,7 +30,8 @@ Database::~Database()
 
 void Database::AddServer(string host, string name, string publicIp, string localIp)
 {
-	string q = "INSERT INTO Warlock_Servers VALUES ('"+host+"', '"+name+"', '"+publicIp+"', '"+localIp+"', '0')";
+	time_t currentTime = time(nullptr);
+	string q = "INSERT INTO Warlock_Servers VALUES ('"+host+"', '"+name+"', '"+publicIp+"', '"+localIp+"', '0', '"+to_string(currentTime)+"')";
 	//mConnection.query(q.c_str()).store();
 	mysqlpp::Query query = mConnection.query(q);
 	query.store();
@@ -67,12 +69,15 @@ ServerData Database::GetServerData(string host)
 	server.publicIp = res[0]["Public_Ip"];
 	server.localIp = res[0]["Local_ip"];
 	server.numPlayers = res[0]["Players"];
+	server.creationTime = res[0]["Creation_Time"];
 
 	return server;
 }
 
 vector<ServerData> Database::GetServers()
 {
+	time_t currentTime = time(nullptr);
+
 	vector<ServerData> servers;
 	string q = "SELECT * FROM Warlock_Servers";
 	mysqlpp::Query query = mConnection.query(q);
@@ -87,7 +92,12 @@ vector<ServerData> Database::GetServers()
 			server.publicIp = res[i]["Public_Ip"];
 			server.localIp = res[i]["Local_ip"];
 			server.numPlayers = res[i]["Players"];
-			servers.push_back(server);
+			server.creationTime = res[i]["Creation_Time"];
+
+			if((currentTime - server.creationTime) > 3600)
+				RemoveServer(server.host);
+			else
+				servers.push_back(server);
 		}
 	}
 
