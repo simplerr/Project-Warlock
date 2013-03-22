@@ -14,6 +14,7 @@ public:
 	void Draw(GLib::Graphics* pGraphics);
 
 	void ButtonPressed(Label* pButton);
+	void SetVisible(bool visible);
 	bool GetChangeState();
 private:
 	TextMenu* mMenu;

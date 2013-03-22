@@ -2,7 +2,9 @@
 #include "BitStream.h"
 #include "d3dUtil.h"
 #include "StatusEffect.h"
+#include "StatusText.h"
 #include <string>
+#include <list>
 
 namespace GLib {
 	class Graphics;
@@ -53,6 +55,8 @@ public:
 	void SetSelectedPlayer(PlayerModule* pPlayer);
 	bool PointInsideUi(XMFLOAT3 position);
 	void RemoveAllItems();
+	void ShowInGameMenu(bool show);
+	void AddStatusText(string text, int x, int y, float time, float size, UINT32 color = GLib::ColorRGBA(0, 0, 0, 255));
 
 	void UpdateChatPosition();
 	void SetStatusText(string text, float time, float size = 30, UINT32 color = GLib::ColorRGBA(0, 0, 0, 255));
@@ -83,6 +87,7 @@ private:
 	InGameMenu*					mInGameMenu;
 	AttributesUi*				mAttributesUi;
 	Client*						mClient;
+	list<GLib::StatusText>		mStatusTextList;
 
 	GameOverOverlay*			mGameOverOverlay;
 	bool						mIsReady;	// to prevent mChat->MsgProc() when not loaded fully.

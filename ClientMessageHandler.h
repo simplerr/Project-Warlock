@@ -28,6 +28,7 @@ public:
 	void HandleCvarChange(RakNet::BitStream& bitstream);
 	void HandlePlayerEliminated(RakNet::BitStream& bitstream);
 	void HandlePerformRematch(RakNet::BitStream& bitstream);
+	void HandleServerShutdown(RakNet::BitStream& bitstream);
 private:
 	Client* mClient;
 	ClientSkillInterpreter*		mSkillInterpreter;

@@ -299,6 +299,10 @@ void ClientMessageHandler::HandlePerformRematch(RakNet::BitStream& bitstream)
 {
 	// Remove all the players items.
 	mClient->GetUi()->RemoveAllItems();
+}
 
-
+void ClientMessageHandler::HandleServerShutdown(RakNet::BitStream& bitstream)
+{
+	mClient->GetUi()->ShowInGameMenu(true);
+	mClient->GetUi()->AddStatusText("Server shutdown!", GLib::GetClientWidth()/2, 100, 10000, 75, GLib::ColorRGBA(255, 0, 0, 255));
 }

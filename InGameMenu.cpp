@@ -50,3 +50,8 @@ bool InGameMenu::GetChangeState()
 {
 	return mChangeState;
 }
+
+void InGameMenu::SetVisible(bool visible)
+{
+	mMenu->SetVisible(visible);
+}

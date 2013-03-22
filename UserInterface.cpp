@@ -116,6 +116,14 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 
 	mInGameMenu->Update(pInput, dt);
 
+	for(auto iter = mStatusTextList.begin(); iter != mStatusTextList.end(); iter++) {
+		if((*iter).IsTimeOut())
+			iter = mStatusTextList.erase(iter);
+		else
+			(*iter).Update(dt);
+	}
+
+
 	// Change the state from the in-game menu and the game over display.
 	if((mGameOverOverlay != nullptr && mGameOverOverlay->GetChangeState()) || mInGameMenu->GetChangeState())
 		PlayingState::Instance()->ChangeState(MainMenuState::Instance());
@@ -130,6 +138,8 @@ void UserInterface::Draw(GLib::Graphics* pGraphics)
 	UiCoordinate coords(UiAlignmentX::CENTER, BOTTOM, 800, 800, 1600, 200, false, true);
 	pGraphics->DrawScreenQuad(mBkgdTexture, coords.x, coords.y, coords.width, coords.height);
 
+	for(auto iter = mStatusTextList.begin(); iter != mStatusTextList.end(); iter++) 
+		(*iter).Draw(pGraphics);
 
 	mAttributesUi->Draw(pGraphics);
 	mInventory->Draw(pGraphics);
@@ -257,6 +267,14 @@ void UserInterface::SetStatusText(string text, float time, float size, UINT32 co
 	mStatusText->SetSize(size);
 }
 
+void UserInterface::AddStatusText(string text, int x, int y, float time, float size, UINT32 color)
+{
+	GLib::StatusText statusText = GLib::StatusText(text, x, y, time);
+	statusText.SetText(text, time, color);
+	statusText.SetSize(size);
+	mStatusTextList.push_back(statusText);
+}
+
 void UserInterface::OnResize(float width, float height)
 {
 	UpdateChatPosition();
@@ -334,4 +352,9 @@ void UserInterface::RemoveAllItems()
 bool UserInterface::HasChatFocus()
 {
 	return mChat->HasFocus();
+}
+
+void UserInterface::ShowInGameMenu(bool show)
+{
+	mInGameMenu->SetVisible(show);
 }

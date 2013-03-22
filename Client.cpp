@@ -119,6 +119,9 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 		case NMSG_WORLD_UPDATE:
 			mMessageHandler->HandleWorldUpdate(bitstream);
 			break;
+		case NMSG_SERVER_SHUTDOWN:
+			mMessageHandler->HandleServerShutdown(bitstream);
+			break;
 		case NMSG_TARGET_ADDED:
 			mMessageHandler->HandleTargetAdded(bitstream);
 			break;
