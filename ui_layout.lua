@@ -37,11 +37,11 @@ MainMenu = {
 	draw_bkgd = 1;
 	draw_item_bkgd = 0;
 	centered_items = 0;
-	bkgd_scale = 1.1;
-	item_bkgd_scale = 1.0;
+	bkgd_scale = 1.0;
+	item_bkgd_scale = 1.4;
 	pos_x = 800;
 	pos_y = 200;
-	font_size = 30;
+	font_size = 40;
 	spacing = 0;
 }
 
@@ -50,11 +50,11 @@ InGameMenu = {
 	item_bkgd = "textures/menu_item_bkgd.png";
 	font_family = "Arial";
 	font_color = "0 0 0 255";
-	draw_bkgd = 0;
-	draw_item_bkgd = 0;
+	draw_bkgd = 1;
+	draw_item_bkgd = 1;
 	centered_items = 0;
 	bkgd_scale = 1.0;
-	item_bkgd_scale = 1.0;
+	item_bkgd_scale = 1.2;
 	pos_x = 800;
 	pos_y = 200;
 	font_size = 60;
@@ -124,7 +124,7 @@ LeaveLobbyButton = {
 }
 
 OptionsBackButton = {
-	pos_x = 905;
+	pos_x = 800;
 	pos_y = 510;
 	bkgd_scale = DefaultButtonData.bkgd_scale;
 	font_size = 40;

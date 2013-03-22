@@ -13,6 +13,7 @@ InGameMenu::InGameMenu(string luaScript)
 	mMenu->SetVisible(false);
 	mMenu->SetPressedSound("sounds/button.wav");
 	mMenu->AddItemPressedListener(&InGameMenu::ButtonPressed, this);
+	mMenu->SetDrawBkgd(true);
 	AddControl(mMenu);
 
 	mChangeState = false;

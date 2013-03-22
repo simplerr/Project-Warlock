@@ -28,6 +28,7 @@ void MainMenuState::Init(Game* pGame)
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
 
 	gSound->PlayMusic("sounds/menu_music.wav", true, false);
+	mChageToState = "none";
 }
 
 void MainMenuState::Cleanup(void)

@@ -36,4 +36,5 @@ private:
 	HWND				 mhNameBox;
 	HWND				 mhServerNameBox;
 	HWND				 mhLookSensBox;
+	string				 mChangeState;
 };

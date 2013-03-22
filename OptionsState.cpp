@@ -35,6 +35,7 @@ void OptionsState::Init(Game* pGame)
 	mControlManager = new ControlManager("ui_layout.lua");
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
 	mWhiteTexture = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
+	mChangeState = "none";
 
 	BuildUi();
 }
@@ -66,6 +67,30 @@ void OptionsState::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 void OptionsState::Update(GLib::Input* pInput, double dt)
 {
 	mControlManager->Update(pInput, dt);
+
+	if(mChangeState == "OptionsBackButton")
+	{
+		Config config("config.txt");
+		char buffer[256];
+		GetWindowText(mhNameBox, buffer, 255);
+		config.nickName = buffer;
+
+		GetWindowText(mhServerNameBox, buffer, 255);
+		config.serverName = buffer;
+
+		GetWindowText(mhLookSensBox, buffer, 255);
+
+		if(GLib::IsNumber(string(buffer))) {
+			config.lookSense = atof(buffer);
+		}
+		else 
+			config.lookSense = 1.0f;
+
+
+		config.Save();
+
+		ChangeState(MainMenuState::Instance());
+	}
 }
 
 void OptionsState::Draw(GLib::Graphics* pGraphics)
@@ -124,26 +149,6 @@ void OptionsState::OnResize(float width, float height)
 void OptionsState::OnButtonPressed(Button* pButton)
 {
 	if(pButton->GetName() == "OptionsBackButton")
-	{
-		Config config("config.txt");
-		char buffer[256];
-		GetWindowText(mhNameBox, buffer, 255);
-		config.nickName = buffer;
+		mChangeState = "OptionsBackButton";
 
-		GetWindowText(mhServerNameBox, buffer, 255);
-		config.serverName = buffer;
-		
-		GetWindowText(mhLookSensBox, buffer, 255);
-
-		if(GLib::IsNumber(string(buffer))) {
-			config.lookSense = atof(buffer);
-		}
-		else 
-			config.lookSense = 1.0f;
-		
-
-		config.Save();
-
-		ChangeState(MainMenuState::Instance());
-	}
 }
