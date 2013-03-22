@@ -64,6 +64,7 @@ void ItemLoaderXML::SetupKeyMap()
 	mStringKeyMap["Teleport"] = SKILL_TELEPORT;	
 	mStringKeyMap["Meteor"] = SKILL_METEOR;
 	mStringKeyMap["Venom Acid"] = SKILL_VENOM;
+	mStringKeyMap["Grappling hook"] = SKILL_GRAPPLING_HOOK;
 
 	// Status effects.
 	mStringKeyMap["Freeze Effect"] = FREEZE_STATUS;	

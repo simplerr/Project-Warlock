@@ -32,6 +32,7 @@ void MeteorProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena,
 	dir.y = 0.0f;
 	XMStoreFloat3(&dir, XMVector3Normalize(XMLoadFloat3(&dir)));
 	pPlayer->SetVelocity(dir * GetImpactImpulse() * (1.0f-pPlayer->GetKnockBackResistance()));
+	pPlayer->ClearTargetQueue();
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));

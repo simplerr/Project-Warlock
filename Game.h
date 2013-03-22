@@ -39,4 +39,5 @@ public:
 	LRESULT MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 private:
 	GameState*	mCurrentState;
+	bool mDrawDebug;
 };

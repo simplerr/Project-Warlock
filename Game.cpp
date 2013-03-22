@@ -98,6 +98,8 @@ void Game::Init()
 	GetGraphics()->SetFogColor(XMFLOAT4(0.4f, 0.4f, 0.4f, 1.0f));
 
 	ChangeState(MainMenuState::Instance());
+
+	mDrawDebug = false;
 }
 
 void Game::Update(GLib::Input* pInput, float dt)
@@ -108,6 +110,9 @@ void Game::Update(GLib::Input* pInput, float dt)
 
 	mx = pInput->MousePosition().x;
 	my = pInput->MousePosition().y;
+
+	if(pInput->KeyPressed(VK_F1))
+		mDrawDebug = !mDrawDebug;
 
 	/*if(pInput->KeyReleased('F')) {
 		float width = GetSystemMetrics(SM_CXSCREEN);
@@ -125,9 +130,12 @@ void Game::Draw(GLib::Graphics* pGraphics)
 	mCurrentState->Draw(pGraphics);
 	pGraphics->DrawBillboards();
 
-	char buffer[244];
-	sprintf(buffer, "x: %.2f\ny: %.2f\nFPS:%.2f", mx, my, GetCurrentFps());
-	pGraphics->DrawText(buffer, GLib::GetClientWidth()-100, 400, 15);
+	if(mDrawDebug)
+	{
+		char buffer[244];
+		sprintf(buffer, "x: %.2f\ny: %.2f\nFPS:%.2f", mx, my, GetCurrentFps());
+		pGraphics->DrawText(buffer, GLib::GetClientWidth()-100, 400, 20, GLib::ColorRGBA(255, 255, 255, 255));
+	}
 
 	// Present the backbuffer.
 	pGraphics->Present();

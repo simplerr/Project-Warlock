@@ -89,3 +89,12 @@ public:
 
 	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
 };
+
+class GrapplingHookSkill : public Skill
+{
+public:
+	GrapplingHookSkill(string icon);
+	~GrapplingHookSkill();
+
+	void Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end);
+};

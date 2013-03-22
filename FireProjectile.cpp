@@ -23,6 +23,7 @@ void FireProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, I
 	XMFLOAT3 dir = GetDirection();
 	dir.y = 0.0f;
 	pPlayer->SetVelocity(dir * GetImpactImpulse() * (1-pPlayer->GetKnockBackResistance()));
+	pPlayer->ClearTargetQueue();
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));

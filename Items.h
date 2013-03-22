@@ -32,6 +32,7 @@ enum ItemName
 	SKILL_METEOR,
 	SKILL_HOOK,
 	SKILL_VENOM,
+	SKILL_GRAPPLING_HOOK,
 	
 	//
 	// Status Effects

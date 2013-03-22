@@ -42,6 +42,7 @@ void FrostProjectile::HandlePlayerCollision(Player* pPlayer, BaseArena* pArena, 
 	// Add a "impulse" to the player.
 	XMFLOAT3 dir = GetDirection();
 	pPlayer->SetVelocity(dir * GetImpactImpulse() * (1.0f-pPlayer->GetKnockBackResistance()));
+	pPlayer->ClearTargetQueue();
 
 	// Get item data.
 	Item* item = pItemLoader->GetItem(ItemKey(GetSkillType(), GetSkillLevel()));

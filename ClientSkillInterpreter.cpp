@@ -9,6 +9,7 @@
 #include "MeteorProjectile.h"
 #include "HookProjectile.h"
 #include "VenomProjectile.h"
+#include "GrapplingHook.h"
 #include "Sound.h"
 
 ClientSkillInterpreter::ClientSkillInterpreter()
@@ -50,6 +51,8 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 		projectile = new MeteorProjectile(owner, end);
 	else if(id == SKILL_VENOM) 
 		projectile = new VenomProjectile(owner, start, dir);
+	else if(id == SKILL_GRAPPLING_HOOK)
+		projectile = new GrapplingHook(owner, start, dir);
 	else if(id == SKILL_TELEPORT) 
 	{
 		player->ClearTargetQueue();
@@ -64,7 +67,7 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 	if(projectile != nullptr)
 		gSound->PlayEffect(projectile->GetCastSound());
 
-	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR || id == SKILL_HOOK || id == SKILL_VENOM) 
+	if(id == SKILL_FIREBALL || id == SKILL_FROSTNOVA || id == SKILL_METEOR || id == SKILL_HOOK || id == SKILL_VENOM || id == SKILL_GRAPPLING_HOOK) 
 	{
 		bitstream.Read(projectileId);
 		projectile->SetSkillLevel(skillLevel);

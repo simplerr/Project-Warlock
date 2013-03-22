@@ -31,6 +31,13 @@ void Actor::Update(float dt)
 	mVelocity = mVelocity * mFriction;
 	SetPosition(GetPosition() + mVelocity); 
 
+	/*if(mSlow < 0.2f)
+		AdjustAnimationSpeedBy(110);
+	if(mSlow >= 0.2f)
+		AdjustAnimationSpeedBy(100);
+	else if(mSlow >= 60)
+		AdjustAnimationSpeedBy(90);*/
+
 	// Move the object.
 	// [NOTE] The position of the actor gets set in the Client as well,
 	// but it's overwritten with the UPDATE_WORLD MSG!
@@ -39,8 +46,6 @@ void Actor::Update(float dt)
 		// Only rotate when walking.
 		if(GetCurrentAnimation() == 0)
 			SetRotation(XMFLOAT3(0, atan2f(-mTargetQueue.front().dir.x, -mTargetQueue.front().dir.z), 0));
-		else if(GetCurrentAnimation() == 5)
-			int a = 1;
 
 		XMFLOAT3 newPos = GetPosition() + mTargetQueue.front().dir * GetMovementSpeed() * (1 - mSlow);
 		SetPosition(XMFLOAT3(newPos.x, GetPosition().y, newPos.z));
@@ -96,12 +101,15 @@ void Actor::AddTarget(XMFLOAT3 targetPos, bool clear)
 	XMStoreFloat3(&target.dir, XMVector3Normalize(XMLoadFloat3(&diff)));
 	target.pos = targetPos;
 
+	mVelocity = XMFLOAT3(0.0f, 0.0f, 0.0f);
+
 	mTargetQueue.push_back(target);
 }
 
 void Actor::ClearTargetQueue()
 {
 	mTargetQueue.clear();
+	SetAnimation(1);
 }
 
 void Actor::SetSelected(bool selected)
@@ -126,7 +134,7 @@ void Actor::SetFriction(float friction)
 
 float Actor::IsKnockedBack()
 {
-	return sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z) > 0.09f;
+	return sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z) > 0.2f;
 }
 
 void Actor::SetSlow(float slow)

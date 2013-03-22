@@ -91,6 +91,10 @@ Skill* SkillHandler::AddSkill(ItemName skillName)
 		skill = new VenomSkill("textures/icons/venom_acid.png");
 		key = 'S';
 	}
+	else if(skillName == SKILL_GRAPPLING_HOOK) {
+		skill = new GrapplingHookSkill("textures/icons/grappling_hook.png");
+		key = 'D';
+	}
 	else
 		return nullptr;
 

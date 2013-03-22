@@ -100,6 +100,13 @@
       <Level cost="9" num="2" damage="8" slow="0.25" dot="2.5" duration="4" cooldown="1.6"/>
       <Level cost="13" num="3" damage="13" slow="0.30" dot="3.0" duration="5" cooldown="1.6"/>
     </Skill>
+
+    <Skill name="Grappling hook" skill="true" icon="textures/icons/grappling_hook.png" hotkey="D">
+      <Desc>A projectile that thrusts the caster*against the target on impact</Desc>
+      <Level cost="4" num="1" damage="5" slow="0.2" dot="2.0" duration="4" cooldown="0"/>
+      <Level cost="9" num="2" damage="8" slow="0.25" dot="2.5" duration="4" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="13" slow="0.30" dot="3.0" duration="5" cooldown="1.6"/>
+    </Skill>
   </Skills>
 
   <!--____________________________________________________________-->

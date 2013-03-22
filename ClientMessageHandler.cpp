@@ -210,6 +210,7 @@ void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bi
 
 	Player* player = (Player*)mClient->GetWorld()->GetObjectById(playerId);
 	Projectile* projectile = (Projectile*)mClient->GetWorld()->GetObjectById(projectileId);
+	projectile->HandlePlayerCollision(player, mClient->GetArena(), mClient->GetUi()->GetItemLoader());
 
 	// Play impact sound.
 	gSound->PlayEffect(projectile->GetImpactSound());

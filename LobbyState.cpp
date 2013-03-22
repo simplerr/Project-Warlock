@@ -68,9 +68,6 @@ void LobbyState::Draw(GLib::Graphics* pGraphics)
 	pGraphics->DrawScreenQuad(mBkgdTexture, GLib::GetClientWidth()/2, GLib::GetClientHeight()/2, GLib::GetClientWidth(), GLib::GetClientHeight());
 	pGraphics->DrawScreenQuad(mPlayerListBkgd, GLib::GetClientWidth()/2, 300, 300, 400);
 
-	if(mClient->GetName() == mServerData.host)
-		pGraphics->DrawText("HOST!", 100, 100, 20, GLib::ColorRGBA(255, 0, 0, 255));
-
 	vector<Player*> playerList = mClient->GetPlayerList();
 
 	for(int i = 0; i < playerList.size(); i++) {

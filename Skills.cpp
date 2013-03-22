@@ -228,3 +228,20 @@ void VenomSkill::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFL
 {
 
 }
+
+// Grappling hook.
+
+GrapplingHookSkill::GrapplingHookSkill(string icon) : Skill(icon)
+{
+	SetName(SKILL_GRAPPLING_HOOK);
+}
+
+GrapplingHookSkill::~GrapplingHookSkill()
+{
+
+}
+
+void GrapplingHookSkill::Cast(GLib::World* pWorld, Player* pCaster, XMFLOAT3 start, XMFLOAT3 end)
+{
+
+}
