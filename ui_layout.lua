@@ -125,7 +125,7 @@ LeaveLobbyButton = {
 
 OptionsBackButton = {
 	pos_x = 800;
-	pos_y = 510;
+	pos_y = 540;
 	bkgd_scale = DefaultButtonData.bkgd_scale;
 	font_size = 40;
 	font_family = DefaultButtonData.font_family;

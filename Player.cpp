@@ -184,7 +184,7 @@ void Player::AddStatusEffect(StatusEffect* pStatusEffect)
 
 void Player::SetCurrentHealth(float health)
 {
-	mCurrentHealth = min(health, mAttributes.health);
+	mCurrentHealth = max(min(health, mAttributes.health), 0);
 }
 
 void Player::SetRegen(float regen)

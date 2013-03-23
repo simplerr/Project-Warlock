@@ -19,73 +19,15 @@ namespace Cvars {
 	const string PROJECTILE_IMPULSE = "-impulse";
 	const string ARENA_RADIUS = "-radius";
 	const string FLOOD_INTERVAL = "-flood_interval";
-	const string FLOD_SIZE = "-flood_size";
+	const string FLOOD_SIZE = "-flood_size";
 	const string CHEATS = "-cheats";
 }
 
 struct ServerCvars
 {
-	ServerCvars() {
-		CvarMap[Cvars::START_GOLD] = 100;
-		CvarMap[Cvars::SHOP_TIME] = 3;
-		CvarMap[Cvars::ROUND_TIME] = 120;
-		CvarMap[Cvars::NUM_ROUNDS] = 1;
-		CvarMap[Cvars::GOLD_PER_KILL] = 1;
-		CvarMap[Cvars::GOLD_PER_WIN] = 3;
-		CvarMap[Cvars::LAVA_DMG] = 1;
-		CvarMap[Cvars::LAVA_SLOW] = 0.4;
-		CvarMap[Cvars::PROJECTILE_IMPULSE] =  3; // Divided by 10 later.
-		CvarMap[Cvars::ARENA_RADIUS] = 60;
-		CvarMap[Cvars::FLOOD_INTERVAL] = 10;
-		CvarMap[Cvars::FLOD_SIZE] = 10;
-		CvarMap[Cvars::CHEATS] = 1;
-	}
+	ServerCvars();
 
-	void LoadFromFile(string filename) {
-		//ifstream fin(filename);
-		//string trash;
-		//int num;
-
-
-		//fin >> trash >> num;
-		//CvarMap[Cvars::START_GOLD] = num;
-		//fin >> trash >> num;
-		//CvarMap[Cvars::SHOP_TIME] = num;
-		//fin >> trash >> num;
-		//CvarMap[Cvars::ROUND_TIME] = num;
-		//fin >> trash >> num;
-		//CvarMap[Cvars::NUM_ROUNDS] = num;
-		//fin >> trash >> num;
-		//CvarMap[Cvars::GOLD_PER_KILL] = num;
-		//fin >> trash >> num;
-		//CvarMap[Cvars::GOLD_PER_WIN] = num;
-		//fin >> trash >> num;
-		//CvarMap[Cvars::LAVA_DMG] = num;
-		//fin >> trash >> num;
-		//CvarMap[Cvars::PROJECTILE_IMPULSE] = num; // Divided by 10 later.
-
-
-		//fin.close();
-
-		//FILE* file;
-		//file = fopen(filename.c_str(), "r");
-		//char trash[64], trash1[64], trash2[64], trash3[64], trash4[64], trash5[64], trash6[64], trash7[64];
-
-		///*fscanf(file, "%s %i %s %i %s %i %s %i %s %i %s %i %s %i %s %i", 
-		//trash,  CvarMap[Cvars::START_GOLD], 
-		//trash1, CvarMap[Cvars::SHOP_TIME],
-		//trash2, CvarMap[Cvars::ROUND_TIME], 
-		//trash3, CvarMap[Cvars::NUM_ROUNDS],
-		//trash4, CvarMap[Cvars::GOLD_PER_KILL],
-		//trash5, CvarMap[Cvars::GOLD_PER_WIN], 
-		//trash6, CvarMap[Cvars::LAVA_DMG], 
-		//trash7, CvarMap[Cvars::PROJECTILE_IMPULSE]);*/
-
-		//fgets(trash, 255, file);
-		//fgets(trash, 255, file);
-
-		//fclose(file);
-	}
+	void LoadFromFile(string filename);
 
 	void SetCvarValue(string cvar, float value) {
 		if(CvarMap.find(cvar) != CvarMap.end())
