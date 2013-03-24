@@ -1,3 +1,0 @@
-texture0="head_eyeR_lo.tga"
-shader="abstract::mesh_skin_diffuse.vert","abstract::mesh_diffuse.frag"
-shadowshader="abstract::mesh_shadow_skin.vert"

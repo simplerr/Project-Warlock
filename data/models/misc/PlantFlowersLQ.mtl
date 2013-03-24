@@ -1,9 +1,0 @@
-# MTL written from E:\3d\3D-Objekte\todo\Platformer\Meshes\PlantFlowersLQ.obj
-newmtl Plants
-Kd 0.8 0.8 0.8
-Ns 256
-d 1
-illum 1
-Ka 0 0 0
-Ks 0.2 0.2 0.2
-map_Kd E:\3d\3D-Objekte\todo\Platformer\Meshes\Plants_D.png

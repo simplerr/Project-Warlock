@@ -1,4 +1,0 @@
-texture0="sorceress.tga"
-texture1="sorceress_n.tga"
-shader="abstract::mesh_diffuse_bumpmap_skin.vert","abstract::mesh_diffuse_bumpmap_specular.frag"
-shadowshader="abstract::mesh_shadow_skin.vert"
