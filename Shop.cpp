@@ -17,7 +17,7 @@ Shop::Shop(int x, int y, int colums, float slotSize)
 	for(int i = 0; i < 9; i++)
 		AddSlot();
 
-	SetHooverInfoPos(XMFLOAT2(GetWidth() + 30, -GetHeight()));
+	SetHooverInfoPos(XMFLOAT2(GetWidth() + 30, -160));
 }
 
 Shop::~Shop()
