@@ -1,0 +1,9 @@
+# MTL written from E:\3d\3D-Objekte\todo\Platformer\Meshes\Crate.obj
+newmtl Crate
+Kd 1 1 1
+Ns 32
+d 1
+illum 1
+Ka 0 0 0
+Ks 0 0 0
+map_Kd E:\3d\3D-Objekte\todo\Platformer\Meshes\Crate_D.png

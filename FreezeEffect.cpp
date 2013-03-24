@@ -4,7 +4,7 @@
 #include "ParticleSystem.h"
 
 FreezeEffect::FreezeEffect()
-	: StatusEffect(FREEZE_STATUS, 3, "textures/smoke.dds", "StatusEffectParticle.lua")
+	: StatusEffect(FREEZE_STATUS, 3, "data/textures/smoke.dds", "data/lua/StatusEffectParticle.lua")
 {
 
 }

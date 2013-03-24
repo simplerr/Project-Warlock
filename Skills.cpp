@@ -16,7 +16,7 @@ Skill::Skill(string icon)
 {
 	SetName(SKILL_FIREBALL);
 	SetCastDelay(0.0f);
-	mDarkOverlay = GLib::GetGraphics()->LoadTexture("textures/black_transparent.png");
+	mDarkOverlay = GLib::GetGraphics()->LoadTexture("data/textures/black_transparent.png");
 }
 
 Skill::~Skill()

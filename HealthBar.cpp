@@ -9,8 +9,8 @@ HealthBar::HealthBar(float x, float y)
 	SetWidth(256);
 	SetHeight(64);
 
-	mBorder = GLib::GetGraphics()->LoadTexture("textures\\bar_border.bmp", 0x00000000);
-	mBar = GLib::GetGraphics()->LoadTexture("textures\\bar.bmp");
+	mBorder = GLib::GetGraphics()->LoadTexture("data/textures\\bar_border.bmp", 0x00000000);
+	mBar = GLib::GetGraphics()->LoadTexture("data/textures\\bar.bmp");
 	mFilled = 0.1f;
 }
 

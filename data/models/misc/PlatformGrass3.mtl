@@ -1,0 +1,33 @@
+# MTL written from E:\3d\3D-Objekte\todo\Platformer\Meshes\PlatformGrass3.obj
+newmtl GrassClean
+Kd 1 1 1
+Ns 32
+d 1
+illum 2
+Ka 0 0 0
+Ks 0 0 0
+map_Kd E:\3d\3D-Objekte\todo\Platformer\Meshes\GrassClean_D.png
+newmtl RocksCliff
+Kd 1 1 1
+Ns 256
+d 1
+illum 2
+Ka 0 0 0
+Ks 0.2 0.2 0.2
+map_Kd E:\3d\3D-Objekte\todo\Platformer\Meshes\RocksCliff_D.png
+newmtl TransitionGrassRock
+Kd 1 1 1
+Ns 32
+d 1
+illum 2
+Ka 0 0 0
+Ks 0 0 0
+map_Kd E:\3d\3D-Objekte\todo\Platformer\Meshes\TransitionRockGrass_D.png
+newmtl TransitionGrassRock1
+Kd 1 1 1
+Ns 32
+d 1
+illum 2
+Ka 0 0 0
+Ks 0 0 0
+map_Kd E:\3d\3D-Objekte\todo\Platformer\Meshes\TransitionGrassRock_D.png

@@ -6,7 +6,7 @@
 #include "World.h"
 
 HookProjectile::HookProjectile(int owner, XMFLOAT3 position, XMFLOAT3 dir)
-	: Projectile(owner, position, XMFLOAT3(dir.x, 0, dir.z), "HookParticle.lua")
+	: Projectile(owner, position, XMFLOAT3(dir.x, 0, dir.z), "data/lua/HookParticle.lua")
 {
 	int a = 1;
 }

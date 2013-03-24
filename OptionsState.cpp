@@ -32,9 +32,9 @@ void OptionsState::Init(Game* pGame)
 	// Important!!
 	SetGame(pGame);
 
-	mControlManager = new ControlManager("ui_layout.lua");
-	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
-	mWhiteTexture = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
+	mControlManager = new ControlManager("data/lua/ui_layout.lua");
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_bkgd.png");
+	mWhiteTexture = GLib::GetGraphics()->LoadTexture("data/textures/white_transparent.png");
 	mChangeState = "none";
 
 	BuildUi();
@@ -70,7 +70,7 @@ void OptionsState::Update(GLib::Input* pInput, double dt)
 
 	if(mChangeState == "OptionsBackButton")
 	{
-		Config config("config.txt");
+		Config config("data/config.txt");
 		char buffer[256];
 		GetWindowText(mhNameBox, buffer, 255);
 		config.nickName = buffer;
@@ -124,12 +124,12 @@ void OptionsState::BuildUi()
 
 	mControlManager->AddControl(mBackButton);
 	mBackButton->SetAlignment(false, true);
-	mBackButton->SetPressedSound("sounds/button.wav");
+	mBackButton->SetPressedSound("data/sounds/button.wav");
 	
 	mControlManager->LoadLuaProperties();
 
 	// Load the nickname from the config file.
-	Config config("config.txt");
+	Config config("data/config.txt");
 	SetWindowText(mhNameBox, config.nickName.c_str());
 	SetWindowText(mhServerNameBox, config.serverName.c_str());
 	char buffer[32];

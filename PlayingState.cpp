@@ -20,10 +20,10 @@ void PlayingState::Init(Game* pGame)
 {
 	// Important!!
 	SetGame(pGame);
-	//gSound->PlayMusic("sounds/ambient.wav", true, 0);
+	//gSound->PlayMusic("data/sounds/ambient.wav", true, 0);
 	gSound->SetMusicVolume(0.3f);
 
-	Config config("config.txt");
+	Config config("data/config.txt");
 	GLib::GetGraphics()->GetCamera()->SetMovementSpeed(config.lookSense);
 
 	GLib::Effects::TerrainFX->SetArenaRadius(gCvars->GetCvarValue(Cvars::ARENA_RADIUS));

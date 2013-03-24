@@ -4,7 +4,7 @@
 
 RoundHandler::RoundHandler()
 {
-	mScoreBkgd = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
+	mScoreBkgd = GLib::GetGraphics()->LoadTexture("data/textures/white_transparent.png");
 }
 
 RoundHandler::~RoundHandler()

@@ -12,7 +12,7 @@ Shop::Shop(int x, int y, int colums, float slotSize)
 {
 	SetInspectingInventory(nullptr);
 	SetHooverInfoPos(XMFLOAT2(-20, -160));
-	SetHooverBkgd("textures/white_transparent.png");
+	SetHooverBkgd("data/textures/white_transparent.png");
 
 	for(int i = 0; i < 9; i++)
 		AddSlot();
@@ -56,7 +56,7 @@ void Shop::OnRightPress(ItemSlot& itemSlot)
 	Item* item = (Item*)itemSlot.item;
 
 	if(player->GetGold() >= item->GetCost() && mInspectingInventory != nullptr && itemSlot.taken) {
-		gSound->PlayEffect("sounds/buy.wav");
+		gSound->PlayEffect("data/sounds/buy.wav");
 
 		mInspectingInventory->AddItem(item);
 		player->SetGold(player->GetGold() - item->GetCost());

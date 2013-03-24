@@ -6,7 +6,7 @@
 #include "World.h"
 
 GrapplingHook::GrapplingHook(int owner, XMFLOAT3 position, XMFLOAT3 dir)
-	: Projectile(owner, position, XMFLOAT3(dir.x, 0, dir.z), "GrapplingHookParticle.lua")
+	: Projectile(owner, position, XMFLOAT3(dir.x, 0, dir.z), "data/lua/GrapplingHookParticle.lua")
 {
 	int a = 1;
 }

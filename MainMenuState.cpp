@@ -21,13 +21,13 @@ void MainMenuState::Init(Game* pGame)
 	// Important!!
 	SetGame(pGame);
 
-	mControlManager = new ControlManager("ui_layout.lua");
+	mControlManager = new ControlManager("data/lua/ui_layout.lua");
 
 	BuildUi();
 
-	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_bkgd.png");
 
-	gSound->PlayMusic("sounds/menu_music.wav", true, false);
+	gSound->PlayMusic("data/data/sounds/menu_music.wav", true, false);
 	mChageToState = "none";
 }
 
@@ -94,7 +94,7 @@ void MainMenuState::BuildUi()
 	mMenu->AddItem("Options", "Options");
 	mMenu->AddItem("About", "About");
 	
-	mMenu->SetPressedSound("sounds/button.wav");
+	mMenu->SetPressedSound("data/sounds/button.wav");
 
 	mMenu->PerformLayout();
 	mControlManager->AddControl(mMenu);

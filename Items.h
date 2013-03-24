@@ -76,7 +76,7 @@ struct Attributes
  4.) Let SkillHandler::AddSkill(ItemName skillName) handle the new skill type
 		if(skillName == SKILL_FIREBALL) 
 		{
-			skill = new FireBall("textures/icons/fireball.png");
+			skill = new FireBall("data/textures/icons/fireball.png");
 			key = 'Q';
 		}
  5.) Let ServerSkillInterpreter::Interpret handle the new skill type as well

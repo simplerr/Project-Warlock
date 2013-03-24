@@ -1,0 +1,38 @@
+# Material file for uld-sword.obj
+
+newmtl Cape
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd Images\Item\Objectcomponents\weapon\sword_1h_ulduar_d_01_Replacable.png
+
+newmtl Cape
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd Images\Item\Objectcomponents\weapon\sword_1h_ulduar_d_01_Replacable.png
+
+newmtl Beam_WaterIce
+	Ns 0
+	d 1
+	illum 2
+	Kd 1.0 1.0 1.0
+	Ks 0.0 0.0 0.0
+	Ka 0.0 0.0 0.0
+	map_Kd Images\Item\ObjectComponents\Weapon\Beam_WaterIce.tga
+
+newmtl sword_1h_ulduar_d_01_Replacable
+	Ns 0
+	d 1
+	illum 2
+	Kd 0.8 0.8 0.8
+	Ks 0.0 0.0 0.0
+	Ka 0.2 0.2 0.2
+	map_Kd ..\..\..\..\images\item\objectcomponents\weapon\sword_1h_ulduar_d_01_Replacable.png
+

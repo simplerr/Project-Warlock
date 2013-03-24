@@ -40,7 +40,7 @@ Client::Client()
 	mUserInterface->SetReady(true);
 
 	//// Read the name and ip to connect to.
-	std::ifstream fin("config.txt");
+	std::ifstream fin("data/config.txt");
 	string ip;
 	fin >> mName;
 	fin >> ip;
@@ -214,7 +214,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 
 			int num = atoi(buffer);
 			if(num >= 0 && num <= 3) {
-				sprintf(file, "sounds/%s.wav", buffer);
+				sprintf(file, "data/sounds/%s.wav", buffer);
 				gSound->PlayEffect(file);
 			}
 			break;
@@ -226,7 +226,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			mUserInterface->RemoveGameOverScreen();
 			break;
 		case NMSG_FLOOD_START:
-			gSound->PlayEffect("sounds/flood_start.wav");
+			gSound->PlayEffect("data/sounds/flood_start.wav");
 			break;
 		case NMSG_ARENA_RADIUS:
 			float radius;
@@ -270,11 +270,11 @@ void Client::EndRound(string winner)
 		int id = rand() % 7;
 
 		if(id == 0)
-			gSound->PlayEffect("sounds/godlike.wav");
+			gSound->PlayEffect("data/sounds/godlike.wav");
 		else if(id == 1)
-			gSound->PlayEffect("sounds/rampage.wav");
+			gSound->PlayEffect("data/sounds/rampage.wav");
 		else if(id == 2)
-			gSound->PlayEffect("sounds/wickedsick.wav");
+			gSound->PlayEffect("data/sounds/wickedsick.wav");
 	}
 }
 

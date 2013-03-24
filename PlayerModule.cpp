@@ -68,7 +68,7 @@ void PlayerModule::PollAction(Client* pClient, GLib::Input* pInput)
 					// Play walking sound.
 					int soundIndex = rand() % 12 + 1;
 					char buffer[128];
-					sprintf(buffer, "sounds/talk/%i.wav", soundIndex);
+					sprintf(buffer, "data/sounds/talk/%i.wav", soundIndex);
 					gSound->PlayEffect(buffer);
 
 					mSoundDelta = 3.5f;

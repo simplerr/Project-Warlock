@@ -1,0 +1,3 @@
+texture0="gay.tga"
+shader="abstract::mesh_skin_diffuse.vert","abstract::mesh_diffuse.frag"
+shadowshader="abstract::mesh_shadow_skin.vert"

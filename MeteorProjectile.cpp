@@ -8,7 +8,7 @@
 #include "FreezeEffect.h"
 
 MeteorProjectile::MeteorProjectile(int owner, XMFLOAT3 target)
-	: Projectile(owner, target + XMFLOAT3(0, 40, 0), XMFLOAT3(0, -1, 0), "MeteorParticle.lua")
+	: Projectile(owner, target + XMFLOAT3(0, 40, 0), XMFLOAT3(0, -1, 0), "data/lua/MeteorParticle.lua")
 {
 
 }

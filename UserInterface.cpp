@@ -27,7 +27,7 @@ UserInterface::UserInterface(Client* pClient)
 {
 	SetReady(false);
 
-	mItemLoader = new ItemLoaderXML("items.xml");
+	mItemLoader = new ItemLoaderXML("data/items.xml");
 	mClient = pClient;
 
 	mStatusArea = new StatusArea(50, 50);
@@ -68,15 +68,15 @@ UserInterface::UserInterface(Client* pClient)
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_VENOM, 1));
 	mSkillShop->PlaceInFreeSlot(ItemKey(SKILL_GRAPPLING_HOOK, 1));
 
-	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/inventory_bkgd.png");
-	mWhiteTexture = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("data/textures/inventory_bkgd.png");
+	mWhiteTexture = GLib::GetGraphics()->LoadTexture("data/textures/white_transparent.png");
 
 	mStatusText = new GLib::StatusText("nothing", 800, 200, 6);
 	mHealthBar = new HealthBar(840, 800);
 
 	mGameOverOverlay = nullptr;
 
-	mInGameMenu = new InGameMenu("ui_layout.lua");
+	mInGameMenu = new InGameMenu("data/lua/ui_layout.lua");
 
 	mChat = new Chat(20, 740, 300, 200);
 	mChat->SetClient(pClient);

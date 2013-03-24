@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Root>
+  <!--____________________________________________________________-->
+  <!-- ___________________________ITEMS___________________________-->
+  <!--____________________________________________________________-->
+  <Items>
+    <Item name="Iron Armor" icon="data/textures/icons/iron_armor.bmp">
+      <Desc>Gives 10/20/30 health</Desc>
+      <Level cost="5" num="1" health="10"/>
+      <Level cost="7" num="2" health="20"/>
+      <Level cost="9" num="3" health="30"/>
+    </Item>
+
+    <Item name="Regen Cap" icon="data/textures/icons/regen_cap.bmp">
+      <Desc>Regenerates 1/2/3 health per second</Desc>
+      <Level cost="3" num="1" regen="1" damage="3"/>
+      <Level cost="9" num="2" regen="2"/>
+      <Level cost="13" num="3" regen="3"/>
+    </Item>
+
+    <Item name="Boots of speed" icon="data/textures/icons/boots_of_speed.png">
+      <Desc>Gives 1/2/4 in bonus movement speed</Desc>
+      <Level cost="3" num="1" movementSpeed="0.01"/>
+      <Level cost="9" num="2" movementSpeed="0.02"/>
+      <Level cost="13" num="3" movementSpeed="0.04"/>
+    </Item>
+
+    <Item name="Mask of madness" icon="data/textures/icons/lifesteal.png">
+      <Desc>Gives 1/2/4 life when dealing damage to a player</Desc>
+      <Level cost="3" num="1" lifesteal="1"/>
+      <Level cost="9" num="2" lifesteal="2"/>
+      <Level cost="13" num="3" lifesteal="4"/>
+    </Item>
+
+    <Item name="Knockback shield" icon="data/textures/icons/knockback_shield.png">
+      <Desc>Knockbak force is reduced by 10/20/40 %</Desc>
+      <Level cost="3" num="1" knockbakResistance="0.1"/>
+      <Level cost="9" num="2" knockbakResistance="0.2"/>
+      <Level cost="13" num="3" knockbakResistance="0.4"/>
+    </Item>
+
+    <Item name="Lava staff" icon="data/textures/icons/lava_staff.png">
+      <Desc>Lava damage is reduced by 30/45/60 %</Desc>
+      <Level cost="4" num="1" lavaImmunity="0.3"/>
+      <Level cost="5" num="2" lavaImmunity="0.45"/>
+      <Level cost="13" num="3" lavaImmunity="0.6"/>
+    </Item>
+
+    <Item name="Magic wand" icon="data/textures/icons/magic_wand.png">
+      <Desc>Adds 5/15/25 damage to all your attacks</Desc>
+      <Level cost="3" num="1" damage="5"/>
+      <Level cost="9" num="2" damage="15"/>
+      <Level cost="13" num="3" damage="25"/>
+    </Item>
+  </Items>
+
+  <!--____________________________________________________________-->
+  <!--__________________________SKILLS____________________________-->
+  <!--____________________________________________________________-->
+  <Skills>
+    <Skill name="Fireball" skill="true" icon="data/textures/icons/fireball.png" hotkey="Q">
+      <Desc>A fireball projectile that gives a*impulse to the collider</Desc>
+      <Level cost="4" num="1" damage="30" cooldown="0"/>
+      <Level cost="9" num="2" damage="40" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="60" cooldown="1.6"/>
+    </Skill>
+
+    <Skill name="Frostnova" skill="true" icon="data/textures/icons/frost_nova.png" hotkey="W">
+      <Desc>Freezes all players in a radius</Desc>
+      <Level cost="4" num="1" damage="5" cooldown="0.5"/>
+      <Level cost="9" num="2" damage="10" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="15" cooldown="1.6"/>
+    </Skill>
+
+    <Skill name="Teleport" skill="true" icon="data/textures/icons/leap.png" hotkey="E">
+      <Desc>Teleports the player</Desc>
+      <Level cost="4" num="1" damage="5" cooldown="1.0"/>
+      <Level cost="9" num="2" damage="10" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="15" cooldown="1.6"/>
+    </Skill>
+
+    <Skill name="Meteor" skill="true" icon="data/textures/icons/meteor.png" hotkey="R">
+      <Desc>Summons a meteor from the sky*dealing AOE damage</Desc>
+      <Level cost="4" num="1" damage="20" cooldown="1.0"/>
+      <Level cost="9" num="2" damage="30" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="15" cooldown="1.6"/>
+    </Skill>
+
+    <Skill name="Hook" skill="true" icon="data/textures/icons/hook.png" hotkey="A">
+      <Desc>A projectile that drags the*collider against you</Desc>
+      <Level cost="4" num="1" damage="30" cooldown="0"/>
+      <Level cost="9" num="2" damage="40" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="60" cooldown="1.6"/>
+    </Skill>
+
+    <Skill name="Venom Acid" skill="true" icon="data/textures/icons/venom_acid.png" hotkey="S">
+      <Desc>A projectile that slows and deals*damage over time to the target</Desc>
+      <Level cost="4" num="1" damage="5" slow="0.2" dot="2.0" duration="4" cooldown="0"/>
+      <Level cost="9" num="2" damage="8" slow="0.25" dot="2.5" duration="4" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="13" slow="0.30" dot="3.0" duration="5" cooldown="1.6"/>
+    </Skill>
+
+    <Skill name="Grappling hook" skill="true" icon="data/textures/icons/grappling_hook.png" hotkey="D">
+      <Desc>A projectile that thrusts the caster*against the target on impact</Desc>
+      <Level cost="4" num="1" damage="5" slow="0.2" dot="2.0" duration="4" cooldown="0"/>
+      <Level cost="9" num="2" damage="8" slow="0.25" dot="2.5" duration="4" cooldown="1.6"/>
+      <Level cost="13" num="3" damage="13" slow="0.30" dot="3.0" duration="5" cooldown="1.6"/>
+    </Skill>
+  </Skills>
+
+  <!--____________________________________________________________-->
+  <!--_______________________STATUS EFFECTS_______________________-->
+  <!--____________________________________________________________-->
+  <StatusEffects>
+    <Effect name="Freeze Effect" icon="data/textures/icons/frost_nova.png">
+      <Desc>Frozen and can't move</Desc>
+    </Effect>
+
+    <Effect name="Teleport Effect" icon="data/textures/icons/leap.png">
+      <Desc>Teleported</Desc>
+    </Effect>
+
+    <Effect name="Poisoned Effect" icon="data/textures/icons/venom_acid.png">
+      <Desc>Poisoned</Desc>
+    </Effect>
+  </StatusEffects>
+</Root>

@@ -9,7 +9,7 @@ AttributesUi::AttributesUi(float x, float y)
 {
 	mPosition = XMFLOAT2(x, y);
 	mSelectedPlayer = nullptr;
-	mWhiteTexture = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
+	mWhiteTexture = GLib::GetGraphics()->LoadTexture("data/textures/white_transparent.png");
 
 	mWidth = 300;
 	mHeight = 120;

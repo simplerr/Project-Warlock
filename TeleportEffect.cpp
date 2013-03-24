@@ -3,7 +3,7 @@
 #include "Graphics.h"
 
 TeleportEffect::TeleportEffect()
-	: StatusEffect(TELEPORT_STATUS, 3, "textures/smoke.dds", "StatusEffectParticle.lua")
+	: StatusEffect(TELEPORT_STATUS, 3, "data/textures/smoke.dds", "data/lua/StatusEffectParticle.lua")
 {
 	SetDuration(0.5f);
 }

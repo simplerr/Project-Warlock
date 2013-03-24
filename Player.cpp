@@ -14,7 +14,7 @@
 #define NOT_DEAD 9999999999
 
 Player::Player()
-	: Actor(GLib::GetGraphics()->GetModelImporter(), "models/wizard/sorceress_anims_split.x")
+	: Actor(GLib::GetGraphics()->GetModelImporter(), "data/models/wizard/sorceress_anims_split.x")
 {
 	SetType(GLib::PLAYER);
 	SetMaxHealth(100.0f);
@@ -28,8 +28,8 @@ Player::Player()
 	SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
 	AdjustAnimationSpeedBy(105);
 
-	mRedHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/bar.bmp");
-	mGreenHealthBarTexture = GLib::GetGraphics()->LoadTexture("textures/green_bar.bmp");
+	mRedHealthBarTexture = GLib::GetGraphics()->LoadTexture("data/textures/bar.bmp");
+	mGreenHealthBarTexture = GLib::GetGraphics()->LoadTexture("data/textures/green_bar.bmp");
 
 	mDeathTimer = NOT_DEAD;
 }

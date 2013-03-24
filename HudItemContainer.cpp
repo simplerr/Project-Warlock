@@ -18,7 +18,7 @@ HudItemContainer::HudItemContainer(int x, int y, int colums, float slotSize)
 	mSlotSize = slotSize;
 	mHooveringSlotId = -1;
 
-	mEmptySlotTexture = GLib::GetGraphics()->LoadTexture("textures/icons/empty_slot.bmp");
+	mEmptySlotTexture = GLib::GetGraphics()->LoadTexture("data/textures/icons/empty_slot.bmp");
 }
 
 HudItemContainer::~HudItemContainer()

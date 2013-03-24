@@ -8,7 +8,7 @@
 #include "PoisonEffect.h"
 
 VenomProjectile::VenomProjectile(int owner, XMFLOAT3 position, XMFLOAT3 dir)
-	: Projectile(owner, position, XMFLOAT3(dir.x, 0, dir.z), "VenomParticle.lua")
+	: Projectile(owner, position, XMFLOAT3(dir.x, 0, dir.z), "data/lua/VenomParticle.lua")
 {
 
 }

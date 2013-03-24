@@ -23,14 +23,14 @@ void LobbyState::Init(Game* pGame)
 	// Important!!
 	SetGame(pGame);
 
-	mControlManager = new ControlManager("ui_layout.lua");
+	mControlManager = new ControlManager("data/lua/ui_layout.lua");
 
 	clientReady = false;
 	mClient = new Client();
 	clientReady = true;
 
-	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
-	mPlayerListBkgd = GLib::GetGraphics()->LoadTexture("textures/white_transparent.png");
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_bkgd.png");
+	mPlayerListBkgd = GLib::GetGraphics()->LoadTexture("data/textures/white_transparent.png");
 
 	mDatabase = new Database();
 }
@@ -95,8 +95,8 @@ void LobbyState::BuildUi()
 	leaveButton->SetAlignment(false, true);
 	mControlManager->AddControl(leaveButton);
 
-	leaveButton->SetPressedSound("sounds/button.wav");
-	startButton->SetPressedSound("sounds/button.wav");
+	leaveButton->SetPressedSound("data/sounds/button.wav");
+	startButton->SetPressedSound("data/sounds/button.wav");
 
 	mControlManager->LoadLuaProperties();
 }

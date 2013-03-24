@@ -4,7 +4,7 @@ StatusArea::StatusArea(float x, float y)
 	: HudItemContainer(x, y, 5, 35)
 {
 	SetHooverInfoPos(XMFLOAT2(-30, 45));
-	SetHooverBkgd("textures/white_transparent.png");
+	SetHooverBkgd("data/textures/white_transparent.png");
 	SetHooverInfoBelow(true);
 	SetDrawEmptySlots(false);
 

@@ -12,7 +12,7 @@ GameOverOverlay::GameOverOverlay(float x, float y, Client* pClient)
 {
 	mScoreList = new TextMenu(x, y, "GameOverList");
 	mScoreList->SetAlignment(false, true);
-	mControlManager = new ControlManager("ui_layout.lua");
+	mControlManager = new ControlManager("data/lua/ui_layout.lua");
 	mControlManager->AddControl(mScoreList);
 	mControlManager->LoadLuaProperties();
 
@@ -20,7 +20,7 @@ GameOverOverlay::GameOverOverlay(float x, float y, Client* pClient)
 
 	mClient = pClient;
 
-	gSound->PlayEffect("sounds/game_over_screen.wav");
+	gSound->PlayEffect("data/sounds/game_over_screen.wav");
 }
 
 GameOverOverlay::~GameOverOverlay()
@@ -60,14 +60,14 @@ void GameOverOverlay::SetScoreMap(map<string, int> scoreMap)
 	mMainMenuButton = new Button(100, 100, "GameOverButton" ,"Main Menu");
 	mMainMenuButton->SetBkgdScale(1.2f);
 	mMainMenuButton->AddPressedListener(&GameOverOverlay::ButtonPressed, this);
-	mMainMenuButton->SetPressedSound("sounds/button.wav");
+	mMainMenuButton->SetPressedSound("data/sounds/button.wav");
 	mControlManager->AddControl(mMainMenuButton);
 
 	// Add "Back to main menu" button.
 	mRematchButton = new Button(100, 100, "GameOverButton" ,"Rematch");
 	mRematchButton->SetBkgdScale(1.2f);
 	mRematchButton->AddPressedListener(&GameOverOverlay::ButtonPressed, this);
-	mRematchButton->SetPressedSound("sounds/button.wav");
+	mRematchButton->SetPressedSound("data/sounds/button.wav");
 	mControlManager->AddControl(mRematchButton);
 
 	if(!mClient->IsHost())

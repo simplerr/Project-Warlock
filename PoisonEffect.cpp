@@ -3,7 +3,7 @@
 #include "Graphics.h"
 
 PoisonEffect::PoisonEffect(float duration, float slow, float dot)
-	: StatusEffect(POISON_STATUS, 3, "textures/venom.png", "StatusEffectParticle.lua")
+	: StatusEffect(POISON_STATUS, 3, "data/textures/venom.png", "data/lua/StatusEffectParticle.lua")
 {
 	mSlow = slow;
 	mDamagePerSecond = dot;

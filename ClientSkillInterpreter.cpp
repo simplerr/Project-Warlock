@@ -60,7 +60,7 @@ void ClientSkillInterpreter::Interpret(Client* pClient, MessageId id, RakNet::Bi
 		// Add a teleport status effect (just for visuals).
 		player->AddStatusEffect(new TeleportEffect());
 
-		gSound->PlayEffect("sounds/blinkarrival.wav");
+		gSound->PlayEffect("data/sounds/blinkarrival.wav");
 	}
 
 	// Play cast sound.

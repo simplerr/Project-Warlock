@@ -17,11 +17,11 @@ void BrowsingState::Init(Game* pGame)
 	SetGame(pGame);
 
 	mDatabase = new Database();
-	mControlManager = new ControlManager("ui_layout.lua");
+	mControlManager = new ControlManager("data/lua/ui_layout.lua");
 
 	BuildUi();
 
-	mBkgdTexture = GLib::GetGraphics()->LoadTexture("textures/menu_bkgd.png");
+	mBkgdTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_bkgd.png");
 
 	mSelectedServerHost = "none";
 }
@@ -75,7 +75,7 @@ void BrowsingState::BuildUi()
 
 	TextMenu* serverMenu = new TextMenu(800, 400, "ServerMenu");
 	serverMenu->AddItemPressedListener(&BrowsingState::OnServerPressed, this);
-	serverMenu->SetPressedSound("sounds/button.wav");
+	serverMenu->SetPressedSound("data/sounds/button.wav");
 
 	for(int i = 0; i < serverList.size(); i++)
 	{

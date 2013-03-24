@@ -16,7 +16,7 @@ SkillInventory::SkillInventory(int x, int y, int colums, float slotSize)
 	: HudItemContainer(x, y, colums, slotSize)
 {
 	SetHooverInfoPos(XMFLOAT2(-slotSize/2, -110));
-	SetHooverBkgd("textures/white_transparent.png");
+	SetHooverBkgd("data/textures/white_transparent.png");
 
 	mPlayer = nullptr;
 	mShop = nullptr;

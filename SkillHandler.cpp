@@ -68,31 +68,31 @@ Skill* SkillHandler::AddSkill(ItemName skillName)
 
 	// Create the specific skill at the right key.
 	if(skillName == SKILL_FIREBALL) {
-		skill = new FireBall("textures/icons/fireball.png");
+		skill = new FireBall("data/textures/icons/fireball.png");
 		key = 'Q';
 	}
 	else if(skillName == SKILL_FROSTNOVA) {
-		skill = new FrostNova("textures/icons/frost_nova.png");
+		skill = new FrostNova("data/textures/icons/frost_nova.png");
 		key = 'W';
 	}
 	else if(skillName == SKILL_TELEPORT) {
-		skill = new Teleport("textures/icons/leap.png");
+		skill = new Teleport("data/textures/icons/leap.png");
 		key = 'E';
 	}
 	else if(skillName == SKILL_METEOR) {
-		skill = new Meteor("textures/icons/meteor.png");
+		skill = new Meteor("data/textures/icons/meteor.png");
 		key = 'R';
 	}
 	else if(skillName == SKILL_HOOK) {
-		skill = new Hook("textures/icons/hook.png");
+		skill = new Hook("data/textures/icons/hook.png");
 		key = 'A';
 	}
 	else if(skillName == SKILL_VENOM) {
-		skill = new VenomSkill("textures/icons/venom_acid.png");
+		skill = new VenomSkill("data/textures/icons/venom_acid.png");
 		key = 'S';
 	}
 	else if(skillName == SKILL_GRAPPLING_HOOK) {
-		skill = new GrapplingHookSkill("textures/icons/grappling_hook.png");
+		skill = new GrapplingHookSkill("data/textures/icons/grappling_hook.png");
 		key = 'D';
 	}
 	else

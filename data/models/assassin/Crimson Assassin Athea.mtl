@@ -1,0 +1,22 @@
+#
+# Crimson Assassin Athea.mtl
+#
+
+newmtl Assassin_Body
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 1.000000 1.000000 1.000000 
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 0.000000
+map_Kd crimsonAssassin_body_diff.bmp
+
+newmtl Assassin_Head
+illum 2
+Kd 0.800000 0.800000 0.800000
+Ka 1.000000 1.000000 1.000000 
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ns 0.000000
+map_Kd crimsonAssassin_head_diff.bmp
+bump crimsonAssassin_head_norm.bmp
