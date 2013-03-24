@@ -8,6 +8,8 @@ using namespace std;
 class ControlManager;
 class Label;
 class Database;
+class Button;
+class TextMenu;
 
 class BrowsingState : public GameState
 {
@@ -28,14 +30,19 @@ public:
 
 	void BuildUi();
 	void OnServerPressed(Label* pLabel);
+	void OnButtonPressed(Button* pButton);
 	void OnResize(float width, float height);
+
+	void RefreshServerList();
 protected:
 	BrowsingState() {};
 private:
 	static BrowsingState mBrowsingState;
 	Database*			 mDatabase;
 	ControlManager*		 mControlManager;
+	TextMenu*			 mServerMenu;
 	GLib::Texture2D*	 mBkgdTexture;
 	map<string, ServerData>  mServerMap;
 	string				 mSelectedServerHost;
+	bool				 mBackToMenu;
 };

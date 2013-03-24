@@ -11,11 +11,13 @@ Shop::Shop(int x, int y, int colums, float slotSize)
 	: HudItemContainer(x, y, colums, slotSize)
 {
 	SetInspectingInventory(nullptr);
-	SetHooverInfoPos(XMFLOAT2(-20, -160));
 	SetHooverBkgd("data/textures/white_transparent.png");
+	SetHooverInfoBelow(true);
 
 	for(int i = 0; i < 9; i++)
 		AddSlot();
+
+	SetHooverInfoPos(XMFLOAT2(GetWidth() + 30, -GetHeight()));
 }
 
 Shop::~Shop()
@@ -46,6 +48,7 @@ void Shop::OnLeftPress(const ItemSlot& itemSlot)
 }
 
 void Shop::OnRightPress(ItemSlot& itemSlot)
+
 {
 	Player* player = GetClient()->GetLocalPlayer();
 

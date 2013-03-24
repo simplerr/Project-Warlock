@@ -72,6 +72,7 @@ public:
 	int				GetHeightInSlots();
 	vector<ItemSlot> GetItemSlots();
 	float			GetWidth();
+	float			GetHeight();
 private:
 	vector<ItemSlot>	mItemSlots;
 	ItemLoaderXML*		mItemLoaderXML;

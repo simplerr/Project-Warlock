@@ -72,7 +72,7 @@ UserInterface::UserInterface(Client* pClient)
 	mWhiteTexture = GLib::GetGraphics()->LoadTexture("data/textures/white_transparent.png");
 
 	mStatusText = new GLib::StatusText("nothing", 800, 200, 6);
-	mHealthBar = new HealthBar(840, 800);
+	mHealthBar = new HealthBar(800, 800);
 
 	mGameOverOverlay = nullptr;
 

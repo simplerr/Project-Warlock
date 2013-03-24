@@ -112,7 +112,7 @@ void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 	// Sell skill.
 	RemoveItem(itemSlot.item);
 	Player* player = GetClient()->GetLocalPlayer();
-	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
+	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 1); // [NOTE][TODO] Hard coded!!!!
 
 	// Send message to server.
 	SendGoldChange(player->GetId(), player->GetGold());
@@ -121,7 +121,7 @@ void SkillInventory::OnRightPress(ItemSlot& itemSlot)
 string SkillInventory::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\nLevel: %i\n", pItem->GetCost() - 3, pItem->GetLevel());	// [NOTE][TODO] Maybe enough?
+	sprintf(buffer, "Sell value: %i gold\nLevel: %i\n", pItem->GetCost() - 1, pItem->GetLevel());	// [NOTE][TODO] Maybe enough?
 	return string(buffer + pItem->GetDescription());
 }
 

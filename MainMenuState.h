@@ -31,6 +31,7 @@ private:
 	static MainMenuState mMainMenuState;
 	ControlManager*		 mControlManager;
 	GLib::Texture2D*	 mBkgdTexture;
+	GLib::Texture2D*	 mTitleTexture;
 	TextMenu*			 mMenu;
 	string				 mChageToState;
 };

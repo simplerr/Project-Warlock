@@ -26,6 +26,7 @@ void MainMenuState::Init(Game* pGame)
 	BuildUi();
 
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_bkgd.png");
+	mTitleTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_title.png");
 
 	gSound->PlayMusic("data/data/sounds/menu_music.wav", true, false);
 	mChageToState = "none";
@@ -79,14 +80,12 @@ void MainMenuState::Update(GLib::Input* pInput, double dt)
 void MainMenuState::Draw(GLib::Graphics* pGraphics)
 {
 	pGraphics->DrawScreenQuad(mBkgdTexture, GLib::GetClientWidth()/2, GLib::GetClientHeight()/2, GLib::GetClientWidth(), GLib::GetClientHeight());
+	pGraphics->DrawScreenQuad(mTitleTexture, GLib::GetClientWidth()/2, 130, 798, 239);
 	mControlManager->Draw(pGraphics);
 }
 
 void MainMenuState::BuildUi()
 {
-	Label* title = new Label(800, 50, "StateHeader", "Project Warlock");
-	mControlManager->AddControl(title);
-
 	mMenu = new TextMenu(800, 400, "MainMenu");
 	mMenu->AddItemPressedListener(&MainMenuState::OnMenuItemPressed, this);
 

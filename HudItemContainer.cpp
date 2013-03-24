@@ -292,3 +292,8 @@ float HudItemContainer::GetWidth()
 {
 	return mNumColums * mSlotSize * 1.2;
 }
+
+float HudItemContainer::GetHeight()
+{
+	return GetHeightInSlots() * mSlotSize;
+}

@@ -111,7 +111,7 @@ void Inventory::OnRightPress(ItemSlot& itemSlot)
 	// Sell item.
 	RemoveItem(itemSlot.item);
 	Player* player = GetClient()->GetLocalPlayer();
-	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 3); // [NOTE][TODO] Hard coded!!!!
+	player->SetGold(player->GetGold() + itemSlot.item->GetCost() - 1); // [NOTE][TODO] Hard coded!!!!
 
 	// Send message to server.
 	SendGoldChange(player->GetId(), player->GetGold());
@@ -120,7 +120,7 @@ void Inventory::OnRightPress(ItemSlot& itemSlot)
 string Inventory::GetHooverText(HudItem* pItem)
 {
 	char buffer[244];
-	sprintf(buffer, "Sell value: %i gold\nLevel: %i\n", pItem->GetCost() - 3, pItem->GetLevel());
+	sprintf(buffer, "Sell value: %i gold\nLevel: %i\n", pItem->GetCost() - 1, pItem->GetLevel());
 	return string(buffer + pItem->GetDescription());
 }
 

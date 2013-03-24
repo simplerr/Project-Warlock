@@ -77,9 +77,9 @@ void GameOverOverlay::SetScoreMap(map<string, int> scoreMap)
 
 	GLib::Rect scoreRect = mScoreList->GetRect();
 	float right = (scoreRect.left + scoreRect.Width()/2) + scoreRect.Width()*mScoreList->GetBkgdScale()/2;
-	mMainMenuButton->SetPosition(right - mMainMenuButton->GetRect().Width()/2, scoreRect.bottom + mMainMenuButton->GetRect().Height()/2);
+	mMainMenuButton->SetPosition(right - mMainMenuButton->GetRect().Width()/2, scoreRect.bottom + mMainMenuButton->GetRect().Height()/2 + 20);
 
-	mRematchButton->SetPosition(mMainMenuButton->GetPosition().x - 200, mMainMenuButton->GetPosition().y);
+	mRematchButton->SetPosition(mMainMenuButton->GetPosition().x - 200, mMainMenuButton->GetPosition().y + 20);
 }
 
 void GameOverOverlay::OnResize(float width, float height)

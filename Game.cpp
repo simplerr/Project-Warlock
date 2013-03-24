@@ -56,6 +56,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, in
 	float width = GetSystemMetrics(SM_CXSCREEN);
 	float height = GetSystemMetrics(SM_CYSCREEN);
 
+	//width = 1600;
+	//height = 1080;
+
 	game.ResizeWindow(width, height);
 
 	// Run the app.
