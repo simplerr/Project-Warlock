@@ -20,7 +20,7 @@ enum ItemName
 	BOOTS_OF_SPEED,	// Movement speed
 	MASK_OF_MADNESS,
 	KNOCKBACK_SHIELD,
-	LAVA_STAFF,
+	LAVA_ARMOR,
 	MAGIC_WAND,
 
 	//

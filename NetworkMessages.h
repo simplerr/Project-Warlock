@@ -27,6 +27,7 @@ enum MessageId
 	//	Game events.
 	//
 	NMSG_PROJECTILE_PLAYER_COLLISION,	// Sent when a projectile collides with a player.
+	NMSG_PROJECTILE_PROJECTILE_COLLISION,
 	NMSG_ITEM_ADDED,
 	NMSG_ITEM_REMOVED,
 	NMSG_GOLD_CHANGE,

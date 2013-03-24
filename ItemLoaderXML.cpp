@@ -36,6 +36,8 @@ ItemLoaderXML::ItemLoaderXML(string filename)
 	LoadItems(root);
 	LoadSkills(root);
 	LoadStatusEffects(root);
+
+	mFilename = filename;
 }
 
 ItemLoaderXML::~ItemLoaderXML()
@@ -54,7 +56,7 @@ void ItemLoaderXML::SetupKeyMap()
 	mStringKeyMap["Boots of speed"] = BOOTS_OF_SPEED;
 	mStringKeyMap["Mask of madness"] = MASK_OF_MADNESS;
 	mStringKeyMap["Knockback shield"] = KNOCKBACK_SHIELD;
-	mStringKeyMap["Lava staff"] = LAVA_STAFF;
+	mStringKeyMap["Lava armor"] = LAVA_ARMOR;
 	mStringKeyMap["Magic wand"] = MAGIC_WAND;
 
 	// Skills
@@ -71,6 +73,24 @@ void ItemLoaderXML::SetupKeyMap()
 	mStringKeyMap["Teleport Effect"] = TELEPORT_STATUS;
 	mStringKeyMap["Poisoned Effect"] = POISON_STATUS;
 }
+
+/*void ItemLoaderXML::ReloadItems()
+{
+	for(auto iter = mItemMap.begin(); iter != mItemMap.end(); iter++)
+		delete (*iter).second;
+
+	mItemMap.clear();
+
+	TiXmlDocument doc(mFilename.c_str());
+	doc.LoadFile();
+
+	// Get the root element.
+	TiXmlElement* root = doc.FirstChildElement();
+
+	LoadItems(root);
+	LoadSkills(root);
+	LoadStatusEffects(root);
+}*/
 
 void ItemLoaderXML::LoadItems(TiXmlElement* pRoot)
 {

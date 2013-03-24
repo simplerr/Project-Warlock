@@ -33,8 +33,8 @@ UserInterface::UserInterface(Client* pClient)
 	mStatusArea = new StatusArea(50, 50);
 	mStatusArea->SetItemLoader(mItemLoader);
 
-	mShop = new Shop(60, 100, 3, 70);
-	mSkillShop = new Shop(60, 380, 3, 70);
+	mShop = new Shop(60, 150, 3, 70);
+	mSkillShop = new Shop(60, 410, 3, 70);
 
 	mInventory = new Inventory(1100, 770+75, 3, 60);
 	mInventory->SetItemLoader(mItemLoader);
@@ -49,12 +49,12 @@ UserInterface::UserInterface(Client* pClient)
 	mShop->SetClient(pClient);
 	mShop->SetItemLoader(mItemLoader);
 	mShop->SetInspectingInventory(mInventory);
-	mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
+	//mShop->PlaceInFreeSlot(ItemKey(REGEN_CAP, 1));
 	mShop->PlaceInFreeSlot(ItemKey(IRON_ARMOR, 1));
 	mShop->PlaceInFreeSlot(ItemKey(BOOTS_OF_SPEED, 1));
 	mShop->PlaceInFreeSlot(ItemKey(KNOCKBACK_SHIELD, 1));
 	mShop->PlaceInFreeSlot(ItemKey(MASK_OF_MADNESS, 1));
-	mShop->PlaceInFreeSlot(ItemKey(LAVA_STAFF, 1));
+	mShop->PlaceInFreeSlot(ItemKey(LAVA_ARMOR, 1));
 	mShop->PlaceInFreeSlot(ItemKey(MAGIC_WAND, 1));
 
 	mSkillShop->SetClient(pClient);

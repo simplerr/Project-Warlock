@@ -221,6 +221,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 								  }
 		case NMSG_PERFORM_REMATCH:
 			mMessageHandler->HandlePerformRematch(bitstream);
+			//mUserInterface->GetItemLoader()->ReloadItems();
 			mGameOver = false;
 			mRoundHandler->ResetScores();
 			mUserInterface->RemoveGameOverScreen();
@@ -232,6 +233,9 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			float radius;
 			bitstream.Read(radius);
 			GLib::Effects::TerrainFX->SetArenaRadius(radius);
+			break;
+		case NMSG_PROJECTILE_PROJECTILE_COLLISION:
+			gSound->PlayEffect("data/sounds/fireball_impact.wav");
 			break;
 	}
 

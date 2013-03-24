@@ -26,6 +26,7 @@ public:
 	ItemLoaderXML(string filename);
 	~ItemLoaderXML();
 
+	//void ReloadItems();
 	void SetupKeyMap();
 	void LoadItems(TiXmlElement* pRoot);
 	void LoadSkills(TiXmlElement* pRoot);
@@ -36,4 +37,5 @@ public:
 private:
 	map<ItemKey, Item*>		mItemMap;
 	map<string, int>		mStringKeyMap;	   
+	string					mFilename;
 };
