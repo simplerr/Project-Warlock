@@ -123,7 +123,6 @@ void UserInterface::Update(GLib::Input* pInput, float dt)
 			(*iter).Update(dt);
 	}
 
-
 	// Change the state from the in-game menu and the game over display.
 	if((mGameOverOverlay != nullptr && mGameOverOverlay->GetChangeState()) || mInGameMenu->GetChangeState())
 		PlayingState::Instance()->ChangeState(MainMenuState::Instance());
