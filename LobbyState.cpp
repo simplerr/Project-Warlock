@@ -14,6 +14,7 @@
 #include <vector>
 #include "UserInterface.h"
 #include "Database.h"
+#include "MainMenuState.h"
 
 LobbyState LobbyState::mLobbyState;
 bool clientReady;
@@ -33,6 +34,7 @@ void LobbyState::Init(Game* pGame)
 	mPlayerListBkgd = GLib::GetGraphics()->LoadTexture("data/textures/white_transparent.png");
 
 	mDatabase = new Database();
+	mLeaveLobby = false;
 }
 
 void LobbyState::Cleanup(void)
@@ -61,6 +63,11 @@ void LobbyState::Update(GLib::Input* pInput, double dt)
 {
 	mControlManager->Update(pInput, dt);
 	mClient->ListenForPackets();
+
+	if(mLeaveLobby) {
+		delete mClient;
+		ChangeState(MainMenuState::Instance());
+	}
 }
 
 void LobbyState::Draw(GLib::Graphics* pGraphics)
@@ -132,6 +139,10 @@ void LobbyState::ButtonPressed(Button* pButton)
 		bitstream.Write((unsigned char)NMSG_START_COUNTDOWN);
 		mClient->SendServerMessage(bitstream);
 		pButton->SetDisabled(true);
+	}
+	else if(pButton->GetName() == "LeaveLobbyButton")
+	{
+		mLeaveLobby = true;
 	}
 }
 

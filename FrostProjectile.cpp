@@ -9,7 +9,7 @@
 #include "Sound.h"
 
 FrostProjectile::FrostProjectile(int owner, XMFLOAT3 position)
-	: Projectile(owner, position, XMFLOAT3(0, 0, 0), "F:/Users/Axel/Documents/Visual Studio 11/Projects/Project Warlock/Project Warlock/data/lua/FrostParticle.lua")
+	: Projectile(owner, position, XMFLOAT3(0, 0, 0), "data/lua/FrostParticle.lua")
 {
 	
 }

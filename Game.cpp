@@ -1,5 +1,5 @@
 #include <crtdbg.h> 
-#include "vld.h"
+//#include "vld.h"
 #include <assert.h>
 #include <time.h>
 #include "Game.h"
@@ -29,8 +29,8 @@
 using namespace GLib;
 
 #define _HAS_ITERATOR_DEBUGGING 0
-#define _DEBUG
-#define VLD_FORCE_ENABLE 1
+//#define _DEBUG
+//#define VLD_FORCE_ENABLE 1
 
 float mx, my;
 

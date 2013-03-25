@@ -41,4 +41,5 @@ private:
 	GLib::Texture2D* mBkgdTexture;
 	GLib::Texture2D* mPlayerListBkgd;
 	bool			mIsHost;
+	bool			mLeaveLobby;
 };

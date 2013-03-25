@@ -50,7 +50,7 @@ void Projectile::Init()
 	mLight->SetRange(1000);
 	mLight->SetRotation(XMFLOAT3(0, -1, 0));
 	GetWorld()->AddObject(mLight);
-	mLight->SetId(mLight->GetId() + 100); // [HACK]
+	mLight->SetId(mLight->GetId() + 900); // [HACK]
 }
 
 void Projectile::Update(float dt)

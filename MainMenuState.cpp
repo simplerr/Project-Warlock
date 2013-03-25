@@ -28,7 +28,8 @@ void MainMenuState::Init(Game* pGame)
 	mBkgdTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_bkgd.png");
 	mTitleTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_title.png");
 
-	gSound->PlayMusic("data/data/sounds/menu_music.wav", true, false);
+	gSound->SetMusicVolume(0.3f);
+	gSound->PlayMusic("data/sounds/menu_music.wav", true, false);
 	mChageToState = "none";
 }
 
@@ -75,6 +76,8 @@ void MainMenuState::Update(GLib::Input* pInput, double dt)
 		ChangeState(BrowsingState::Instance());
 	else if(mChageToState == "Host")
 		ChangeState(HostState::Instance());
+	else if(mChageToState == "Exit")
+		SendMessage(GLib::GetWindowHandler(), WM_DESTROY, 0, 0);
 }
 
 void MainMenuState::Draw(GLib::Graphics* pGraphics)
@@ -92,6 +95,7 @@ void MainMenuState::BuildUi()
 	mMenu->AddItem("Play", "Play");
 	mMenu->AddItem("Options", "Options");
 	mMenu->AddItem("About", "About");
+	mMenu->AddItem("Exit", "Exit");
 	
 	mMenu->SetPressedSound("data/sounds/button.wav");
 

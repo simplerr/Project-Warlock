@@ -50,9 +50,9 @@ void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
 	}
 
 	GLib::ObjectList* objects = mClient->GetWorld()->GetObjects();
-	for(int i = 0; i < objects->size(); i++)
+	for(auto iter = objects->begin(); iter != objects->end(); iter++)
 	{
-		GLib::Object3D* object = objects->operator[](i);
+		GLib::Object3D* object = (*iter);
 
 		// Do interpolation stuff here.
 		if(object->GetId() == id)
@@ -211,6 +211,8 @@ void ClientMessageHandler::HandleProjectilePlayerCollision(RakNet::BitStream& bi
 	Player* player = (Player*)mClient->GetWorld()->GetObjectById(playerId);
 	Projectile* projectile = (Projectile*)mClient->GetWorld()->GetObjectById(projectileId);
 	projectile->HandlePlayerCollision(player, mClient->GetArena(), mClient->GetUi()->GetItemLoader());
+
+	//MessageBox(0, "test!", 0, 0);
 
 	// Play impact sound.
 	gSound->PlayEffect(projectile->GetImpactSound());
