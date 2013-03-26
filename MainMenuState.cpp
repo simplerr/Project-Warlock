@@ -29,7 +29,7 @@ void MainMenuState::Init(Game* pGame)
 	mTitleTexture = GLib::GetGraphics()->LoadTexture("data/textures/menu_title.png");
 
 	gSound->SetMusicVolume(0.3f);
-	gSound->PlayMusic("data/sounds/menu_music.wav", true, false);
+	gSound->PlayMusic("data/sounds/ambient.wav", true, false);
 	mChageToState = "none";
 }
 
