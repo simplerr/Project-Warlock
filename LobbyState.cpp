@@ -15,6 +15,7 @@
 #include "UserInterface.h"
 #include "Database.h"
 #include "MainMenuState.h"
+#include "MessageIdentifiers.h"
 
 LobbyState LobbyState::mLobbyState;
 bool clientReady;

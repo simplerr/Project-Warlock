@@ -56,6 +56,11 @@ Client::~Client()
 	//delete mArena;
 	delete mRoundHandler;
 
+	RakNet::BitStream bitstream;
+	bitstream.Write((unsigned char)NMSG_PLAYER_DISCONNECTED);
+	SendServerMessage(bitstream);
+	Sleep(200);
+
 	mRaknetPeer->Shutdown(0);
 	RakNet::RakPeerInterface::DestroyInstance(mRaknetPeer);
 }
@@ -167,12 +172,16 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			break;
 		case NMSG_CHANGETO_PLAYING:
 			InitPlayingState(mRoundHandler->GetArenaState(), false, GetLocalPlayer()->GetPosition());
+			gSound->PlayEffect("data/sounds/shopping_done.wav");
 			break;
 		case NMSG_CHANGETO_SHOPPING:
+			// [NOTE] Server never sends this message
 			InitShoppingState(mRoundHandler->GetArenaState(), false);
+			gSound->PlayEffect("data/sounds/shopping_start.wav");			
 			break;
 		case NMSG_ROUND_START:
 			mMessageHandler->HandleRoundStarted(bitstream);
+			gSound->PlayEffect("data/sounds/shopping_start.wav");			
 			break;
 		case NMSG_ROUND_ENDED:
 			mMessageHandler->HandleRoundEnded(bitstream);
@@ -216,7 +225,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			if(num >= 0 && num <= 3) {
 				sprintf(file, "data/sounds/%s.wav", buffer);
 				gSound->PlayEffect(file);
-			}
+			}			
 			break;
 								  }
 		case NMSG_PERFORM_REMATCH:
@@ -279,6 +288,11 @@ void Client::EndRound(string winner)
 			gSound->PlayEffect("data/sounds/rampage.wav");
 		else if(id == 2)
 			gSound->PlayEffect("data/sounds/wickedsick.wav");
+		else
+		{
+			// Default sound effect on round over.
+			gSound->PlayEffect("data/sounds/humiliation.wav");
+		}
 	}
 }
 

@@ -81,6 +81,10 @@ void Shop::OnRightPress(ItemSlot& itemSlot)
 			itemSlot.taken = true;
 		}
 	}
+	else
+	{
+		gSound->PlayEffect("data/sounds/error.wav");
+	}
 }
 
 string Shop::GetHooverText(HudItem* pItem)

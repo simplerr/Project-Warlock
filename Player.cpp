@@ -26,7 +26,7 @@ Player::Player()
 	SetMovementSpeed(0.1f);
 	SetLifeSteal(0.0f);
 	SetScale(XMFLOAT3(0.05f, 0.05f, 0.05f));	
-	AdjustAnimationSpeedBy(105);
+	AdjustAnimationSpeedBy(110);
 
 	mRedHealthBarTexture = GLib::GetGraphics()->LoadTexture("data/textures/bar.bmp");
 	mGreenHealthBarTexture = GLib::GetGraphics()->LoadTexture("data/textures/green_bar.bmp");

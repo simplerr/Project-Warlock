@@ -170,6 +170,8 @@ void ClientMessageHandler::HandleAddPlayer(RakNet::BitStream& bitstream)
 	}
 	else
 		mClient->AddChatText(name + " has connected!\n", RGB(0, 200, 0));
+
+	gSound->PlayEffect("data/sounds/player_connect.wav");
 }
 
 void ClientMessageHandler::HandlePlayerDisconnected(RakNet::BitStream& bitstream)

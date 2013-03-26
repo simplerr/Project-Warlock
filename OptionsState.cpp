@@ -26,6 +26,8 @@ OptionsState OptionsState::mOptionsState;
 #define IDC_NICKNAME_BOX  102
 #define IDC_SERVERNAME_BOX  103
 #define IDC_LOOKSENSE_BOX 104
+#define IDC_MUSIC_BOX 105
+#define IDC_EFFECTS_BOX 106
 
 void OptionsState::Init(Game* pGame)
 {
@@ -86,6 +88,9 @@ void OptionsState::Update(GLib::Input* pInput, double dt)
 		else 
 			config.lookSense = 1.0f;
 
+		
+		config.music = (Button_GetCheck(mhMusicCheckbox) == BST_CHECKED ? 1 : 0); 
+		config.soundEffects = (Button_GetCheck(mhEffectsChecbox) == BST_CHECKED ? 1 : 0); 
 
 		config.Save();
 
@@ -101,6 +106,8 @@ void OptionsState::Draw(GLib::Graphics* pGraphics)
 	pGraphics->DrawText("Nickname", GLib::GetClientWidth()/2-100, 220, 20, GLib::ColorRGBA(0, 0, 0, 255));
 	pGraphics->DrawText("Server name", GLib::GetClientWidth()/2-100, 320, 20, GLib::ColorRGBA(0, 0, 0, 255));
 	pGraphics->DrawText("Look sense (0 - 10)", GLib::GetClientWidth()/2-100, 420, 20, GLib::ColorRGBA(0, 0, 0, 255));
+	//pGraphics->DrawText("Music", GLib::GetClientWidth()/2-100, 520, 20, GLib::ColorRGBA(0, 0, 0, 255));
+	//pGraphics->DrawText("Sound effects", GLib::GetClientWidth()/2-100, 620, 20, GLib::ColorRGBA(0, 0, 0, 255));
 	mControlManager->Draw(pGraphics);
 }
 
@@ -117,6 +124,12 @@ void OptionsState::BuildUi()
 
 	mhLookSensBox = CreateWindow("EDIT", "", WS_VISIBLE | WS_CHILD | WS_OVERLAPPED,
 		GLib::GetClientWidth()/2-100, 450, 200, 30, GLib::GetWindowHandler(), (HMENU)IDC_LOOKSENSE_BOX, GLib::GetAppInstance(), NULL);
+
+	/*mhMusicCheckbox = CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX  | WS_OVERLAPPED,
+		GLib::GetClientWidth()/2-100, 550, 15, 15, GLib::GetWindowHandler(), (HMENU)IDC_MUSIC_BOX, GLib::GetAppInstance(), NULL);
+
+	mhEffectsChecbox = CreateWindow("BUTTON", "", WS_VISIBLE | WS_CHILD | BS_AUTOCHECKBOX | WS_OVERLAPPED,
+		GLib::GetClientWidth()/2-100, 650, 15, 15, GLib::GetWindowHandler(), (HMENU)IDC_EFFECTS_BOX, GLib::GetAppInstance(), NULL);*/
 
 	// Add a back button.
 	mBackButton = new Button(905, 510, "OptionsBackButton", "Back");
@@ -135,6 +148,9 @@ void OptionsState::BuildUi()
 	char buffer[32];
 	sprintf(buffer, "%.1f", config.lookSense);
 	SetWindowText(mhLookSensBox, buffer);
+
+	SendMessage(mhMusicCheckbox, BM_SETCHECK, config.music, 0);
+	SendMessage(mhEffectsChecbox, BM_SETCHECK, config.soundEffects, 0);
 }
 
 void OptionsState::OnResize(float width, float height)

@@ -36,5 +36,7 @@ private:
 	HWND				 mhNameBox;
 	HWND				 mhServerNameBox;
 	HWND				 mhLookSensBox;
+	HWND				 mhMusicCheckbox;
+	HWND				 mhEffectsChecbox;
 	string				 mChangeState;
 };
