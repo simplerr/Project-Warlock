@@ -50,7 +50,7 @@ private:
 	float		mImpactImpulse;
 	string		mCastSound;
 	string		mImpactSound;
-	GLib::LightObject* mLight;
+	int			mLightId;
 
 	// Skill data.
 	ItemName	mSkillType;

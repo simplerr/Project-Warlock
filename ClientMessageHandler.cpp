@@ -27,10 +27,10 @@ ClientMessageHandler::~ClientMessageHandler()
 void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
 {
 	GLib::ObjectType type;
-	unsigned char id;
+	int id;
 	XMFLOAT3 pos, rotation;
 	float health, deathTimer;
-	int animIndex, gold;
+	int animIndex, gold, eliminated;
 
 	bitstream.Read(type);
 	bitstream.Read(id);
@@ -47,6 +47,7 @@ void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
 		bitstream.Read(deathTimer);
 		bitstream.Read(health);
 		bitstream.Read(gold);
+		bitstream.Read(eliminated);
 	}
 
 	GLib::ObjectList* objects = mClient->GetWorld()->GetObjects();
@@ -67,6 +68,7 @@ void ClientMessageHandler::HandleWorldUpdate(RakNet::BitStream& bitstream)
 				player->SetDeathTimer(deathTimer);
 				player->SetCurrentHealth(health);
 				player->SetGold(gold);
+				player->SetEliminated(eliminated);
 			}
 		}
 	}
@@ -238,7 +240,7 @@ void ClientMessageHandler::HandleRoundEnded(RakNet::BitStream& bitstream)
 
 void ClientMessageHandler::HandleCvarList(RakNet::BitStream& bitstream)
 {
-	int startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, lavaDamage, projectileImpulse, arenaRadius, floodInterval, floodSize, cheats;
+	int startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, goldPerRound, lavaDamage, projectileImpulse, arenaRadius, floodInterval, floodSize, cheats;
 	bitstream.Read(startGold);
 	bitstream.Read(shopTime);
 	bitstream.Read(roundTime);
@@ -254,8 +256,8 @@ void ClientMessageHandler::HandleCvarList(RakNet::BitStream& bitstream)
 
 	// Format and add it to the chat.
 	char buffer[2048];
-	sprintf(buffer, "-startgold: %i\n-shoptime: %i\n-roundtime: %i\n-rounds: %i\n-goldperkill: %i\n-goldperwin: %i\n-lavadmg: %f\n-impulse: %f\n-radius: %f\n-flood_interval: %f\n-flood_size: %f\n-cheats: %f\n",
-		startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, lavaDamage, lavaDamage, arenaRadius, floodInterval, floodSize, cheats);
+	sprintf(buffer, "-startgold: %i\n-shoptime: %i\n-roundtime: %i\n-rounds: %i\n-goldperkill: %i\n-goldperwin: %i\n-goldperround: %i\n-lavadmg: %f\n-impulse: %f\n-radius: %f\n-flood_interval: %f\n-flood_size: %f\n-cheats: %f\n",
+		startGold, shopTime, roundTime, numRounds, goldPerKill, goldPerWin, goldPerRound, lavaDamage, lavaDamage, arenaRadius, floodInterval, floodSize, cheats);
 
 	mClient->AddChatText("Cvar list:\n", RGB(0, 0, 255));
 	mClient->AddChatText(buffer, RGB(0, 0, 0));

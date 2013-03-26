@@ -26,7 +26,9 @@ Projectile::Projectile(int owner, XMFLOAT3 pos, XMFLOAT3 dir, string luaScript)
 
 Projectile::~Projectile()
 {
-	mLight->Kill();
+	Object3D* light = GetWorld()->GetObjectById(mLightId);
+	if(light != nullptr)
+		light->Kill();
 }
 
 void Projectile::Init()
@@ -40,17 +42,18 @@ void Projectile::Init()
 	auto intensitySplit = GLib::SplitString(intensity, ' ');
 	auto attSplit = GLib::SplitString(att, ' ');
 
-	mLight = new GLib::LightObject();
+	GLib::LightObject* light = new GLib::LightObject();
 	XMFLOAT4 colors = XMFLOAT4(atoi(colorsSplit[0].c_str()) / 255.0f, atoi(colorsSplit[1].c_str()) / 255.0f, atoi(colorsSplit[2].c_str()) / 255.0f, atoi(colorsSplit[3].c_str()) / 255.0f);
-	mLight->SetMaterials(GLib::Material(colors));
-	mLight->SetLightType((GLib::LightType)GLib::POINT_LIGHT);
-	mLight->SetIntensity(atof(intensitySplit[0].c_str()), atof(intensitySplit[1].c_str()), atof(intensitySplit[2].c_str()));
-	mLight->SetAtt(atof(attSplit[0].c_str()), atof(attSplit[1].c_str()), atof(attSplit[2].c_str()));
-	mLight->SetSpot(spot);
-	mLight->SetRange(1000);
-	mLight->SetRotation(XMFLOAT3(0, -1, 0));
-	GetWorld()->AddObject(mLight);
-	mLight->SetId(mLight->GetId() + 900); // [HACK]
+	light->SetMaterials(GLib::Material(colors));
+	light->SetLightType((GLib::LightType)GLib::POINT_LIGHT);
+	light->SetIntensity(atof(intensitySplit[0].c_str()), atof(intensitySplit[1].c_str()), atof(intensitySplit[2].c_str()));
+	light->SetAtt(atof(attSplit[0].c_str()), atof(attSplit[1].c_str()), atof(attSplit[2].c_str()));
+	light->SetSpot(spot);
+	light->SetRange(1000);
+	light->SetRotation(XMFLOAT3(0, -1, 0));
+	GetWorld()->AddObject(light);
+	light->SetId(light->GetId() + 900); // [HACK]
+	mLightId = light->GetId();
 }
 
 void Projectile::Update(float dt)
@@ -61,7 +64,9 @@ void Projectile::Update(float dt)
 	SetPosition(GetPosition() + velocity);
 	mTravelled += sqrt(velocity.x * velocity.x + velocity.y * velocity.y + velocity.z * velocity.z);
 
-	mLight->SetPosition(GetPosition());
+	Object3D* light = GetWorld()->GetObjectById(mLightId);
+	if(light != nullptr)
+		light->SetPosition(GetPosition());
 
 	if(mTravelled > mMaxDistance)
 		Kill();

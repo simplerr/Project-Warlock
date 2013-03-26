@@ -14,6 +14,7 @@ namespace Cvars {
 	const string NUM_ROUNDS = "-rounds";
 	const string GOLD_PER_KILL = "-goldperkill";
 	const string GOLD_PER_WIN = "-goldperwin";
+	const string GOLD_PER_ROUND = "-goldperround";
 	const string LAVA_DMG = "-lavadmg";
 	const string LAVA_SLOW = "-lavaslow";
 	const string PROJECTILE_IMPULSE = "-impulse";

@@ -8,6 +8,7 @@ ServerCvars::ServerCvars()
 	CvarMap[Cvars::NUM_ROUNDS] = 1;
 	CvarMap[Cvars::GOLD_PER_KILL] = 1;
 	CvarMap[Cvars::GOLD_PER_WIN] = 3;
+	CvarMap[Cvars::GOLD_PER_ROUND] = 4;
 	CvarMap[Cvars::LAVA_DMG] = 1;
 	CvarMap[Cvars::LAVA_SLOW] = 0.4;
 	CvarMap[Cvars::PROJECTILE_IMPULSE] =  3; // Divided by 10 later.
@@ -35,6 +36,8 @@ void ServerCvars::LoadFromFile(string filename)
 	CvarMap[Cvars::GOLD_PER_KILL] = num;
 	fin >> trash >> num;
 	CvarMap[Cvars::GOLD_PER_WIN] = num;
+	fin >> trash >> num;
+	CvarMap[Cvars::GOLD_PER_ROUND] = num;
 	fin >> trash >> num;
 	CvarMap[Cvars::LAVA_DMG] = num;
 	fin >> trash >> num;

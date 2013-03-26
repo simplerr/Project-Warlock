@@ -53,7 +53,7 @@ Client::~Client()
 {
 	delete mMessageHandler;
 	delete mUserInterface;
-	delete mArena;
+	//delete mArena;
 	delete mRoundHandler;
 
 	mRaknetPeer->Shutdown(0);
