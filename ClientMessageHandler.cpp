@@ -249,6 +249,7 @@ void ClientMessageHandler::HandleCvarList(RakNet::BitStream& bitstream)
 	bitstream.Read(numRounds);
 	bitstream.Read(goldPerKill);
 	bitstream.Read(goldPerWin);
+	bitstream.Read(goldPerRound);
 	bitstream.Read(lavaDamage);
 	bitstream.Read(projectileImpulse);
 	bitstream.Read(arenaRadius);

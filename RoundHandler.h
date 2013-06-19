@@ -24,7 +24,8 @@ public:
 	void ResetScores();
 
 	ArenaState& GetArenaState();
-	string GetWinner();
+	string GetRoundWinner();
+	string GetGameWinner();
 	map<string, int> GetScoreMap();
 private:
 	// These relate to each other, RoundHandler or similar

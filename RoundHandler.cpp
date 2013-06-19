@@ -62,7 +62,7 @@ void RoundHandler::SetWinner(string winner)
 	mWinner = winner;
 }
 
-string RoundHandler::GetWinner()
+string RoundHandler::GetRoundWinner()
 {
 	return mWinner;
 }
@@ -81,4 +81,20 @@ void RoundHandler::ResetScores()
 {
 	for(auto iter = mScoreMap.begin(); iter != mScoreMap.end(); iter++)
 		(*iter).second = 0;
+}
+
+string RoundHandler::GetGameWinner()
+{
+	int highestScore = 0;
+	string winner = "none";
+	for(auto iter = mScoreMap.begin(); iter != mScoreMap.end(); iter++) 
+	{
+		if((*iter).second > highestScore)		
+		{
+			highestScore = (*iter).second;
+			winner = (*iter).first;
+		}
+	}
+
+	return winner;
 }

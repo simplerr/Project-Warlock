@@ -141,6 +141,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 			break;
 		case NMSG_PLAYER_DISCONNECTED:
 			mMessageHandler->HandlePlayerDisconnected(bitstream);
+			gSound->PlayEffect("data/sounds/disconnect.wav");
 			break;
 		case NSMG_CONNECTED_CLIENTS:
 			mMessageHandler->HandleGetConnectedPlayers(bitstream);
@@ -191,7 +192,7 @@ bool Client::HandlePacket(RakNet::Packet* pPacket)
 				char winner[244];
 				bitstream.Read(winner);
 				mRoundHandler->AddScore(winner, 1);
-				mUserInterface->DisplayGameOver(this, winner);
+				mUserInterface->DisplayGameOver(this, mRoundHandler->GetGameWinner());
 				mArena->RemoveStatusEffects();
 				mGameOver = true;
 				break;

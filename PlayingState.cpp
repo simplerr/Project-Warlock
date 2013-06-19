@@ -21,7 +21,7 @@ void PlayingState::Init(Game* pGame)
 	// Important!!
 	SetGame(pGame);
 	//gSound->PlayMusic("data/sounds/ambient.wav", true, 0);
-	gSound->SetMusicVolume(0.3f);
+	gSound->SetMusicVolume(0.1f);
 
 	Config config("data/config.txt");
 	GLib::GetGraphics()->GetCamera()->SetMovementSpeed(config.lookSense);
