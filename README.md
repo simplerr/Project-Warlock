@@ -1,7 +1,7 @@
-##Project Warlock
+# Project Warlock
 
-A 3D multiplayer game based on the WC3 mod Warlock 
+![Image](projectwarlock.png)
 
-Currently in very early stages. 
-
-Uses [this](https://github.com/simplerr/Graphics-Library) for rendering.
+This is an multiplayer game where you play in an arena with the goal to defeat the other players and remain the last man standing.
+The arena shrinks by time and you can buy/upgrade spells to use against your opponents.
+The game is using the same DirectX 11 renderar as the "Graphics Demo" project showcases.
